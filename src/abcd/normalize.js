@@ -39,26 +39,36 @@ class Term {
   constructor() {}
 }
 
+// The identity function.
 class Id extends Term {
   constructor() { super() }
 }
 
+// [A] [B] a = B [A]
+// "Application" of a block to the stack.
 class App extends Term {
   constructor() { super() }
 }
 
+// [A] [B] b = [[A] B]
+// "Binding" a block to another.
 class Bind extends Term {
   constructor()  { super() }
 }
 
+// [A] c = [A] [A]
+// Copying a block.
 class Copy extends Term {
   constructor()  { super() }
 }
 
+// [A] d =
+// Dropping a block.
 class Drop extends Term {
   constructor()  { super() }
 }
 
+// A word like `foo`.
 class Variable extends Term {
   constructor(name) {
     super();
@@ -66,6 +76,7 @@ class Variable extends Term {
   }
 }
 
+// A quotation like `[foo]`.
 class Block extends Term {
   constructor(body) {
     super();
@@ -73,6 +84,7 @@ class Block extends Term {
   }
 }
 
+// A sequence like `foo bar`.
 class Sequence extends Term {
   constructor(fst, snd) {
     super();
