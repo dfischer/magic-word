@@ -15,8 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-// Denshi has a concatenative bytecode with four primitive
-// combinators:
+// ABCD is a concatenative bytecode with four primitive functions:
 //
 //     [foo] [bar] a = bar [foo]
 //     [foo] [bar] b = [[foo] bar]
@@ -28,7 +27,8 @@
 // so on.
 
 // Rewrite a string of bytecode until it reaches normal form. Doesn't
-// handle quotas, uses a simplistic evaluation strategy.
+// handle quotas, uses a simplistic evaluation strategy. Note that
+// this will hang if the bytecode is some sort of infinite loop.
 export default function normalize(src) {
   let fst = parse(src);
   let snd = solve(fst);
@@ -307,6 +307,8 @@ function assert(x, message) {
 }
 
 (function() {
+  // Just a quick sanity check. I'll need to think about a more
+  // sophisticated testing setup.
   let tests = {
     "[foo] [bar] a": "bar [foo]",
     "[foo] [bar] b": "[[foo] bar]",
