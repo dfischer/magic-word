@@ -1,0 +1,23 @@
+{
+  "name": "denshi",
+  "version": "0.0.2",
+  "description": "An experimental programming environment.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xkapastel/denshi.git"
+  },
+  "author": "Matthew Blount <xkapastel@gmail.com>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/xkapastel/denshi/issues"
+  },
+  "homepage": "https://github.com/xkapastel/denshi#readme",
+  "dependencies": {
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.0"
+  }
+}
