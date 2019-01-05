@@ -15,16 +15,9 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-// Use a neural model to map strings to more typical strings.
-export class Codec {
-  // The notion of typical string is determined by the history of
-  // strings seen by the codec.
-  add(string) {
+import Hn from "./web/HackerNews.js";
 
-  }
-
-  // Map a string to a typical string.
-  denoise(string) {
-
-  }
-}
+(async function() {
+  let links = await Hn.frontPage();
+  console.log(links);
+})();

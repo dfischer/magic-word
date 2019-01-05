@@ -1,7 +1,7 @@
 const path = require("path");
 
 let app = {
-  entry: "./src/app/index.js",
+  entry: "./src/app.js",
   output: {
     path: path.resolve(__dirname, "lib"),
     filename: "app.js",
@@ -28,7 +28,7 @@ fs.readdirSync("node_modules")
 
 let bot = {
   target: "node",
-  entry: "./src/bot/index.js",
+  entry: "./src/bot.js",
   output: {
     path: path.resolve(__dirname, "bin"),
     filename: "bot.js",

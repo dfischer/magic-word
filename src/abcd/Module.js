@@ -15,9 +15,42 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import Hn from "../web/HackerNews.js";
+import normalize from "./normalize.js";
 
-(async function() {
-  let links = await Hn.frontPage();
-  console.log(links);
-})();
+export default class Module {
+  constructor() {
+    this.data = new Map();
+  }
+
+  set(key, value) {
+    key = key.trim();
+    value = value.trim();
+    if (key === value) {
+      this.data.delete(key);
+    } else {
+      this.data.set(key, value);
+    }
+  }
+
+  get(key) {
+    if (this.data.has(key)) {
+      return this.data.get(key);
+    }
+    return key;
+  }
+
+  delete(key) {
+    this.data.delete(key);
+  }
+
+  normalize(src) {
+    return normalize(src, {
+      module: (key) => this.get(key),
+      quota: 100,
+    });
+  }
+
+  include(prefix, reference) {
+    // XXX TODO Module#include
+  }
+}

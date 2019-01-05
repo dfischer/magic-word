@@ -29,8 +29,8 @@
 // Rewrite a string of bytecode until it reaches normal form. Doesn't
 // handle quotas, uses a simplistic evaluation strategy. Note that
 // this will hang if the bytecode is some sort of infinite loop.
-export default function normalize(src) {
-  let fst = parse(src);
+export default function normalize(src, ctx) {
+  let fst = parse(src, ctx);
   let snd = solve(fst);
   return quote(snd);
 }
@@ -128,7 +128,7 @@ function error(x) {
 }
 
 // Convert a string of code in to a term.
-function parse(src) {
+function parse(src, ctx) {
   const isLbracket = (x) => x == "[";
   const isRbracket = (x) => x == "]";
   const isLparen   = (x) => x == "(";
@@ -174,6 +174,8 @@ function parse(src) {
     } else if (isVariable(word)) {
       var term = variable(word);
       build.push(term);
+      index++;
+    } else if (word.length === 0) {
       index++;
     } else {
       error(`couldn't parse word ${word}`);

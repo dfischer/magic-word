@@ -21,7 +21,8 @@ const version   = "0.0.2";
 const cacheName = `denshi-${version}`;
 const cacheUrls = [
   "/",
-  "/static/denshi.mjs",
+  "/lib/app.js",
+  "https://fonts.googleapis.com/css?family=Roboto:300,400,500",
 ];
 
 async function onInstall(event) {
