@@ -15,3 +15,9 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
+import Hn from "../web/HackerNews.js";
+
+(async function() {
+  let links = await Hn.frontPage();
+  console.log(links);
+})();

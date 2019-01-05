@@ -19,12 +19,21 @@ let app = {
   },
 };
 
+const fs = require("fs");
+
+let externals = {};
+fs.readdirSync("node_modules")
+  .filter(x => [".bin"].indexOf(x) === -1)
+  .forEach(x => externals[x] = `commonjs ${x}`);
+
 let bot = {
   entry: "./src/bot/index.js",
+  target: "node",
   output: {
     path: path.resolve(__dirname, "bin"),
     filename: "bot.js",
   },
+  externals: externals,
   module: {
     rules: [
       {
