@@ -27,22 +27,23 @@ fs.readdirSync("node_modules")
   .forEach(x => externals[x] = `commonjs ${x}`);
 
 let bot = {
-  entry: "./src/bot/index.js",
   target: "node",
+  entry: "./src/bot/index.js",
   output: {
     path: path.resolve(__dirname, "bin"),
     filename: "bot.js",
   },
   externals: externals,
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: ["babel-loader"],
-      },
-    ],
-  },
 };
 
-module.exports = [app, bot];
+let shell = {
+  target: "node",
+  entry: "./src/shell.js",
+  output: {
+    path: path.resolve(__dirname, "bin"),
+    filename: "shell.js",
+  },
+  externals: externals,
+};
+
+module.exports = [app, bot, shell];
