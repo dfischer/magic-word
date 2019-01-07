@@ -43,6 +43,7 @@ let shell = {
     path: path.resolve(__dirname, "bin"),
     filename: "shell.js",
   },
+  mode: "development",
   externals: externals,
 };
 

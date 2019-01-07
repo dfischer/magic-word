@@ -27,8 +27,10 @@ export default class Module {
     value = value.trim();
     if (key === value) {
       this.data.delete(key);
+      return key;
     } else {
       this.data.set(key, value);
+      return value;
     }
   }
 
@@ -41,12 +43,12 @@ export default class Module {
 
   delete(key) {
     this.data.delete(key);
+    return key;
   }
 
   normalize(src) {
     return normalize(src, {
       module: (key) => this.get(key),
-      quota: 100,
     });
   }
 

@@ -172,7 +172,13 @@ function parse(src, ctx) {
       build.push(drop);
       index++;
     } else if (isVariable(word)) {
-      var term = variable(word);
+      var binding = ctx.module(word);
+      var term;
+      if (word === binding) {
+        term = variable(word);
+      } else {
+        term = parse(binding, ctx);
+      }
       build.push(term);
       index++;
     } else if (word.length === 0) {
@@ -325,7 +331,9 @@ function assert(x, message) {
   };
   for (let [key, expected] of Object.entries(tests)) {
     log(`test: ${key} = ${expected}`);
-    const actual = normalize(key);
+    const actual = normalize(key, {
+      module: (x) => x,
+    });
     if (expected !== actual) {
       error(`expected: ${key} = ${expected}\nactual: ${key} = ${actual}`);
     }

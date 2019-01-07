@@ -16,18 +16,33 @@
 // <https://www.gnu.org/licenses/.
 
 import { createInterface as readline } from "readline";
-import normalize from "./abcd/normalize.js";
 
-function shell(prompt, callback) {
+function shell(prompt, onInput) {
   let ui = readline({ input: process.stdin, output: process.stdout });
   ui.prompt(prompt);
-  ui.on("line", (line) => {
-    callback(line);
+  ui.on("line", (input) => {
+    let output = onInput(input);
+    console.log(output);
     ui.prompt(prompt);
   });
   return ui;
 }
 
+import Module from "./abcd/Module.js";
+
+// XXX TODO Maybe this could be a coroutine, so module could be kept
+// inside that callback's scope and remain stateful between turns.
+
+let module = new Module();
+
 shell("user@denshi\n> ", (src) => {
-  console.log(normalize(src));
+  const setPattern = /^:([a-z][a-z0-9]*) +(.*)$/;
+  let setMatch = src.match(setPattern);
+  if (setMatch !== null) {
+    let name = setMatch[1];
+    let body = setMatch[2];
+    return module.set(name, body);
+  } else {
+    return module.normalize(src);
+  }
 });
