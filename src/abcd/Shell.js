@@ -47,3 +47,8 @@ export default class Shell {
     return buf.join("\n");
   }
 }
+
+(function() {
+  let shell = new Shell();
+  shell.send(":foo bar baz");
+})();

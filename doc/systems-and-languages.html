@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Denshi</title>
+        <title>Systems &amp; Languages - Denshi</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="abcd.html"><strong aria-hidden="true">2.</strong> ABCD</a></li><li><a href="modules.html"><strong aria-hidden="true">3.</strong> Modules</a></li></ol>
+            <ol class="chapter"><li><a href="systems-and-languages.html" class="active"><strong aria-hidden="true">1.</strong> Systems &amp; Languages</a></li><li><a href="abcd.html"><strong aria-hidden="true">2.</strong> ABCD</a></li><li><a href="polynomials.html"><strong aria-hidden="true">3.</strong> Polynomials</a></li><li><a href="embedding.html"><strong aria-hidden="true">4.</strong> Embedding</a></li><li><a href="modules.html"><strong aria-hidden="true">5.</strong> Modules</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -136,9 +136,9 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>TODO</p>
-<p>In <a href="">Incommensurability</a>, Gabriel draws a distinction between a
-<em>system</em> and a <em>language</em>.</p>
+                        <p>In
+<a href="https://www.dreamsongs.com/Files/Incommensurability.pdf">Incommensurability</a>,
+Gabriel draws a distinction between <em>systems</em> and <em>languages</em>:</p>
 <blockquote>
 <p>A system is a set of interacting components, though sometimes the
 interaction is in the realm of ideas—and thus a language can also be
@@ -147,29 +147,71 @@ behavior. A real set of things doing real stuff. —Even if in a
 computer.</p>
 <p>A language is a system of signs but for the purpose of conveying
 meaning. A language is words on the page. Grammatical correctness is
-important to a language.  You can see the overlap in meaning. But
-the difference is clear: systems are about things happening, and
-languages are about conveying meaning.</p>
+important to a language.</p>
 </blockquote>
-<p>A system emphasizes <em>runtime</em>.</p>
-<p>Wrt types: One program's compile time is another program's runtime.</p>
+<p>Gabriel also suggests that before the language paradigm rose to power,
+the words &quot;language&quot; and &quot;system&quot; were used almost interchangeably in
+the programming community. As an interesting example of this, I want
+to draw attention to the Smalltalk language, and in particular the
+article <a href="https://www.cs.virginia.edu/%7Eevans/cs655/readings/smalltalk.html">Design Principles Behind
+Smalltalk</a>
+published in BYTE Magazine, 1981, by one of the original Smalltalk
+contributors, Daniel Ingalls:</p>
 <blockquote>
-<p>“Programs are meant to be read by humans and only incidentally for
-computers to execute.”</p>
+<p>Operating System: An operating system is a collection of things that
+don't fit into a language. There shouldn't be one.</p>
+<p>Here are some examples of conventional operating system components
+that have been naturally incorporated into the Smalltalk language:</p>
 <ul>
-<li>Donald Knuth</li>
+<li>
+<p>Storage management -- Entirely automatic. Objects are created by a
+message to their class and reclaimed when no further references to
+them exist. Expansion of the address space through virtual memory
+is similarly transparent.</p>
+</li>
+<li>
+<p>File system -- Included in the normal framework through objects
+such as Files and Directories with message protocols that support
+file access.</p>
+</li>
+<li>
+<p>Display handling -- The display is simply an instance of class
+Form, which is continually visible, and the graphical manipulation
+messages defined in that class are used to change the visible
+image.</p>
+</li>
+<li>
+<p>Keyboard Input -- The user input devices are similarly modeled as
+objects with appropriate messages for determining their state or
+reading their history as a sequence of events.</p>
+</li>
+<li>
+<p>Access to subsystems -- Subsystems are naturally incorporated as
+independent objects within Smalltalk: there they can draw on the
+large existing universe of description, and those that involve
+interaction with the user can participate as components in the
+user interface.</p>
+</li>
+<li>
+<p>Debugger -- The state of the Smalltalk processor is accessible as
+an instance of class Process that owns a chain of stack
+frames. The debugger is just a Smalltalk subsystem that has access
+to manipulate the state of a suspended process. It should be noted
+that nearly the only run-time error that can occur in Smalltalk is
+for a message not to be recognized by its receiver.</p>
+</li>
 </ul>
+<p>Smalltalk has no &quot;operation system&quot; as such. The necessary primitive
+operations, such as reading a page from the disk, are incorporated
+as primitive methods in response to otherwise normal Smalltalk
+messages.</p>
 </blockquote>
-<p>The Knuth quote is a strong statement in favor of the language
-paradigm. It's true that the language paradigm is the dominant one
-today.</p>
-<p>Neural networks are often criticized on the basis of failing to live
-up to the demands on the language paradigm: they are considered &quot;black
-boxes&quot;.</p>
-<p>This isn't such a big deal from a systems point of view. If you have a
-good analysis of the network's behavior, with e.g. an abstract
-interpretation, then you've got everything you need. There's no
-lingering question of what the network &quot;means&quot;.</p>
+<hr />
+<p>Denshi is a <em>programming system</em>: a collection of tools that help you
+perform computation. These includes a bytecode virtual machine with
+several programming languages targeting it, sensors and acutators
+connected to internet services, visualization of code and data, a
+means of tracking the lifecycle of software objects etc.</p>
 
                     </main>
 

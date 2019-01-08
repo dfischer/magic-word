@@ -1,6 +1,8 @@
 const path = require("path");
 
 let app = {
+  mode: "development",
+  target: "web",
   entry: "./src/app.js",
   output: {
     path: path.resolve(__dirname, "lib"),
@@ -27,6 +29,7 @@ fs.readdirSync("node_modules")
   .forEach(x => externals[x] = `commonjs ${x}`);
 
 let bot = {
+  mode: "development",
   target: "node",
   entry: "./src/bot.js",
   output: {
@@ -36,15 +39,4 @@ let bot = {
   externals: externals,
 };
 
-let repl = {
-  target: "node",
-  entry: "./src/repl.js",
-  output: {
-    path: path.resolve(__dirname, "bin"),
-    filename: "repl.js",
-  },
-  mode: "development",
-  externals: externals,
-};
-
-module.exports = [app, bot, repl];
+module.exports = [app, bot];
