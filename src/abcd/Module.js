@@ -23,6 +23,8 @@ export default class Module {
   }
 
   set(key, value) {
+    // XXX TODO Prevent cycles in definitions. Currently a cycle will
+    // just blow everything up.
     key = key.trim();
     value = value.trim();
     if (key === value) {
@@ -48,11 +50,19 @@ export default class Module {
 
   normalize(src) {
     return normalize(src, {
-      module: (key) => this.get(key),
+      expand: (key) => this.get(key),
     });
   }
 
   include(prefix, reference) {
     // XXX TODO Module#include
+  }
+
+  toString() {
+    let buf = [];
+    for (let [key, value] of this.data) {
+      buf.push(`:${key} ${value}`);
+    }
+    return buf.join("\n");
   }
 }

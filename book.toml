@@ -1,0 +1,7 @@
+[book]
+title = "Denshi"
+authors = ["Matthew Blount"]
+src = "./src/doc"
+
+[build]
+build-dir = "./doc"

@@ -36,12 +36,12 @@ import Module from "./abcd/Module.js";
 let module = new Module();
 
 shell("user@denshi\n> ", (src) => {
-  const setPattern = /^:([a-z][a-z0-9]*) +(.*)$/;
-  let setMatch = src.match(setPattern);
-  if (setMatch !== null) {
-    let name = setMatch[1];
-    let body = setMatch[2];
-    return module.set(name, body);
+  if (src === ".dump") {
+    return module.toString();
+  }
+  let match = src.match(/^:([a-z][a-z0-9]*) +(.*)$/);
+  if (match !== null) {
+    return module.set(match[1], match[2]);
   } else {
     return module.normalize(src);
   }

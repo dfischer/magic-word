@@ -29,6 +29,9 @@
 // Rewrite a string of bytecode until it reaches normal form. Doesn't
 // handle quotas, uses a simplistic evaluation strategy. Note that
 // this will hang if the bytecode is some sort of infinite loop.
+// `ctx` is of type: {
+//   expand: a function from words to their expansions
+// }
 export default function normalize(src, ctx) {
   let fst = parse(src, ctx);
   let snd = solve(fst);
@@ -172,12 +175,16 @@ function parse(src, ctx) {
       build.push(drop);
       index++;
     } else if (isVariable(word)) {
-      var binding = ctx.module(word);
       var term;
-      if (word === binding) {
-        term = variable(word);
+      if (ctx.expand) {
+        let binding = ctx.expand(word);
+        if (binding !== word) {
+          term = parse(binding, ctx);
+        } else {
+          term = variable(word);
+        }
       } else {
-        term = parse(binding, ctx);
+        term = variable(word);
       }
       build.push(term);
       index++;
@@ -331,9 +338,7 @@ function assert(x, message) {
   };
   for (let [key, expected] of Object.entries(tests)) {
     log(`test: ${key} = ${expected}`);
-    const actual = normalize(key, {
-      module: (x) => x,
-    });
+    const actual = normalize(key);
     if (expected !== actual) {
       error(`expected: ${key} = ${expected}\nactual: ${key} = ${actual}`);
     }
