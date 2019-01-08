@@ -17,7 +17,7 @@
 
 import { createInterface as readline } from "readline";
 
-function shell(prompt, onInput) {
+function loop(prompt, onInput) {
   let ui = readline({ input: process.stdin, output: process.stdout });
   ui.prompt(prompt);
   ui.on("line", (input) => {
@@ -28,21 +28,7 @@ function shell(prompt, onInput) {
   return ui;
 }
 
-import Module from "./abcd/Module.js";
+import Shell from "./abcd/Shell.js";
 
-// XXX TODO Maybe this could be a coroutine, so module could be kept
-// inside that callback's scope and remain stateful between turns.
-
-let module = new Module();
-
-shell("user@denshi\n> ", (src) => {
-  if (src === ".dump") {
-    return module.toString();
-  }
-  let match = src.match(/^:([a-z][a-z0-9]*) +(.*)$/);
-  if (match !== null) {
-    return module.set(match[1], match[2]);
-  } else {
-    return module.normalize(src);
-  }
-});
+let shell = new Shell();
+loop("user@denshi\n> ", x => shell.send(x));

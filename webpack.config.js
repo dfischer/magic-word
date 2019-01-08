@@ -36,15 +36,15 @@ let bot = {
   externals: externals,
 };
 
-let shell = {
+let repl = {
   target: "node",
-  entry: "./src/shell.js",
+  entry: "./src/repl.js",
   output: {
     path: path.resolve(__dirname, "bin"),
-    filename: "shell.js",
+    filename: "repl.js",
   },
   mode: "development",
   externals: externals,
 };
 
-module.exports = [app, bot, shell];
+module.exports = [app, bot, repl];

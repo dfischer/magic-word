@@ -17,11 +17,14 @@
 
 import normalize from "./normalize.js";
 
+// A module is a key-value store, associating names with blocks of
+// code.
 export default class Module {
   constructor() {
     this.data = new Map();
   }
 
+  // Define a word with a block of code.
   set(key, value) {
     // XXX TODO Prevent cycles in definitions. Currently a cycle will
     // just blow everything up.
@@ -36,6 +39,9 @@ export default class Module {
     }
   }
 
+  // Get the block of code associated with a word. If there's no
+  // definition, then the word is considered to be associated with
+  // itself.
   get(key) {
     if (this.data.has(key)) {
       return this.data.get(key);
@@ -43,11 +49,18 @@ export default class Module {
     return key;
   }
 
+  // Undefine a word.
   delete(key) {
     this.data.delete(key);
     return key;
   }
 
+  // Normalize a block of code, expanding words to their definitions.
+  // I do want to associate some sort of effort quota with
+  // normalization in general, and in particular with the expansion of
+  // words. Awelon also mentioned something about only expanding when
+  // the expansion would actually make progress, but I'm not yet sure
+  // how to determine that.
   normalize(src) {
     return normalize(src, {
       expand: (key) => this.get(key),
@@ -56,13 +69,5 @@ export default class Module {
 
   include(prefix, reference) {
     // XXX TODO Module#include
-  }
-
-  toString() {
-    let buf = [];
-    for (let [key, value] of this.data) {
-      buf.push(`:${key} ${value}`);
-    }
-    return buf.join("\n");
   }
 }

@@ -33,6 +33,11 @@
 //   expand: a function from words to their expansions
 // }
 export default function normalize(src, ctx) {
+  if (ctx === undefined) {
+    ctx = {
+      expand: (x) => x,
+    };
+  }
   let fst = parse(src, ctx);
   let snd = solve(fst);
   return quote(snd);
