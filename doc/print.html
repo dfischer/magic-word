@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="systems-and-languages.html"><strong aria-hidden="true">1.</strong> Systems &amp; Languages</a></li><li><a href="abcd.html"><strong aria-hidden="true">2.</strong> ABCD</a></li><li><a href="polynomials.html"><strong aria-hidden="true">3.</strong> Polynomials</a></li><li><a href="embedding.html"><strong aria-hidden="true">4.</strong> Embedding</a></li><li><a href="modules.html"><strong aria-hidden="true">5.</strong> Modules</a></li></ol>
+            <ol class="chapter"><li><a href="systems-and-languages.html"><strong aria-hidden="true">1.</strong> Systems &amp; Languages</a></li><li><a href="abcd.html"><strong aria-hidden="true">2.</strong> ABCD</a></li><li><a href="polynomial-types.html"><strong aria-hidden="true">3.</strong> Polynomial Types</a></li><li><a href="embedding.html"><strong aria-hidden="true">4.</strong> Embedding</a></li><li><a href="modules.html"><strong aria-hidden="true">5.</strong> Modules</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -212,6 +212,43 @@ perform computation. These includes a bytecode virtual machine with
 several programming languages targeting it, sensors and acutators
 connected to internet services, visualization of code and data, a
 means of tracking the lifecycle of software objects etc.</p>
+<p>ABCD is a purely functional, Turing-complete,
+<a href="http://tunes.org/%7Eiepos/joy.html">concatenative</a> bytecode with four
+primitive functions:</p>
+<pre><code>[A] [B] a = B [A]
+[A] [B] b = [[A] B]
+    [A] c = [A] [A]
+    [A] d =
+</code></pre>
+<p>In the equations above, a sequence of code that looks like the pattern
+on the left hand side of the equality is replaced with the pattern on
+the right. Such a replacement is called a <em>rewrite</em>; the repeated
+application of rewrites to a volume of code is called <em>program
+rewriting</em>.</p>
+<p>Program rewriting is different from evaluation in typical
+languages. Consider the following JavaScript program:</p>
+<pre><code class="language-javascript">let frontPage = await HackerNews.titles();
+let relevant = frontPage.filter(x =&gt; x.includes(&quot;JavaScript&quot;));
+let downcase = relevant.map(x =&gt; x.toLowerCase());
+console.log(downcase);
+</code></pre>
+<p>In vanilla JavaScript it is not meaningful to talk about serializing
+this program after the first line has finished evaluating. It's not
+clear how to save the state of a running JavaScript program, and even
+if such a mechanism was created (as it was in Dart with &quot;snapshots&quot;),
+the result would not be a &quot;JavaScript program&quot;. It would be &quot;something
+else&quot;, some sort of image file that has to be treated differently from
+source code.</p>
+<p>In Denshi it is perfectly possible to serialize a program in the
+middle of execution, and the result of the serialization is again a
+Denshi program.</p>
+<p>Because the range of each rewrite is bounded, they can
+happen in parallel across a large volume of code. It's sometimes
+useful to think of ABCD as a cellular automata, with evaluation as the
+time evolution of cells.</p>
+<p>ABCD is universal (i.e. Turing-complete); for security purposes,
+total subsets may be identified through the use of annotations
+and accelerators.</p>
 
                     </main>
 
