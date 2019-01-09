@@ -11,9 +11,13 @@ primitive functions:
 
 In the equations above, a sequence of code that looks like the pattern
 on the left hand side of the equality is replaced with the pattern on
-the right. Such a replacement is called a *rewrite*; the repeated
+the right. Such a replacement is called a
+[*rewrite*](https://en.wikipedia.org/wiki/Rewriting); the repeated
 application of rewrites to a volume of code is called *program
 rewriting*.
+
+[Derive these combinators from an analysis of the lambda calculus and
+the concept of scope]
 
 Program rewriting is different from evaluation in typical
 languages. Consider the following JavaScript program:
@@ -36,6 +40,8 @@ source code.
 In Denshi it is perfectly possible to serialize a program in the
 middle of execution, and the result of the serialization is again a
 Denshi program.
+
+[Go through the JavaScript program step by step]
 
 Because the range of each rewrite is bounded, they can
 happen in parallel across a large volume of code. It's sometimes
