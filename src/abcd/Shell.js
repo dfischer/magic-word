@@ -19,6 +19,7 @@ export default class Shell {
     this.subscribers.set("import", []);
   }
 
+  // Send newline separated input to the shell.
   send(input) {
     let output = [];
     let lines = input.split("\n").map(x => x.trim());
@@ -73,6 +74,8 @@ export default class Shell {
     };
   }
 
+  // Serialize this shell to commands that will recreate it.
+  // `shell` equals `new Shell().send(shell.toString())`
   toString() {
     let buf = [];
     // Print all of the definitions.

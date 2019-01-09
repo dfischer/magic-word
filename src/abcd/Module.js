@@ -25,6 +25,11 @@ export default class Module {
     this.data = new Map();
   }
 
+  // Iterate over the key/value pairs in the module.
+  [Symbol.iterator]() {
+    return this.data[Symbol.iterator]();
+  }
+
   // Define a word with a block of code.
   set(key, value) {
     // XXX TODO Prevent cycles in definitions. Currently a cycle will

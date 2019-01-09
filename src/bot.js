@@ -17,17 +17,19 @@
 
 import { createInterface as readline } from "readline";
 
-function loop(prompt, onInput) {
+function loop(prompt, onLine, onClose) {
   let ui = readline({ input: process.stdin, output: process.stdout });
   ui.prompt(prompt);
-  ui.on("line", (input) => {
-    let output = onInput(input);
+  ui.on("line", (line) => {
+    let output = onLine(line);
     console.log(output);
     ui.prompt(prompt);
   });
+  ui.on("close", onClose);
   return ui;
 }
 
+import fs from "fs";
 import assert from "assert";
 import Shell from "./abcd/Shell.js";
 
@@ -40,5 +42,16 @@ import Shell from "./abcd/Shell.js";
   assert.deepEqual(shell.send("foo"), "foo");
 })();
 
+const home = process.env.DENSHI_HOME;
+if (home === undefined) {
+  throw "DENSHI_HOME is undefined";
+}
+let modulePath = `${home}/modules/default`;
+let moduleBody = fs.readFileSync(modulePath, "utf8");
 let shell = new Shell();
-loop("user@denshi\n> ", x => shell.send(x));
+shell.send(moduleBody);
+
+const onLine = (x) => shell.send(x);
+const onQuit = ()  => fs.writeFileSync(modulePath, shell.toString());
+
+loop("user@denshi\n> ", onLine, onQuit);
