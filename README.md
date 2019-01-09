@@ -1,3 +1,5 @@
+# Denshi <img src="http://img.shields.io/liberapay/patrons/xkapastel.svg?logo=liberapay">
+
 Denshi is an experimental programming environment, intended to explore
 applications of machine learning to the development of software.
 
@@ -9,3 +11,8 @@ One goal of the Denshi project is to begin *synthesizing* programs in
 addition to "writing" them. The idea is to take some executable
 definition of a "good" program and use that to search a space of
 candidates.
+
+Another goal of the Denshi project is to explore the [*language/system
+dichotomy*](./src/doc/systems-and-languages.md): can the concept of a
+"programming system" unify many of the tools used with "programming
+languages" today?
