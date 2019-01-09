@@ -12,6 +12,11 @@ import Module from "./Module.js";
 export default class Shell {
   constructor() {
     this.module = new Module();
+    // `subscribers` is a map from event names to arrays of listeners.
+    this.subscribers = new Map();
+    this.subscribers.set("set", []);
+    this.subscribers.set("delete", []);
+    this.subscribers.set("import", []);
   }
 
   send(input) {
@@ -21,21 +26,51 @@ export default class Shell {
       // Defining words
       var match = line.match(/^:([a-z][a-z0-9]+) +(.*)$/);
       if (match !== null) {
-        output.push(this.module.set(match[1], match[2]));
+        let key = match[1];
+        let value = match[2];
+        let response = this.module.set(key, value);
+        output.push(response);
+        this._emit("set", { key: key, value: value });
         continue;
       }
       // Undefining words
       var match = line.match(/^~([a-z][a-z0-9]+)$/);
       if (match !== null) {
-        output.push(this.module.delete(match[1]));
+        let key = match[1];
+        let response = this.module.delete(key);
+        output.push(response);
+        this._emit("delete", { key: key });
         continue;
       }
       // Normalization
       output.push(this.module.normalize(line));
-      continue;
       // XXX TODO prefix imports
     }
     return output.join("\n");
+  }
+
+  _emit(event, data) {
+    let subs = this.subscribers.get(event);
+    for (let thunk of subs) {
+      Promise.resolve().then(() => thunk(data));
+    }
+  }
+
+  on(event, agent) {
+    if (!this.subscribers.has(event)) {
+      debugger;
+      throw `no such event: ${event}`;
+    }
+    let subs = this.subscribers.get(event);
+    subs.push(agent);
+    // Add a flag so the removal function is idempotent.
+    let removed = false;
+    return () => {
+      if (!removed) {
+        subs.splice(subs.indexOf(agent), 1);
+        removed = true;
+      }
+    };
   }
 
   toString() {
@@ -47,8 +82,3 @@ export default class Shell {
     return buf.join("\n");
   }
 }
-
-(function() {
-  let shell = new Shell();
-  shell.send(":foo bar baz");
-})();
