@@ -16,6 +16,7 @@
 // <https://www.gnu.org/licenses/.
 
 import normalize from "./normalize.js";
+import * as xl from "./accelerate.js";
 
 // A module is a key-value store, associating names with blocks of
 // code.
@@ -34,6 +35,18 @@ export default class Module {
       this.data.delete(key);
       return key;
     } else {
+      // "Acceleration" doesn't actually do anything yet; I just want
+      // to demonstrate that it's feasible to recognize sum/product
+      // types.
+      if (xl.isUnit(value)) {
+        console.log("Accelerating `unit`...");
+      } else if (xl.isInl(value)) {
+        console.log("Accelerating `inl`...");
+      } else if (xl.isInr(value)) {
+        console.log("Accelerating `inr`...");
+      } else if (xl.isPair(value)) {
+        console.log("Accelerating `pair`...");
+      }
       this.data.set(key, value);
       return value;
     }
