@@ -17,10 +17,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-
-function App(props) {
-  return <div>Denshi</div>
-}
+import App from "./ui/App.js";
 
 const body = document.querySelector("body");
 ReactDOM.render(<App/>, body);

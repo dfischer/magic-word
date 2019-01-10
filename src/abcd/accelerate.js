@@ -18,7 +18,7 @@
 import normalize from "./normalize.js";
 
 // The current strategy for accelerating polynomial types ("ADT"s) is
-// to recognize the implementations of `inl`, `inr` and `pair`.
+// to recognize the implementations of `unit`, `inl`, `inr` and `pair`.
 
 // Predicates the unit block: []
 export function isUnit(block) {
@@ -28,14 +28,14 @@ export function isUnit(block) {
 // Predicates blocks that implemement `inl`.
 // [L] [R] [X] inl exec = [X] L
 export function isInl(block) {
-  let residual = normalize(`[fst] [snd] [value] ${block} [] [] b a a d`);
+  let residual = normalize(`[fst] [snd] [value] ${block} [[]] a a d`);
   return residual === "[value] fst";
 }
 
 // Predicates blocks that implement `inr`.
 // [L] [R] [X] inr exec = [X] R
 export function isInr(block) {
-  let residual = normalize(`[fst] [snd] [value] ${block} [] [] b a a d`);
+  let residual = normalize(`[fst] [snd] [value] ${block} [[]] a a d`);
   return residual === "[value] snd";
 }
 
