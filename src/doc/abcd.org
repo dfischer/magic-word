@@ -1,0 +1,59 @@
+ABCD is a purely functional, Turing-complete, [[http://tunes.org/~iepos/joy.html][concatenative]] bytecode
+with four primitive functions:
+
+#+BEGIN_SRC
+[A] [B] a = B [A]
+[A] [B] b = [[A] B]
+    [A] c = [A] [A]
+    [A] d =
+#+END_SRC
+
+In the equations above, whenever a pattern on the left hand side of an
+equality is encountered within a volume of code, it is replaced with
+the pattern on the right. Such a replacement is called a [[https://en.wikipedia.org/wiki/Rewriting][/rewrite/]];
+the repeated application of rewrites to a volume of code is called
+/program rewriting/.
+
+[Derive these combinators from an analysis of the lambda calculus and
+the concept of scope]
+
+Program rewriting is different from evaluation in typical
+languages. Consider the following JavaScript program:
+
+#+BEGIN_SRC
+let frontPage = await HackerNews.titles();
+let relevant = frontPage.filter(x => x.includes("JavaScript"));
+let downcase = relevant.map(x => x.toLowerCase());
+console.log(downcase);
+#+END_SRC
+
+In vanilla JavaScript it is not meaningful to talk about serializing
+this program after the first line has finished evaluating. It's not
+clear how to save the state of a running JavaScript program, and even
+if such a mechanism was created (as it was in Dart with "snapshots"),
+the result would not be a "JavaScript program". It would be "something
+else", some sort of image file that has to be treated differently from
+source code.
+
+In Denshi it is perfectly possible to serialize a program in the
+middle of execution, and the result of the serialization is again a
+Denshi program.
+
+[Go through the JavaScript program step by step]
+
+Because the range of each rewrite is bounded, they can happen in
+parallel across a large volume of code.
+
+This bytecode is simple and universal, serving as a denotational
+semantics to define what is computable. To define what is complex
+(i.e. to define the spacetime usage of particular patterns), subsets
+of this language are identified and given an independent but
+compatible operational semantics[fn:0]. These subsets are called
+/dialects/ and are a first class notion throughout the Denshi system.
+
+Because this arrangement may seem strange from the view of typical
+development environments, I want to make an analogy with the UNIX
+programming model.
+
+[fn:0] This technique was used in [[http://asmjs.org/][asm.js]] and more recently the
+[[https://github.com/ElementsProject/simplicity][Simplicity blockchain language]].

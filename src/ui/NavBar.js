@@ -16,7 +16,7 @@
 // <https://www.gnu.org/licenses/.
 
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
@@ -24,14 +24,19 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import FunctionsIcon from '@material-ui/icons/Functions';
 import ExploreIcon from '@material-ui/icons/Explore';
 
-export default function NavBar({ classes }) {
+const useStyles = makeStyles({
+  root: {
+    width: "100%",
+  },
+});
+
+export default function NavBar(props) {
   // XXX TODO state
   let [position, setPosition] = useState(0);
-
-  function onChange(event, value) {
+  const onChange = (event, value) => {
     setPosition(value);
-  }
-
+  };
+  const classes = useStyles();
   return (
     <BottomNavigation value={position}
                       className={classes.root}
@@ -44,7 +49,3 @@ export default function NavBar({ classes }) {
     </BottomNavigation>
   );
 }
-
-NavBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};

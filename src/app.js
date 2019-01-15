@@ -15,6 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
+import "./ui/bootstrap.js";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./ui/App.js";

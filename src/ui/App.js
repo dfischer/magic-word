@@ -16,53 +16,27 @@
 // <https://www.gnu.org/licenses/.
 
 import React, { useState, useReducer, useEffect, useRef } from "react";
-import { withStyles } from '@material-ui/core/styles';
-import RawSearchBar from "./SearchBar.js";
-import RawNavBar from "./NavBar.js";
+import SearchBar from "./SearchBar.js";
+import NavBar from "./NavBar.js";
 
-const styles = {
-  searchBar: {
-    root: {
-      padding: '2px 4px',
-      display: 'flex',
-      alignItems: 'center',
-      width: 400,
-    },
-    input: {
-      marginLeft: 8,
-      flex: 1,
-    },
-    iconButton: {
-      padding: 10,
-    },
-  },
-  navBar: {
-    root: {
-      width: 500,
-    },
-  },
-};
-
-const NavBar    = withStyles(styles.navBar)(RawNavBar);
-const SearchBar = withStyles(styles.searchBar)(RawSearchBar);
+function useEvent(element, event, thunk) {
+  useEffect(() => {
+    element.addEventListener(event, thunk);
+    return () => element.removeEventListener(thunk);
+  });
+}
 
 export default function App(props) {
   let scrollRef = useRef(null);
-  let [showSearchBar, setShowSearchBar] = useState(true);
-  const onScroll = (event) => {
-    setShowSearchBar(scrollRef.current < window.scrollY);
-    scrollRef.current = window.scrollY;
-  };
+  useEvent(window, "scroll", () => {
+
+  });
   const onSearchBarChange = (value) => {
 
   };
   const onNavBarChange = (value) => {
 
   };
-  useEffect(() => {
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener(onScroll);
-  });
   return (
     <div>
       <SearchBar onChange={onSearchBarChange}/>

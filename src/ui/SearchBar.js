@@ -16,13 +16,31 @@
 // <https://www.gnu.org/licenses/.
 
 import React from "react";
-import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 
-export default function SearchBar({ classes, onChange }) {
+const useStyles = makeStyles({
+  root: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    width: "96%",
+    margin: "0 auto",
+  },
+  input: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  iconButton: {
+    padding: 10,
+  },
+});
+
+export default function SearchBar({ onChange }) {
+  const classes = useStyles();
   return (
     <Paper className={classes.root} elevation={1}>
       <IconButton className={classes.iconButton} aria-label="Search">
@@ -32,7 +50,3 @@ export default function SearchBar({ classes, onChange }) {
     </Paper>
   );
 }
-
-SearchBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
