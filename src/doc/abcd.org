@@ -8,6 +8,7 @@ with four primitive functions:
     [A] d =
 #+END_SRC
 
+** Rewriting
 In the equations above, whenever a pattern on the left hand side of an
 equality is encountered within a volume of code, it is replaced with
 the pattern on the right. Such a replacement is called a [[https://en.wikipedia.org/wiki/Rewriting][/rewrite/]];
@@ -44,6 +45,7 @@ Denshi program.
 Because the range of each rewrite is bounded, they can happen in
 parallel across a large volume of code.
 
+** Dialects
 This bytecode is simple and universal, serving as a denotational
 semantics to define what is computable. To define what is complex
 (i.e. to define the spacetime usage of particular patterns), subsets
@@ -54,6 +56,17 @@ compatible operational semantics[fn:0]. These subsets are called
 Because this arrangement may seem strange from the view of typical
 development environments, I want to make an analogy with the UNIX
 programming model.
+
+** Inference
+A deep inference presentation of propositional, intuitionistic logic.
+
+#+BEGIN_SRC
+                    [A] ⊢ [[A] [A] (∧)]
+          [[A] [B] (∧)] ⊢ [A]
+          [[A] [B] (∧)] ⊢ [B]
+[[[A] [B] (⊃)] [A] (∧)] ⊢ [B]
+                    [B] ⊢ [[A] [[B] [A] (∧)] (⊃)]
+#+END_SRC
 
 [fn:0] This technique was used in [[http://asmjs.org/][asm.js]] and more recently the
 [[https://github.com/ElementsProject/simplicity][Simplicity blockchain language]].

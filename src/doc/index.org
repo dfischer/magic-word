@@ -1,5 +1,6 @@
-Welcome to the Denshi documentation.
+Denshi is an experimental programming environment, intended to explore
+applications of machine learning to the development of software.
 
-[[./systems-and-languages.org][Systems & Languages]]
-[[./abcd.org][ABCD]]
-
+** Contents
+- [[./systems-and-languages.org][Systems & Languages]]
+- [[./abcd.org][ABCD]]
