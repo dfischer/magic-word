@@ -27,8 +27,10 @@ const useStyles = makeStyles({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    width: "96%",
+    width: "100%",
     margin: "0 auto",
+    position: "fixed",
+    top: 0,
   },
   input: {
     marginLeft: 8,

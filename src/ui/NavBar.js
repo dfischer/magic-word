@@ -27,6 +27,8 @@ import ExploreIcon from '@material-ui/icons/Explore';
 const useStyles = makeStyles({
   root: {
     width: "100%",
+    position: "fixed",
+    bottom: 0,
   },
 });
 
@@ -37,15 +39,26 @@ export default function NavBar(props) {
     setPosition(value);
   };
   const classes = useStyles();
+  let data = [
+    { label: "Home", icon: <HomeIcon/> },
+    { label: "Explore", icon: <ExploreIcon/> },
+    { label: "Events", icon: <NotificationsIcon/> },
+    { label: "Functions", icon: <FunctionsIcon/> },
+  ];
+  let buttons = data.map(({ label, icon }) => {
+    return (
+      <BottomNavigationAction
+        label={label}
+        icon={icon}
+      />
+    )
+  });
   return (
     <BottomNavigation value={position}
                       className={classes.root}
                       onChange={onChange}
                       showLabels>
-      <BottomNavigationAction label="Home" icon={<HomeIcon/>}/>
-      <BottomNavigationAction label="Explore" icon={<ExploreIcon/>}/>
-      <BottomNavigationAction label="Events" icon={<NotificationsIcon/>}/>
-      <BottomNavigationAction label="Functions" icon={<FunctionsIcon/>}/>
+      { buttons }
     </BottomNavigation>
   );
 }

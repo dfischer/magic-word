@@ -16,6 +16,7 @@
 // <https://www.gnu.org/licenses/.
 
 import React, { useState, useReducer, useEffect, useRef } from "react";
+import { makeStyles } from '@material-ui/styles';
 import SearchBar from "./SearchBar.js";
 import NavBar from "./NavBar.js";
 
@@ -26,10 +27,17 @@ function useEvent(element, event, thunk) {
   });
 }
 
+const useStyles = makeStyles({
+  root: {
+    width: "100%",
+    height: "100%",
+  },
+});
+
 export default function App(props) {
   let scrollRef = useRef(null);
   useEvent(window, "scroll", () => {
-
+    
   });
   const onSearchBarChange = (value) => {
 
@@ -37,8 +45,9 @@ export default function App(props) {
   const onNavBarChange = (value) => {
 
   };
+  const classes = useStyles();
   return (
-    <div>
+    <div className={classes.root}>
       <SearchBar onChange={onSearchBarChange}/>
       <NavBar onChange={onNavBarChange}/>
     </div>
