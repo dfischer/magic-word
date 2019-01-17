@@ -1,12 +1,12 @@
 const path = require("path");
 
-let app = {
+let client = {
   mode: "development",
   target: "web",
-  entry: "./src/app.js",
+  entry: "./src/client/index.js",
   output: {
     path: path.resolve(__dirname, "lib"),
-    filename: "app.js",
+    filename: "denshi.js",
   },
   module: {
     rules: [
@@ -28,15 +28,15 @@ fs.readdirSync("node_modules")
   .filter(x => [".bin"].indexOf(x) === -1)
   .forEach(x => externals[x] = `commonjs ${x}`);
 
-let bot = {
+let server = {
   mode: "development",
   target: "node",
-  entry: "./src/bot.js",
+  entry: "./src/server/index.js",
   output: {
     path: path.resolve(__dirname, "bin"),
-    filename: "bot.js",
+    filename: "denshi.js",
   },
   externals: externals,
 };
 
-module.exports = [app, bot];
+module.exports = [client, server];

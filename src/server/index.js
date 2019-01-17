@@ -30,8 +30,8 @@ function loop(prompt, onLine, onClose) {
 }
 
 import fs from "fs";
-import assert from "assert";
-import Shell from "./abcd/Shell.js";
+import assert from "../assert";
+import Shell from "../abcd/Shell.js";
 
 (function() {
   console.log(`testing shell...`);
