@@ -112,6 +112,11 @@ export default class Term {
         var term = Term.word(token);
         build.push(term);
         index++;
+      } else if (isHint(token)) {
+        var value = token.substring(1, token.length-1);
+        var term = Term.hint(value);
+        build.push(term);
+        index++;
       } else {
         assert(token.length === 0, `unknown token: ${token}`);
         index++;

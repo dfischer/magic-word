@@ -130,7 +130,8 @@ function _normalize(term, ctx) {
         dictionary.set(term.value, binding);
       }
     } else if (Term.isHint(term)) {
-      //
+      // Preserve hints in the code for now.
+      thunk(term);
     }
   }
 
