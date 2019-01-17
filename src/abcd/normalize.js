@@ -116,6 +116,7 @@ function _normalize(term, ctx) {
       code.push(term.snd);
       code.push(term.fst);
     } else if (Term.isWord(term)) {
+      // If we've parsed this word before, queue its definition.
       if (dictionary.has(term.value)) {
         let binding = dictionary.get(term.value);
         code.push(binding);
@@ -123,8 +124,11 @@ function _normalize(term, ctx) {
       }
       let source = ctx.expand(term.value);
       if (source === term.value) {
+        // If the word's expansion is equal to its name, that means it
+        // didn't actually have a definition. So just thunk it.
         thunk(term);
       } else {
+        // Otherwise cache the definition we got and queue it.
         let binding = Term.parse(source);
         code.push(binding);
         dictionary.set(term.value, binding);
