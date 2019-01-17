@@ -70,7 +70,6 @@ export default class Term {
     const isRbracket = (x) => x == "]";
     const isLparen   = (x) => x == "(";
     const isRparen   = (x) => x == ")";
-    // Words are alphanumeric with hyphens, always starting with an alpha.
     const isWord     = (x) => /^[^\[\]\(\)\t\r\n :]+$/.test(x);
     const isHint     = (x) => /^\(([^\[\]\(\)\t\r\n :]+)\)$/.test(x);
     const tokenize = (x) => {
