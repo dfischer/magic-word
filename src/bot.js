@@ -34,6 +34,7 @@ import assert from "assert";
 import Shell from "./abcd/Shell.js";
 
 (function() {
+  console.log(`testing shell...`);
   let shell = new Shell();
   assert.deepEqual(shell.send("foo"), "foo");
   shell.send(":foo bar [baz] qux");

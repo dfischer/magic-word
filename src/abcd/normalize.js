@@ -26,6 +26,9 @@
 // like this, including numbers, strings, records, images, videos and
 // so on.
 
+import Term from "./Term.js";
+import assert from "../assert.js";
+
 // Rewrite a string of bytecode until it reaches normal form. Doesn't
 // handle quotas, uses a simplistic evaluation strategy. Note that
 // this will hang if the bytecode is some sort of infinite loop.
@@ -33,206 +36,18 @@
 //   expand: a function from words to their expansions
 // }
 export default function normalize(src, ctx) {
-  if (ctx === undefined) {
-    ctx = {
-      expand: (x) => x,
-    };
-  }
-  let fst = parse(src, ctx);
-  let snd = solve(fst);
-  return quote(snd);
-}
-
-class Term {
-  constructor() {}
-}
-
-// The identity function.
-class Id extends Term {
-  constructor() { super() }
-}
-
-// [A] [B] a = B [A]
-// "Application" of a block to the stack.
-class App extends Term {
-  constructor() { super() }
-}
-
-// [A] [B] b = [[A] B]
-// "Binding" a block to another.
-class Bind extends Term {
-  constructor()  { super() }
-}
-
-// [A] c = [A] [A]
-// Copying a block.
-class Copy extends Term {
-  constructor()  { super() }
-}
-
-// [A] d =
-// Dropping a block.
-class Drop extends Term {
-  constructor()  { super() }
-}
-
-// A word like `foo`.
-class Variable extends Term {
-  constructor(name) {
-    super();
-    this.name = name;
-  }
-}
-
-// A quotation like `[foo]`.
-class Block extends Term {
-  constructor(body) {
-    super();
-    this.body = body;
-  }
-}
-
-// A sequence like `foo bar`.
-class Sequence extends Term {
-  constructor(fst, snd) {
-    super();
-    this.fst = fst;
-    this.snd = snd;
-  }
-}
-
-const id       = new Id();
-const app      = new App();
-const bind     = new Bind();
-const copy     = new Copy();
-const drop     = new Drop();
-const block    = (x) => new Block(x);
-const variable = (x) => new Variable(x);
-
-function sequence(fst, snd) {
-  // don't create junk code
-  if (snd instanceof Id) {
-    return fst;
-  }
-  if (fst instanceof Id) {
-    return snd;
-  }
-  // normalize the sequence so that
-  // `a b c d` becomes seq(a, seq(b, seq(c, d)))
-  if (fst instanceof Sequence) {
-    let inner = sequence(fst.snd, snd);
-    return sequence(fst.fst, inner);
-  }
-  return new Sequence(fst, snd);
-}
-
-function log(x) {
-  console.log(x);
-}
-
-function error(x) {
-  debugger;
-  throw x;
-}
-
-// Convert a string of code in to a term.
-function parse(src, ctx) {
-  const isLbracket = (x) => x == "[";
-  const isRbracket = (x) => x == "]";
-  const isLparen   = (x) => x == "(";
-  const isRparen   = (x) => x == ")";
-  // Words are alphanumeric with hyphens, always starting with an alpha.
-  const isVariable = (x) => /^[a-z][a-z0-9-]+$/.test(x);
-  const isHint     = (x) => /^\([a-z][a-z0-9-]*\)$/.test(x);
-  const tokenize = (x) => {
-    // Code is made out of words, separated by spaces. Allow word-like
-    // separation on the inside of brackets, but not the outside. So
-    // `[foo]` is legal but `[]bar` is not.
-    return x.replace(/\[/g, "[ ").replace(/\]/g, " ]").split(" ");
-  };
-  let build = [];
-  let stack = [];
-  let words = tokenize(src);
-  let index = 0;
-  while (index < words.length) {
-    const word = words[index];
-    if (isLbracket(word)) {
-      stack.push(build);
-      build = [];
-      index++;
-    } else if (isRbracket(word)) {
-      assert(stack.length != 0, "unbalanced brackets");
-      var term = block(
-        build.reduceRight((acc, x) => sequence(x, acc), id));
-      build = stack.pop();
-      build.push(term);
-      index++;
-    } else if (word === "a") {
-      build.push(app);
-      index++;
-    } else if (word === "b") {
-      build.push(bind);
-      index++;
-    } else if (word === "c") {
-      build.push(copy);
-      index++;
-    } else if (word === "d") {
-      build.push(drop);
-      index++;
-    } else if (isVariable(word)) {
-      var term;
-      if (ctx.expand) {
-        let binding = ctx.expand(word);
-        if (binding !== word) {
-          term = parse(binding, ctx);
-        } else {
-          term = variable(word);
-        }
-      } else {
-        term = variable(word);
-      }
-      build.push(term);
-      index++;
-    } else if (word.length === 0) {
-      index++;
-    } else {
-      error(`couldn't parse word ${word}`);
-    }
-  }
-  return build.reduceRight((acc, x) => sequence(x, acc), id);
-}
-
-// Convert a term into source code that will reproduce it.
-function quote(term) {
-  if (term instanceof Id) {
-    return "";
-  } else if (term instanceof App) {
-    return "a";
-  } else if (term instanceof Bind) {
-    return "b";
-  } else if (term instanceof Copy) {
-    return "c";
-  } else if (term instanceof Drop) {
-    return "d";
-  } else if (term instanceof Block) {
-    let body = quote(term.body);
-    return `[${body}]`;
-  } else if (term instanceof Sequence) {
-    let fst = quote(term.fst);
-    let snd = quote(term.snd);
-    return `${fst} ${snd}`;
-  } else if (term instanceof Variable) {
-    return term.name;
-  } else {
-    error(`cannot quote term: ${term}`);
-  }
+  ctx = ctx || {};
+  ctx.expand = ctx.expand || ((x) => x);
+  var term = Term.parse(src);
+  var term = _normalize(term, ctx);
+  return term.toString();
 }
 
 // Attempt to rewrite a term until it reaches normal form.
 // I'll need to come back here and think about e.g. spacetime quota,
 // evaluation strategies etc. For now this is just the easiest thing
 // I could implement.
-function solve(term) {
+function _normalize(term, ctx) {
   // Terms that were "thunked" because of a failure to perform a
   // rewrite. If a rewrite can't be performed, that term and all
   // of the terms on the stack become "dead code".
@@ -245,6 +60,8 @@ function solve(term) {
   // queue, so the "first" element is at the end of the array.
   let code = [term];
 
+  let dictionary = new Map();
+
   function thunk(term) {
     sink = sink.concat(data);
     sink.push(term);
@@ -253,9 +70,10 @@ function solve(term) {
 
   while (code.length > 0) {
     let term = code.pop();
-    if (term instanceof Id) {
-      // The identity function is very easy to implement.
-    } else if (term instanceof App) {
+    assert(Term.isTerm(term), `invalid term: ${term}`);
+    if (Term.isId(term)) {
+      // [foo] = [foo]
+    } else if (Term.isApp(term)) {
       // [foo] [bar] a = bar [foo]
       if (data.length < 2) {
         thunk(term);
@@ -265,7 +83,7 @@ function solve(term) {
       let arg = data.pop();
       code.push(arg);
       code.push(fun.body);
-    } else if (term instanceof Bind) {
+    } else if (Term.isBind(term)) {
       // [foo] [bar] b = [[foo] bar]
       if (data.length < 2) {
         thunk(term);
@@ -273,32 +91,46 @@ function solve(term) {
       }
       let fun = data.pop();
       let arg = data.pop();
-      data.push(block(sequence(arg, fun.body)));
-    } else if (term instanceof Copy) {
+      let seq = Term.seq(arg, fun.body);
+      let blk = Term.block(seq);
+      data.push(blk);
+    } else if (Term.isCopy(term)) {
       // [foo] c = [foo] [foo]
       if (data.length < 1) {
         thunk(term);
         continue;
       }
       data.push(data[data.length-1]);
-    } else if (term instanceof Drop) {
+    } else if (Term.isDrop(term)) {
       // [foo] d =
       if (data.length < 1) {
         thunk(term);
         continue;
       }
       data.pop();
-    } else if (term instanceof Block) {
+    } else if (Term.isBlock(term)) {
       // Just put the block on the stack.
       data.push(term);
-    } else if (term instanceof Sequence) {
+    } else if (Term.isSeq(term)) {
       // Queue up the components in order.
       code.push(term.snd);
       code.push(term.fst);
-    } else if (term instanceof Variable) {
-      thunk(term);
-    } else {
-      error(`invalid term: ${term}`);
+    } else if (Term.isWord(term)) {
+      if (dictionary.has(term.value)) {
+        let binding = dictionary.get(term.value);
+        code.push(binding);
+        continue;
+      }
+      let source = ctx.expand(term.value);
+      if (source === term.value) {
+        thunk(term);
+      } else {
+        let binding = Term.parse(source);
+        code.push(binding);
+        dictionary.set(term.value, binding);
+      }
+    } else if (Term.isHint(term)) {
+      //
     }
   }
 
@@ -308,22 +140,14 @@ function solve(term) {
   // represents. For `sink` and `data`, the leftmost element should be
   // in front.
 
-  let state = id;
+  let state = Term.id;
   //           left-to-right      rightmost in front
-  state = code.reduce((acc, x) => sequence(x, acc), state);
+  state = code.reduce((acc, x) => Term.seq(x, acc), state);
   //           right-to-left           leftmost in front
-  state = data.reduceRight((acc, x) => sequence(x, acc), state);
+  state = data.reduceRight((acc, x) => Term.seq(x, acc), state);
   //           right-to-left           leftmost in front
-  state = sink.reduceRight((acc, x) => sequence(x, acc), state);
+  state = sink.reduceRight((acc, x) => Term.seq(x, acc), state);
   return state;
-}
-
-function assert(x, message) {
-  if (!x) {
-    console.log(`assert: ${message}`);
-    debugger;
-    throw "aborting";
-  }
 }
 
 (function() {
@@ -342,10 +166,9 @@ function assert(x, message) {
     "[foo] [bar] d": "[foo]",
   };
   for (let [key, expected] of Object.entries(tests)) {
-    log(`test: ${key} = ${expected}`);
+    console.log(`test: ${key} = ${expected}`);
     const actual = normalize(key);
-    if (expected !== actual) {
-      error(`expected: ${key} = ${expected}\nactual: ${key} = ${actual}`);
-    }
+    assert(expected === actual,
+           `expected: ${key} = ${expected}\nactual: ${key} = ${actual}`);
   }
 })();
