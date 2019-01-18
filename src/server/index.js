@@ -15,22 +15,9 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import { createInterface as readline } from "readline";
-
-function loop(prompt, onLine, onClose) {
-  let ui = readline({ input: process.stdin, output: process.stdout });
-  ui.prompt(prompt);
-  ui.on("line", (line) => {
-    let output = onLine(line);
-    console.log(output);
-    ui.prompt(prompt);
-  });
-  ui.on("close", onClose);
-  return ui;
-}
-
 import fs from "fs";
-import assert from "../assert";
+import net from "net";
+import assert from "assert";
 import Shell from "../abcd/Shell.js";
 
 (function() {
@@ -52,7 +39,32 @@ let moduleBody = fs.readFileSync(modulePath, "utf8");
 let shell = new Shell();
 shell.send(moduleBody);
 
-const onLine = (x) => shell.send(x);
-const onQuit = ()  => fs.writeFileSync(modulePath, shell.toString());
+const serve = (shell, socket) => {
+  let buf = "";
+  socket.setEncoding("utf8");
+  socket.on("data", (data) => {
+    buf += data;
+    let offset = 0;
+    let index = buf.indexOf("\n", offset);
+    while (index !== -1) {
+      let input = buf.substring(offset, index - offset);
+      let output = shell.send(input);
+      socket.write(`${output}\n`);
+      offset = index + 1;
+      index = buf.indexOf("\n", offset);
+    }
+    buf = buf.substring(offset);
+  });
+  socket.on("close", () => {
+    fs.writeFileSync(modulePath, shell.toString());
+    console.log(`goodbye`);
+    process.exit(1);
+  });
+  socket.on("error", (error) => {
+    console.log(`ERROR: ${error}`);
+    process.exit(1);
+  });
+}
 
-loop("user@denshi\n> ", onLine, onQuit);
+let server = net.createServer((socket) => serve(shell, socket));
+server.listen(4000);
