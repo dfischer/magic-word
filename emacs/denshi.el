@@ -15,9 +15,18 @@
 ;; License along with this program.  If not, see
 ;; <https:;;www.gnu.org/licenses/.
 
+(defvar denshi-server-host "127.0.0.1"
+  "The Denshi language server's host.")
+
+(defvar denshi-server-port 4000
+  "The Denshi language server's port.")
+
 (defun denshi-connect ()
   "Connect to a Denshi language server."
   (interactive)
-  (message "Not implemented."))
+  (let* ((program (cons denshi-server-host denshi-server-port))
+         (buffer (make-comint "denshi" program)))
+    (switch-to-buffer buffer)
+    (message "Connected.")))
 
 (provide 'denshi)

@@ -40,6 +40,7 @@ let shell = new Shell();
 shell.send(moduleBody);
 
 const serve = (shell, socket) => {
+  const prompt = "user@denshi\n> ";
   let buf = "";
   socket.setEncoding("utf8");
   socket.on("data", (data) => {
@@ -49,7 +50,7 @@ const serve = (shell, socket) => {
     while (index !== -1) {
       let input = buf.substring(offset, index - offset);
       let output = shell.send(input);
-      socket.write(`${output}\n`);
+      socket.write(`${output}\n${prompt}`);
       offset = index + 1;
       index = buf.indexOf("\n", offset);
     }
@@ -64,6 +65,7 @@ const serve = (shell, socket) => {
     console.log(`ERROR: ${error}`);
     process.exit(1);
   });
+  socket.write(prompt);
 }
 
 let server = net.createServer((socket) => serve(shell, socket));
