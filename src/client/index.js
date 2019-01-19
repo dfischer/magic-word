@@ -15,10 +15,10 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import "../ui/material-ui-boilerplate.js";
+import "./ui/material-ui-boilerplate.js";
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "../ui/App.js";
+import App from "./ui/App.js";
 
 const body = document.querySelector("body");
 ReactDOM.render(<App/>, body);
