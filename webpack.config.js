@@ -55,4 +55,15 @@ let irc = {
   externals: externals,
 }
 
-module.exports = [app, irc];
+let shell = {
+  mode: "development",
+  target: "node",
+  entry: "./src/abc/shell/main.js",
+  output: {
+    path: path.resolve(__dirname, "bin"),
+    filename: "shell.js",
+  },
+  externals: externals,
+}
+
+module.exports = [app, irc, shell];

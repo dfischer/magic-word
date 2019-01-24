@@ -15,11 +15,12 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
+import assert from "../../../assert.js";
 import parse from "./parse.js";
 import quote from "./quote.js";
 import { Term, Real } from "./Term.js";
 
-export default (src) => {
+export default (src, expand) => {
   let gas   = 65535;
   let sink  = [];
   let data  = [];
@@ -27,14 +28,27 @@ export default (src) => {
   let words = new Map();
   let redex;
 
+  if (expand === undefined) {
+    expand = (x) => x;
+  }
+
   const fetch = () => {
     assert(code.length > 0);
     let term = code.pop();
-    debugger;
-    while (Term.isSequence(term)) {
-      code.push(term.snd);
-      code.push(term.fst);
-      term = code.pop();
+    while (true) {
+      if (Term.isSequence(term)) {
+        code.push(term.snd);
+        term = term.fst;
+      } else if (Term.isWord(term)) {
+        let src = expand(term.value);
+        if (src === term.value) {
+          break;
+        } else {
+          term = parse(src);
+        }
+      } else {
+        break;
+      }
     }
     return term;
   }
