@@ -17,8 +17,15 @@
 
 import norm from "../norm/pure/norm.js";
 
-export default (src) => {
-  for (let i = 0; i < sampleLength; i++) {
-
+export default (wave) => {
+  let buf = new Float64Array(65536);
+  for (let i = 0; i < buf.length; i++) {
+    let time = i / buf.length;
+    let src = `${time} ${wave}`;
+    let dst = norm(src);
+    let sample = Number.parseFloat(dst);
+    assert(!Number.isNaN(value));
+    buf[i] = sample;
   }
+  return buf;
 }

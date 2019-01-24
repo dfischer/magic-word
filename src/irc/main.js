@@ -15,9 +15,9 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import connect from "../../connect.js";
-import open from "../../../abc/shell/open.js";
-import makeParser from "../../../abc/shell/makeParser.js";
+import connect from "./connect.js";
+import open from "../abc/shell/open.js";
+import makeParser from "../abc/shell/makeParser.js";
 
 const nickname = process.env.DENSHI_IRC_NICKNAME;
 const password = process.env.DENSHI_IRC_PASSWORD;
