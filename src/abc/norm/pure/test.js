@@ -15,12 +15,28 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import norm from "./abc/norm/pure/norm.js";
-import test from "./abc/norm/pure/test.js";
-import main from "./irc/main.js";
-import connect from "./irc/connect.js";
+import assert from "../../../assert.js";
+import norm from "./norm.js";
 
-export default {
-  abc: { norm, test },
-  irc: { main, connect },
+export default () => {
+  let tests = {
+    "[foo] [bar] a": "bar [foo]",
+    "[foo] [bar] b": "[[foo] bar]",
+    "[foo] c": "[foo] [foo]",
+    "[foo] d": "",
+    "[foo] s bar r": "[bar] foo",
+    "1 2 +": "3",
+    "2 3 *": "6",
+    "1 -": "-1",
+    "2 /": "0.5",
+    "2 3 &": "2",
+    "2 3 |": "3",
+    "2.5 !": "2",
+    "2.5 ?": "3",
+  }
+  for (let [src, expected] of Object.entries(tests)) {
+    console.log(`norm: test: ${src} = ${expected}`);
+    const actual = norm(src);
+    assert(expected === actual, `expected\n${expected}\nbut got\n${actual}`);
+  }
 }

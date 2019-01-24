@@ -7,7 +7,3 @@
 Denshi is an experimental programming environment, intended to explore
 applications of machine learning to the development of software.
 
-There are several ways to run Denshi. An instance of the [Denshi
-mobile app](https://denshi.app) is running [here](https://denshi.app),
-along with [documentation](https://denshi.app/doc). There is also a
-language server with GNU/Emacs integration.

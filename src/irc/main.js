@@ -15,28 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import assert from "../../assert.js";
-import norm from "./norm.js";
+import connect from "./connect.js";
+
+const nickname = process.env.DENSHI_IRC_NICKNAME;
+const password = process.env.DENSHI_IRC_PASSWORD;
+const channel = process.env.DENSHI_IRC_CHANNEL;
+const address = process.env.DENSHI_IRC_ADDRESS;
+const port = process.env.DENSHI_IRC_PORT;
 
 export default () => {
-  let tests = {
-    "[foo] [bar] a": "bar [foo]",
-    "[foo] [bar] b": "[[foo] bar]",
-    "[foo] c": "[foo] [foo]",
-    "[foo] d": "",
-    "[foo] s bar r": "[bar] foo",
-    "1 2 +": "3",
-    "2 3 *": "6",
-    "1 -": "-1",
-    "2 /": "0.5",
-    "2 3 &": "2",
-    "2 3 |": "3",
-    "2.5 !": "2",
-    "2.5 ?": "3",
-  }
-  for (let [src, expected] of Object.entries(tests)) {
-    console.log(`norm: test: ${src} = ${expected}`);
-    const actual = norm(src);
-    assert(expected === actual, `expected\n${expected}\nbut got\n${actual}`);
-  }
+  connect({ nickname, password, channel, address, port })
 }
