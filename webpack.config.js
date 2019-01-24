@@ -39,4 +39,20 @@ let v0_server = {
   externals: externals,
 };
 
-module.exports = [v0_client, v0_server];
+let v1_lib = {
+  mode: "development",
+  target: "node",
+  entry: "./src/v1/denshi.js",
+  output: {
+    path: path.resolve(__dirname, "lib"),
+    filename: "denshi.js",
+    library: "denshi",
+    libraryTarget: "commonjs2",
+    libraryExport: "default",
+  },
+  // this doesn't seem to work...something about the chromebook setup.
+  // devtool: "source-map",
+  externals: externals,
+}
+
+module.exports = [v1_lib];

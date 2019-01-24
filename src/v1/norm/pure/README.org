@@ -1,0 +1,4 @@
+This is a normalizer written in the style of a typical Lisp
+interpreter: pairs are used to create syntax trees, which are walked
+by an evaluator. The intention is to be simple and correct,
+acknowledging that performance will suffer for this.
