@@ -44,13 +44,15 @@ let app = {
   },
 }
 
-let irc = {
+let irc = {};
+
+irc.Denshi = {
   mode: "development",
   target: "node",
-  entry: "./src/irc/main.js",
+  entry: "./src/irc/bots/Denshi/main.js",
   output: {
-    path: path.resolve(__dirname, "bin"),
-    filename: "irc.js",
+    path: path.resolve(__dirname, "bin", "irc"),
+    filename: "Denshi.js",
   },
   externals: externals,
 }
@@ -66,4 +68,4 @@ let shell = {
   externals: externals,
 }
 
-module.exports = [app, irc, shell];
+module.exports = [app, irc.Denshi, shell];

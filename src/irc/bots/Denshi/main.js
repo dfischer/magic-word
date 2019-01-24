@@ -15,12 +15,24 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import connect from "./connect.js";
+import connect from "../../connect.js";
+import open from "../../../abc/shell/open.js";
+import makeParser from "../../../abc/shell/makeParser.js";
 
 const nickname = process.env.DENSHI_IRC_NICKNAME;
 const password = process.env.DENSHI_IRC_PASSWORD;
-const channel = process.env.DENSHI_IRC_CHANNEL;
-const address = process.env.DENSHI_IRC_ADDRESS;
-const port = process.env.DENSHI_IRC_PORT;
+const channel  = process.env.DENSHI_IRC_CHANNEL;
+const address  = process.env.DENSHI_IRC_ADDRESS;
+const port     = process.env.DENSHI_IRC_PORT;
 
-connect({ nickname, password, channel, address, port })
+let shell = open();
+let parse = makeParser(shell);
+
+connect(
+  { nickname, password, channel, address, port },
+  (line) => {
+    let command = parse(line);
+    let response = command();
+    return response;
+  },
+);

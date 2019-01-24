@@ -35,6 +35,7 @@ export default (src, expand) => {
   const fetch = () => {
     assert(code.length > 0);
     let term = code.pop();
+    // XXX HACK Think of a better way to do word expansion.
     while (true) {
       if (Term.isSequence(term)) {
         code.push(term.snd);
@@ -94,7 +95,6 @@ export default (src, expand) => {
   while (gas > 0 && code.length > 0) {
     gas--;
     redex = fetch();
-    //console.log(`norm: redex is ${quote(redex)}`);
     if (Term.isId(redex)) {
       //
     } else if (Term.isApply(redex)) {
@@ -207,6 +207,5 @@ export default (src, expand) => {
   }, state);
 
   let dst = quote(state);
-  //console.log(`norm: ${src} => ${dst}`);
   return dst
 }
