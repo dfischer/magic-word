@@ -15,12 +15,8 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import norm from "./abc/norm/pure/norm.js";
-import test from "./abc/norm/pure/test.js";
-import main from "./irc/main.js";
-import connect from "./irc/connect.js";
+import React from "react";
 
-export default {
-  abc: { norm, test },
-  irc: { main, connect },
+export default (props) => {
+  return <h1>App</h1>;
 }

@@ -23,6 +23,4 @@ const channel = process.env.DENSHI_IRC_CHANNEL;
 const address = process.env.DENSHI_IRC_ADDRESS;
 const port = process.env.DENSHI_IRC_PORT;
 
-export default () => {
-  connect({ nickname, password, channel, address, port })
-}
+connect({ nickname, password, channel, address, port })
