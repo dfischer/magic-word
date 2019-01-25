@@ -205,3 +205,7 @@ export default (src, expand) => {
   let dst = quote(state);
   return dst
 }
+
+import test from "./test.js";
+test();
+
