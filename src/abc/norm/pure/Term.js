@@ -29,8 +29,6 @@ export class Term {
   static get drop()    { return kDrop    }
   static get reset()   { return kReset   }
   static get shift()   { return kShift   }
-  static get min()     { return kMin     }
-  static get max()     { return kMax     }
   static get sum()     { return kSum     }
   static get negate()  { return kNegate  }
   static get product() { return kProduct }
@@ -93,14 +91,6 @@ export class Term {
 
   static isShift(obj) {
     return Term.isConstant(obj) && obj.name === "shift";
-  }
-
-  static isMin(obj) {
-    return Term.isConstant(obj) && obj.name === "min";
-  }
-
-  static isMax(obj) {
-    return Term.isConstant(obj) && obj.name === "max";
   }
 
   static isSum(obj) {
@@ -197,18 +187,6 @@ export class Binary extends Term {
 }
 
 export class Real {
-  static min(fst, snd) {
-    assert(Term.isReal(fst));
-    assert(Term.isReal(snd));
-    return Term.real(Math.min(fst.value, snd.value));
-  }
-
-  static max(fst, snd) {
-    assert(Term.isReal(fst));
-    assert(Term.isReal(snd));
-    return Term.real(Math.max(fst.value, snd.value));
-  }
-
   static sum(fst, snd) {
     assert(Term.isReal(fst));
     assert(Term.isReal(snd));
@@ -273,8 +251,6 @@ const kCopy    = new Constant("copy");
 const kDrop    = new Constant("drop");
 const kReset   = new Constant("reset");
 const kShift   = new Constant("shift");
-const kMin     = new Constant("min");
-const kMax     = new Constant("max");
 const kSum     = new Constant("sum");
 const kNegate  = new Constant("negate");
 const kProduct = new Constant("product");

@@ -16,8 +16,10 @@
 // <https://www.gnu.org/licenses/.
 
 import norm from "../norm/pure/norm.js";
+import testNorm from "../norm/pure/test.js";
 
 export default () => {
+  testNorm();
   let module = new Map();
   const set = (key, value) => {
     console.log(`module: set ${key} to ${value}`);

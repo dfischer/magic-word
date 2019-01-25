@@ -29,10 +29,8 @@ export default () => {
     "2 3 *": "6",
     "1 -": "-1",
     "2 /": "0.5",
-    "2 3 &": "2",
-    "2 3 |": "3",
-    "2.5 !": "2",
-    "2.5 ?": "3",
+    "2.5 ~": "2",
+    "2.5 #": "3",
   }
   for (let [src, expected] of Object.entries(tests)) {
     console.log(`norm: test: ${src} = ${expected}`);

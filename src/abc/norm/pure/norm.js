@@ -158,10 +158,6 @@ export default (src, expand) => {
           code.push(block.body);
         }
       }
-    } else if (Term.isMin(redex)) {
-      arith2(Real.min);
-    } else if (Term.isMax(redex)) {
-      arith2(Real.max);
     } else if (Term.isSum(redex)) {
       arith2(Real.sum);
     } else if (Term.isNegate(redex)) {

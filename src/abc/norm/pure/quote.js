@@ -34,10 +34,6 @@ export default function quote(obj) {
     return "r";
   } else if (Term.isShift(obj)) {
     return "s";
-  } else if (Term.isMin(obj)) {
-    return "&";
-  } else if (Term.isMax(obj)) {
-    return "|";
   } else if (Term.isSum(obj)) {
     return "+";
   } else if (Term.isNegate(obj)) {
@@ -55,9 +51,9 @@ export default function quote(obj) {
   } else if (Term.isSin(obj)) {
     return "%";
   } else if (Term.isFloor(obj)) {
-    return "!";
+    return "~";
   } else if (Term.isCeil(obj)) {
-    return "?";
+    return "#";
   } else if (Term.isHint(obj)) {
     return `(${obj.value})`;
   } else if (Term.isWord(obj)) {

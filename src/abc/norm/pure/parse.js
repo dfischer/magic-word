@@ -65,13 +65,9 @@ export default (src) => {
       build.push(Term.cos);
     } else if (token === "%") {
       build.push(Term.sin);
-    } else if (token === "&") {
-      build.push(Term.min);
-    } else if (token === "|") {
-      build.push(Term.max);
-    } else if (token === "!") {
+    } else if (token === "~") {
       build.push(Term.floor);
-    } else if (token === "?") {
+    } else if (token === "#") {
       build.push(Term.ceil);
     } else if (/^\(.+\)$/.test(token)) {
       let name = token.substring(1, token.length - 1);
