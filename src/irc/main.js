@@ -27,8 +27,7 @@ const port     = process.env.DENSHI_IRC_PORT;
 
 let shell = open();
 let parse = makeParser(shell);
-
-connect(
+let handle = connect(
   { nickname, password, channel, address, port },
   (line) => {
     let command = parse(line);
