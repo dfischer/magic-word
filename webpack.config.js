@@ -75,6 +75,17 @@ let wiki = {
     filename: "wiki.js",
   },
   externals: externals,
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
 }
 
 module.exports = [app, irc, shell, wiki];

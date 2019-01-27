@@ -18,39 +18,74 @@
 import open from "../abc/shell/open.js";
 import express from "express";
 import parser from "body-parser";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import Index from "./components/Index.js";
+import Block from "./components/Block.js";
+
+const render = (component) => {
+  let body = renderToStaticMarkup(component);
+  return `
+<!doctype html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta lang="en-US">
+ </head>
+ <body>
+  <div id="container">${body}</div>
+ </body>
+</html>
+`
+}
 
 export default (port) => {
   let [set, unset, norm] = open();
   let app = express();
-  app.use(parser.text());
+  app.use(parser.urlencoded({ extended: false }));
   app.get("/", (request, response) => {
-    console.log(`wiki: GET /`);
-    response.send("Hello, Denshi.");
-  });
-  app.post("/", (request, response) => {
-    const body = request.body;
-    console.log(`wiki: POST / ${body}`);
-    const residual = norm(body);
-    response.send(residual);
+    const html = render(<Index/>);
+    response.send(html);
   });
   app.get("/:word", (request, response) => {
     const word = request.params.word;
-    console.log(`wiki: GET ${word}`);
-    const body = norm(word);
-    response.send(body);
+    const src = norm(word);
+    response.format({
+      "text/plain": () => {
+        response.send(src);
+      },
+      "text/html": () => {
+        const html = render(<Block name={word} src={src}/>);
+        response.send(html);
+      },
+      "default": () => {
+        response.status(406);
+        response.send("Unacceptable.");
+      },
+    });
   });
   app.post("/:word", (request, response) => {
     const word = request.params.word;
-    const body = request.body;
-    console.log(`wiki: POST ${word} ${body}`);
-    set(word, body);
-    response.send(`POST ${word} = ${body}`);
-  });
-  app.delete("/:word", (request, response) => {
-    const word = request.params.word;
-    console.log(`wiki: DELETE ${word}`);
-    unset(word);
-    response.send(`DELETE ${word}`);
+    if (request.body.src === undefined) {
+      response.status(400);
+      response.send("Bad request.");
+    } else {
+      const src = norm(request.body.src);
+      set(word, src);
+      response.format({
+        "text/plain": () => {
+          response.send(src);
+        },
+        "text/html": () => {
+          const html = render(<Block name={word} src={src}/>);
+          response.send(html);
+        },
+        "default": () => {
+          response.status(406);
+          response.send("Unacceptable.");
+        },
+      });
+    }
   });
   app.listen(port, () => {
     console.log(`wiki: listening on ${port}`);

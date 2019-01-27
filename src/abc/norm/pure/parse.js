@@ -42,6 +42,7 @@ const realPattern = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
 // x = exp
 // z = sin
 export default (src) => {
+  src = src.trim();
   src = src.replace(/\[/g, "[ ");
   src = src.replace(/\]/g, " ]");
   let tokens = src.split(" ");
@@ -128,8 +129,11 @@ export default (src) => {
     } else if (wordPattern.test(token)) {
       let term = Term.word(token);
       build.push(term);
+    } else if (token.length === 0) {
+      //
     } else {
-      throw `parse: unknown token: ${token}`;
+      console.log(`parse: unknown token: ${token}`);
+      return Term.block(Term.hint("syntax-error"));
     }
   }
   return build.reduceRight((acc, x) => {
