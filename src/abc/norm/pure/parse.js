@@ -129,7 +129,7 @@ export default (src) => {
       let term = Term.word(token);
       build.push(term);
     } else {
-
+      throw `parse: unknown token: ${token}`;
     }
   }
   return build.reduceRight((acc, x) => {
