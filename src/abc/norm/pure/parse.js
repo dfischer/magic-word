@@ -19,8 +19,8 @@ import assert from "../../../assert.js";
 import { Term } from "./Term.js";
 
 const atomPattern = /^[abcdfgklnpqrstvxz]$/;
-const wordPattern = /^[a-zA-Z0-9-_.~]+$/;
-const hintPattern = /^\([a-zA-Z0-9-_.~]+\)$/;
+const wordPattern = /^[a-zA-Z0-9_]+$/;
+const hintPattern = /^\([a-zA-Z0-9_]+\)$/;
 const realPattern = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
 
 // Map a string to a Term, according to the following bytecode map:

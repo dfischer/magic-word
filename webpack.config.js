@@ -66,4 +66,15 @@ let shell = {
   externals: externals,
 }
 
-module.exports = [app, irc, shell];
+let wiki = {
+  mode: "development",
+  target: "node",
+  entry: "./src/wiki/main.js",
+  output: {
+    path: path.resolve(__dirname, "bin"),
+    filename: "wiki.js",
+  },
+  externals: externals,
+}
+
+module.exports = [app, irc, shell, wiki];
