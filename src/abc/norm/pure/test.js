@@ -18,6 +18,9 @@
 import assert from "../../../assert.js";
 import norm from "./norm.js";
 
+// A basic sanity check for now. I'll need to have a more
+// sophisticated test setup at some point. Probably ABC modules will
+// have embedded tests.
 export default () => {
   let tests = {
     "[foo] [bar] a": "bar [foo]",
@@ -25,12 +28,12 @@ export default () => {
     "[foo] c": "[foo] [foo]",
     "[foo] d": "",
     "[foo] s bar r": "[bar] foo",
-    "1 2 +": "3",
-    "2 3 *": "6",
-    "1 -": "-1",
-    "2 /": "0.5",
-    "2.5 ~": "2",
-    "2.5 #": "3",
+    "1 2 p": "3",
+    "2 3 t": "6",
+    "1 n": "-1",
+    "2 v": "0.5",
+    "2.5 f": "2",
+    "2.5 g": "3",
   }
   for (let [src, expected] of Object.entries(tests)) {
     console.log(`norm: test: ${src} = ${expected}`);

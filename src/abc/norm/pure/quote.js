@@ -18,6 +18,8 @@
 import assert from "../../../assert.js";
 import { Term } from "./Term.js";
 
+// Map a term to a string.
+// XXX TODO: This just repeats information in parse.js.
 export default function quote(obj) {
   assert(Term.isTerm(obj));
   if (Term.isId(obj)) {
@@ -35,25 +37,25 @@ export default function quote(obj) {
   } else if (Term.isShift(obj)) {
     return "s";
   } else if (Term.isSum(obj)) {
-    return "+";
+    return "p";
   } else if (Term.isNegate(obj)) {
-    return "-";
+    return "n";
   } else if (Term.isProduct(obj)) {
-    return "*";
+    return "t";
   } else if (Term.isInvert(obj)) {
-    return "/";
+    return "v";
   } else if (Term.isExp(obj)) {
-    return "^";
+    return "x";
   } else if (Term.isLog(obj)) {
-    return "$";
+    return "l";
   } else if (Term.isCos(obj)) {
-    return "@";
+    return "k";
   } else if (Term.isSin(obj)) {
-    return "%";
+    return "z";
   } else if (Term.isFloor(obj)) {
-    return "~";
+    return "f";
   } else if (Term.isCeil(obj)) {
-    return "#";
+    return "g";
   } else if (Term.isHint(obj)) {
     return `(${obj.value})`;
   } else if (Term.isWord(obj)) {

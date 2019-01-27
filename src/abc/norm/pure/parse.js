@@ -18,6 +18,29 @@
 import assert from "../../../assert.js";
 import { Term } from "./Term.js";
 
+const atomPattern = /^[abcdfgklnpqrstvxz]$/;
+const wordPattern = /^[a-zA-Z0-9-_.~]+$/;
+const hintPattern = /^\([a-zA-Z0-9-_.~]+\)$/;
+const realPattern = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
+
+// Map a string to a Term, according to the following bytecode map:
+// a = apply
+// b = bind
+// c = copy
+// d = drop
+// f = floor
+// g = ceil
+// k = cos
+// l = log
+// n = -
+// p = +
+// q = >
+// r = reset
+// s = shift
+// t = *
+// v = /
+// x = exp
+// z = sin
 export default (src) => {
   src = src.replace(/\[/g, "[ ");
   src = src.replace(/\]/g, " ]");
@@ -37,53 +60,76 @@ export default (src) => {
       let term = Term.block(fold);
       build = stack.pop();
       build.push(term);
-    } else if (token === "a") {
-      build.push(Term.apply);
-    } else if (token === "b") {
-      build.push(Term.bind);
-    } else if (token === "c") {
-      build.push(Term.copy);
-    } else if (token === "d") {
-      build.push(Term.drop);
-    } else if (token === "r") {
-      build.push(Term.reset);
-    } else if (token === "s") {
-      build.push(Term.shift);
-    } else if (token === "+") {
-      build.push(Term.sum);
-    } else if (token === "-") {
-      build.push(Term.negate);
-    } else if (token === "*") {
-      build.push(Term.product);
-    } else if (token === "/") {
-      build.push(Term.invert);
-    } else if (token === "^") {
-      build.push(Term.exp);
-    } else if (token === "$") {
-      build.push(Term.log);
-    } else if (token === "@") {
-      build.push(Term.cos);
-    } else if (token === "%") {
-      build.push(Term.sin);
-    } else if (token === "~") {
-      build.push(Term.floor);
-    } else if (token === "#") {
-      build.push(Term.ceil);
-    } else if (/^\(.+\)$/.test(token)) {
+    } else if (atomPattern.test(token)) {
+      let term;
+      switch (token) {
+      case "a":
+        term = Term.apply;
+        break;
+      case "b":
+        term = Term.bind;
+        break;
+      case "c":
+        term = Term.copy;
+        break;
+      case "d":
+        term = Term.drop;
+        break;
+      case "f":
+        term = Term.floor;
+        break;
+      case "g":
+        term = Term.ceil;
+        break;
+      case "k":
+        term = Term.cos;
+        break;
+      case "l":
+        term = Term.log;
+        break;
+      case "n":
+        term = Term.negate;
+        break;
+      case "p":
+        term = Term.sum;
+        break;
+      case "q":
+        term = Term.gt;
+        break;
+      case "r":
+        term = Term.reset;
+        break;
+      case "s":
+        term = Term.shift;
+        break;
+      case "t":
+        term = Term.product;
+        break;
+      case "v":
+        term = Term.invert;
+        break;
+      case "x":
+        term = Term.exp;
+        break;
+      case "z":
+        term = Term.sin;
+        break;
+      }
+      build.push(term);
+    } else if (hintPattern.test(token)) {
       let name = token.substring(1, token.length - 1);
       let term = Term.hint(name);
       build.push(term);
-    } else if (/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/.test(token)) {
+    } else if (realPattern.test(token)) {
       let value = Number.parseFloat(token);
       assert(!Number.isNaN(value));
       let term = Term.real(value);
       build.push(term);
-    } else {
-      //assert(token.length > 1, "Words must be at least 2 characters.");
-      assert(!token.includes("("), "Words cannot include parentheses.");
-      assert(!token.includes(")"), "Words cannot include parentheses.");
+    } else if (wordPattern.test(token)) {
       let term = Term.word(token);
       build.push(term);
+    } else {
+
     }
   }
   return build.reduceRight((acc, x) => {

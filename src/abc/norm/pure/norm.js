@@ -20,6 +20,8 @@ import parse from "./parse.js";
 import quote from "./quote.js";
 import { Term, Real } from "./Term.js";
 
+// Normalize a string of code.
+// Expansion is a hack atm.
 export default (src, expand) => {
   let gas   = 65535;
   let sink  = [];
@@ -98,6 +100,7 @@ export default (src, expand) => {
     if (Term.isId(redex)) {
       //
     } else if (Term.isApply(redex)) {
+      // [A] [B] a = B [A]
       if (data.length < 2) {
         thunk();
       } else {
@@ -107,6 +110,7 @@ export default (src, expand) => {
         code.push(block.body);
       }
     } else if (Term.isBind(redex)) {
+      // [A] [B] b = [[A] B]
       if (data.length < 2) {
         thunk();
       } else {
@@ -117,6 +121,7 @@ export default (src, expand) => {
         data.push(result);
       }
     } else if (Term.isCopy(redex)) {
+      // [A] c = [A] [A]
       if (data.length === 0) {
         thunk();
       } else {
@@ -124,6 +129,7 @@ export default (src, expand) => {
         data.push(peek);
       }
     } else if (Term.isDrop(redex)) {
+      // [A] d =
       if (data.length === 0) {
         thunk();
       } else {
@@ -132,6 +138,7 @@ export default (src, expand) => {
     } else if (Term.isReset(redex)) {
       thunk();
     } else if (Term.isShift(redex)) {
+      // [F] s K r = [K] F
       if (data.length === 0) {
         thunk();
       } else {
@@ -159,32 +166,50 @@ export default (src, expand) => {
         }
       }
     } else if (Term.isSum(redex)) {
+      // 2 3 p = 5
       arith2(Real.sum);
     } else if (Term.isNegate(redex)) {
+      // 5 n = -5
       arith1(Real.negate);
     } else if (Term.isProduct(redex)) {
+      // 2 3 t = 6
       arith2(Real.product);
     } else if (Term.isInvert(redex)) {
+      // 5 v = 0.2
       arith1(Real.invert);
     } else if (Term.isExp(redex)) {
+      // 5 x = ...
       arith1(Real.exp);
     } else if (Term.isLog(redex)) {
+      // 5 l = ...
       arith1(Real.log);
     } else if (Term.isCos(redex)) {
+      // 5 k = ...
       arith1(Real.cos);
     } else if (Term.isSin(redex)) {
+      // 5 z = ...
       arith1(Real.sin);
     } else if (Term.isFloor(redex)) {
+      // 2.5 f = 2
       arith1(Real.floor);
     } else if (Term.isCeil(redex)) {
+      // 2.5 g = 3
       arith1(Real.ceil);
     } else if (Term.isReal(redex)) {
+      // Real literals are placed on the stack.
       data.push(redex);
     } else if (Term.isBlock(redex)) {
+      // Block literals are placed on the stack.
       data.push(redex);
     } else if (Term.isHint(redex)) {
+      // Hints are identity functions with invisible effects.  For now
+      // we'll just thunk, but in general these will e.g. drive
+      // acceleration.
       thunk();
     } else if (Term.isWord(redex)) {
+      // Technically this is dead code since we expand words in
+      // `fetch`.  I'll need to think of a better way to handle words
+      // in general.
       thunk();
     } else {
       throw `norm: unknown redex: ${redex}`;
