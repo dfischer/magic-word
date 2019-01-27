@@ -16,13 +16,14 @@
 // <https://www.gnu.org/licenses/.
 
 import React from "react";
+import Code from "./Code.js";
 
 export default (props) => {
   const action = `/${props.name}`;
   return (
     <div className="block">
       <h1>{props.name}</h1>
-      <pre><code>{props.src}</code></pre>
+      <Code src={props.src}/>
       <form method="post"
             action={action}>
         <textarea name="src"

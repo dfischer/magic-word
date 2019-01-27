@@ -21,7 +21,8 @@ import parser from "body-parser";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import Index from "./components/Index.js";
-import Block from "./components/Block.js";
+import Word from "./components/Word.js";
+import Code from "./components/Code.js";
 
 const render = (component) => {
   let body = renderToStaticMarkup(component);
@@ -44,22 +45,64 @@ export default (port) => {
   let app = express();
   app.use(parser.urlencoded({ extended: false }));
   app.get("/", (request, response) => {
-    const html = render(<Index/>);
-    response.send(html);
+    response.format({
+      "text/plain": () => {
+        response.type("text/plain");
+        response.send(`[(version-0-0-0)]`);
+      },
+      "text/html": () => {
+        const html = render(<Index/>);
+        response.type("text/html");
+        response.send(html);
+      },
+      "default": () => {
+        response.status(406);
+        response.type("text/plain");
+        response.send("Unacceptable.");
+      },
+    });
+  });
+  app.post("/", (request, response) => {
+    if (request.body.src === undefined) {
+      response.status(400);
+      response.type("text/plain");
+      response.send("Bad request.");
+    } else {
+      const src = norm(request.body.src);
+      response.format({
+        "text/plain": () => {
+          response.type("text/plain");
+          response.send(src);
+        },
+        "text/html": () => {
+          const html = render(<Code src={src}/>);
+          response.type("text/html");
+          response.send(html);
+        },
+        "default": () => {
+          response.status(406);
+          response.type("text/plain");
+          response.send("Unacceptable.");
+        },
+      });
+    }
   });
   app.get("/:word", (request, response) => {
     const word = request.params.word;
     const src = norm(word);
     response.format({
       "text/plain": () => {
+        response.type("text/plain");
         response.send(src);
       },
       "text/html": () => {
-        const html = render(<Block name={word} src={src}/>);
+        const html = render(<Word name={word} src={src}/>);
+        response.type("text/html");
         response.send(html);
       },
       "default": () => {
         response.status(406);
+        response.type("text/plain");
         response.send("Unacceptable.");
       },
     });
@@ -68,20 +111,24 @@ export default (port) => {
     const word = request.params.word;
     if (request.body.src === undefined) {
       response.status(400);
+      response.type("text/plain");
       response.send("Bad request.");
     } else {
       const src = norm(request.body.src);
       set(word, src);
       response.format({
         "text/plain": () => {
+          response.type("text/plain");
           response.send(src);
         },
         "text/html": () => {
-          const html = render(<Block name={word} src={src}/>);
+          const html = render(<Word name={word} src={src}/>);
+          response.type("text/html");
           response.send(html);
         },
         "default": () => {
           response.status(406);
+          response.type("text/plain");
           response.send("Unacceptable.");
         },
       });

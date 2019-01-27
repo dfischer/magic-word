@@ -15,31 +15,11 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import norm from "../norm.js";
-//import { Database } from "sqlite3";
+import React from "react";
 
-// Open an ABC module at the given path.
-export default (path) => {
-  let module = new Map();
-  const set = (key, value) => {
-    console.log(`module: set ${key} to ${value}`);
-    value = norm(value);
-    module.set(key, value);
-    return value;
-  }
-  const unset = (key) => {
-    console.log(`module: unset ${key}`);
-    module.delete(key);
-    return key;
-  }
-  const localNorm = (src) => {
-    console.log(`module: norm ${src}`);
-    return norm(src, (name) => {
-      if (module.has(name)) {
-        return module.get(name);
-      }
-      return name;
-    });
-  }
-  return [set, unset, localNorm];
+export default (props) => {
+  return (
+    <pre><code>{props.src}</code></pre>
+  );
 }
+
