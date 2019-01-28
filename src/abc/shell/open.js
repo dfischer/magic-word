@@ -19,6 +19,7 @@ import norm from "../norm.js";
 import { Database } from "sqlite3";
 
 const database = (path) => {
+  path = path || `${process.env.DENSHI_HOME}/mod/default`;
   let db = new Database(path);
   return {
     run(code, data) {

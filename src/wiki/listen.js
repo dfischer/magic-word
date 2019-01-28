@@ -41,8 +41,7 @@ const render = (component) => {
 }
 
 export default (port) => {
-  let path = `${process.env.DENSHI_HOME}/mod/default`;
-  let [set, unset, norm] = open(path);
+  let [set, unset, norm] = open();
   let app = express();
   app.use(parser.urlencoded({ extended: false }));
   app.get("/", (request, response) => {

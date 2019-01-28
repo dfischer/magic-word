@@ -27,7 +27,7 @@ export default (props) => {
       <form method="post"
             action={action}>
         <textarea name="src"
-                  placeholder={props.src}
+                  defaultValue={props.src}
                   rows="5"
                   cols="80"/>
         <br/>
