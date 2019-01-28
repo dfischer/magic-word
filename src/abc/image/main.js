@@ -19,8 +19,8 @@ import open from "./open.js";
 import makeParser from "./makeParser.js";
 import { createInterface as readline } from "readline";
 
-let shell = open();
-let parse = makeParser(shell);
+let image = open();
+let parse = makeParser(image);
 
 let ui = readline({ input: process.stdin, output: process.stdout });
 ui.setPrompt("user@denshi\n> ");
@@ -31,7 +31,7 @@ ui.on("line", (line) => {
   ui.prompt();
 });
 ui.on("error", (error) => {
-  console.log(`shell: error: ${error}`);
+  console.log(`image: error: ${error}`);
 });
 ui.on("close", () => {
   process.exit(1);

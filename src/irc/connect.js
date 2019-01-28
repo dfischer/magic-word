@@ -19,15 +19,15 @@ import { Socket } from "net";
 import { setTimeout } from "timers";
 import parse from "./parse.js";
 
-function eachLine(thunk) {
+const eachLine = (thunk) => {
   let buf = "";
-  return (data) => {
+  return async (data) => {
     buf += data;
     let offset = 0;
     let index = buf.indexOf("\n", offset);
     while (index >= 0) {
       let line = buf.substring(offset, index);
-      thunk(line);
+      await thunk(line);
       offset = index + 1;
       index = buf.indexOf("\n", offset);
     }
@@ -51,7 +51,7 @@ export default ({
     socket.write(`PASS ${password}\n`);
     socket.write(`JOIN ${channel}\n`);
   });
-  socket.on("data", eachLine((line) => {
+  socket.on("data", eachLine(async (line) => {
     console.log(`irc: ${line}`);
     let message = parse(line);
     if (message.verb === "PING") {
@@ -65,12 +65,12 @@ export default ({
       if (target === channel) {
         if (body.startsWith(flag)) {
           let src = body.replace(flag, "");
-          let response = handler(src);
+          let response = await handler(src);
           socket.write(`PRIVMSG ${channel} :${response}\n`);
         }
       } else if (target === nickname) {
         let name = message.source.split("!")[0];
-        let response = handler(body);
+        let response = await handler(body);
         socket.write(`PRIVMSG ${name} :${response}\n`);
       }
     }

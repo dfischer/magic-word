@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import open from "../abc/shell/open.js";
+import open from "../abc/image/open.js";
 import express from "express";
 import parser from "body-parser";
 import React from "react";
