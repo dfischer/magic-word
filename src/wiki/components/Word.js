@@ -16,14 +16,14 @@
 // <https://www.gnu.org/licenses/.
 
 import React from "react";
-import Code from "./Code.js";
+import Block from "./Block.js";
 
 export default (props) => {
   const action = `/${props.name}`;
   return (
     <div className="block">
       <h1>{props.name}</h1>
-      <Code src={props.src}/>
+      <Block src={props.src}/>
       <form method="post"
             action={action}>
         <textarea name="src"
@@ -32,6 +32,10 @@ export default (props) => {
                   cols="80"/>
         <br/>
         <button type="submit">Update</button>
+      </form>
+      <form method="delete"
+            action={action}>
+        <button type="submit">Delete</button>
       </form>
     </div>
   );

@@ -22,7 +22,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import Index from "./components/Index.js";
 import Word from "./components/Word.js";
-import Code from "./components/Code.js";
+import Block from "./components/Block.js";
 
 const render = (component) => {
   let body = renderToStaticMarkup(component);
@@ -75,7 +75,7 @@ export default (port) => {
           response.send(src);
         },
         "text/html": () => {
-          const html = render(<Code src={src}/>);
+          const html = render(<Block src={src}/>);
           response.type("text/html");
           response.send(html);
         },
