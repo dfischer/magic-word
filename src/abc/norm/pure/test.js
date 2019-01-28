@@ -21,7 +21,7 @@ import norm from "./norm.js";
 // A basic sanity check for now. I'll need to have a more
 // sophisticated test setup at some point. Probably ABC modules will
 // have embedded tests.
-export default () => {
+export default async () => {
   let tests = {
     "[foo] [bar] a": "bar [foo]",
     "[foo] [bar] b": "[[foo] bar]",
@@ -37,7 +37,7 @@ export default () => {
   }
   for (let [src, expected] of Object.entries(tests)) {
     console.log(`norm: test: ${src} = ${expected}`);
-    const actual = norm(src);
+    const actual = await norm(src);
     assert(expected === actual, `expected\n${expected}\nbut got\n${actual}`);
   }
 }

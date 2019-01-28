@@ -22,7 +22,7 @@ import { Term, Real } from "./Term.js";
 
 // Normalize a string of code.
 // Expansion is a hack atm.
-export default (src, expand) => {
+export default async (src, expand) => {
   let gas   = 65535;
   let sink  = [];
   let data  = [];
@@ -31,10 +31,10 @@ export default (src, expand) => {
   let redex;
 
   if (expand === undefined) {
-    expand = (x) => x;
+    expand = async (x) => x;
   }
 
-  const fetch = () => {
+  const fetch = async () => {
     assert(code.length > 0);
     let term = code.pop();
     // XXX HACK Think of a better way to do word expansion.
@@ -43,7 +43,7 @@ export default (src, expand) => {
         code.push(term.snd);
         term = term.fst;
       } else if (Term.isWord(term)) {
-        let src = expand(term.value);
+        let src = await expand(term.value);
         if (src === term.value) {
           break;
         } else {
@@ -96,7 +96,7 @@ export default (src, expand) => {
 
   while (gas > 0 && code.length > 0) {
     gas--;
-    redex = fetch();
+    redex = await fetch();
     if (Term.isId(redex)) {
       //
     } else if (Term.isApply(redex)) {
@@ -230,7 +230,3 @@ export default (src, expand) => {
   let dst = quote(state);
   return dst
 }
-
-import test from "./test.js";
-test();
-

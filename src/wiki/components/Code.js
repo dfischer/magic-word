@@ -18,6 +18,7 @@
 import React from "react";
 
 export default (props) => {
+  // XXX TODO Use hints to determine how to render the code.
   return (
     <pre><code>{props.src}</code></pre>
   );

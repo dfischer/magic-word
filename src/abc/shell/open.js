@@ -16,29 +16,61 @@
 // <https://www.gnu.org/licenses/.
 
 import norm from "../norm.js";
-//import { Database } from "sqlite3";
+import { Database } from "sqlite3";
+
+const database = (path) => {
+  let db = new Database(path);
+  return {
+    run(code, data) {
+      return new Promise((resolve, reject) => {
+        db.run(code, data, (error) => {
+          if (error !== null) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+    },
+    get(code, data) {
+      return new Promise((resolve, reject) => {
+        db.get(code, data, (error, value) => {
+          if (error !== null) {
+            reject(error);
+          } else {
+            resolve(value);
+          }
+        });
+      });
+    }
+  }
+}
 
 // Open an ABC module at the given path.
 export default (path) => {
   let module = new Map();
-  const set = (key, value) => {
-    console.log(`module: set ${key} to ${value}`);
-    value = norm(value);
-    module.set(key, value);
-    return value;
+  let db = database(path);
+  const set = async (name, src) => {
+    console.log(`module: set ${name} to ${src}`);
+    const residual = await norm(src);
+    await db.run("delete from words where name=?", [name]);
+    await db.run("insert into words values (?, ?)", [name, residual]);
+    return residual;
   }
-  const unset = (key) => {
-    console.log(`module: unset ${key}`);
-    module.delete(key);
-    return key;
+  const unset = async (name) => {
+    console.log(`module: unset ${name}`);
+    await db.run("delete from words where name=?", [name]);
+    return name;
   }
-  const localNorm = (src) => {
+  const localNorm = async (src) => {
     console.log(`module: norm ${src}`);
-    return norm(src, (name) => {
-      if (module.has(name)) {
-        return module.get(name);
+    return norm(src, async (name) => {
+      let row = await db.get("select src from words where name=?", [name]);
+      if (row) {
+        return row.src;
+      } else {
+        return name;
       }
-      return name;
     });
   }
   return [set, unset, localNorm];

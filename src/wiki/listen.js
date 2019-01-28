@@ -41,7 +41,8 @@ const render = (component) => {
 }
 
 export default (port) => {
-  let [set, unset, norm] = open();
+  let path = `${process.env.DENSHI_HOME}/mod/default`;
+  let [set, unset, norm] = open(path);
   let app = express();
   app.use(parser.urlencoded({ extended: false }));
   app.get("/", (request, response) => {
@@ -62,13 +63,13 @@ export default (port) => {
       },
     });
   });
-  app.post("/", (request, response) => {
+  app.post("/", async (request, response) => {
     if (request.body.src === undefined) {
       response.status(400);
       response.type("text/plain");
       response.send("Bad request.");
     } else {
-      const src = norm(request.body.src);
+      const src = await norm(request.body.src);
       response.format({
         "text/plain": () => {
           response.type("text/plain");
@@ -87,9 +88,9 @@ export default (port) => {
       });
     }
   });
-  app.get("/:word", (request, response) => {
+  app.get("/:word", async (request, response) => {
     const word = request.params.word;
-    const src = norm(word);
+    const src = await norm(word);
     response.format({
       "text/plain": () => {
         response.type("text/plain");
@@ -107,14 +108,14 @@ export default (port) => {
       },
     });
   });
-  app.post("/:word", (request, response) => {
+  app.post("/:word", async (request, response) => {
     const word = request.params.word;
     if (request.body.src === undefined) {
       response.status(400);
       response.type("text/plain");
       response.send("Bad request.");
     } else {
-      const src = norm(request.body.src);
+      const src = await norm(request.body.src);
       set(word, src);
       response.format({
         "text/plain": () => {
