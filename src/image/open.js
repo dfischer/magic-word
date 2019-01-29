@@ -17,12 +17,22 @@
 
 import norm from "../norm.js";
 import { Database } from "sqlite3";
+import { existsSync as fileExists } from "fs";
 
 const database = (name) => {
   name = name || "default";
   const home = process.env.DENSHI_HOME;
   const path = `${home}/${name}`;
+  let exists = fileExists(path);
   let db = new Database(path);
+  if (!exists) {
+    db.serialize(() => {
+      db.run("create table words (name text primary key, src text)");
+      console.log(`image: created ${name}`);
+    });
+  } else {
+    console.log(`image: ${name} already exists`);
+  }
   return {
     run(code, data) {
       return new Promise((resolve, reject) => {
