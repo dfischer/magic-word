@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import assert from "../../../assert.js";
+import assert from "../../assert.js";
 import parse from "./parse.js";
 import quote from "./quote.js";
 import { Term, Real } from "./Term.js";

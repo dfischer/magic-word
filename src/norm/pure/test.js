@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import assert from "../../../assert.js";
+import assert from "../../assert.js";
 import norm from "./norm.js";
 
 // A basic sanity check for now. I'll need to have a more

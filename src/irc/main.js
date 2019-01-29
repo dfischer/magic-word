@@ -16,7 +16,7 @@
 // <https://www.gnu.org/licenses/.
 
 import connect from "./connect.js";
-import open from "../abc/image/open.js";
+import open from "../image/open.js";
 import makeParser from "../shell/makeParser.js";
 
 const nickname = process.env.DENSHI_IRC_NICKNAME;
