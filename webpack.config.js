@@ -58,7 +58,7 @@ let irc = {
 let shell = {
   mode: "development",
   target: "node",
-  entry: "./src/abc/shell/main.js",
+  entry: "./src/shell/main.js",
   output: {
     path: path.resolve(__dirname, "bin"),
     filename: "shell.js",
