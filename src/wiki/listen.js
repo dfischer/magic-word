@@ -45,6 +45,7 @@ export default (port) => {
   let app = express();
   app.use(parser.urlencoded({ extended: false }));
   app.get("/", (request, response) => {
+    console.log(`wiki: get /`);
     response.format({
       "text/plain": () => {
         response.type("text/plain");
@@ -63,6 +64,7 @@ export default (port) => {
     });
   });
   app.post("/", async (request, response) => {
+    console.log(`wiki: post /`);
     if (request.body.src === undefined) {
       response.status(400);
       response.type("text/plain");
@@ -89,6 +91,7 @@ export default (port) => {
   });
   app.get("/:word", async (request, response) => {
     const word = request.params.word;
+    console.log(`wiki: get ${word}`);
     const src = await norm(word);
     response.format({
       "text/plain": () => {
