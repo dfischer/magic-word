@@ -33,10 +33,6 @@ export default (props) => {
         <br/>
         <button type="submit">Update</button>
       </form>
-      <form method="delete"
-            action={action}>
-        <button type="submit">Delete</button>
-      </form>
     </div>
   );
 }

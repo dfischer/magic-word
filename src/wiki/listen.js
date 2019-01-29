@@ -109,13 +109,19 @@ export default (port) => {
   });
   app.post("/:word", async (request, response) => {
     const word = request.params.word;
+    console.log(`wiki: post ${word}`);
     if (request.body.src === undefined) {
       response.status(400);
       response.type("text/plain");
       response.send("Bad request.");
     } else {
-      const src = await norm(request.body.src);
-      set(word, src);
+      let src = request.body.src.trim();
+      if (src === word) {
+        unset(word);
+      } else {
+        src = await norm(src);
+        set(word, src);
+      }
       response.format({
         "text/plain": () => {
           response.type("text/plain");
