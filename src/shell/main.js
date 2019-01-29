@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import open from "./open.js";
+import open from "../abc/image/open.js";
 import makeParser from "./makeParser.js";
 import { createInterface as readline } from "readline";
 

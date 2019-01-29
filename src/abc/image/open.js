@@ -21,7 +21,7 @@ import { Database } from "sqlite3";
 const database = (name) => {
   name = name || "default";
   const home = process.env.DENSHI_HOME;
-  const path = `${home}/mod/${name}`;
+  const path = `${home}/${name}`;
   let db = new Database(path);
   return {
     run(code, data) {
