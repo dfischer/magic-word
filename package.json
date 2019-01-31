@@ -21,7 +21,6 @@
     "@material-ui/styles": "^3.0.0-alpha.8",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "puppeteer": "^1.11.0",
     "react": "^16.8.0-alpha.0",
     "react-dom": "^16.8.0-alpha.0",
     "sqlite3": "^4.0.6"
