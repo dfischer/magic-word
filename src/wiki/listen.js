@@ -31,6 +31,7 @@ const render = (component) => {
  <head>
   <meta charset="utf-8">
   <meta lang="en-US">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  </head>
  <body>
   <div id="container">${body}</div>
@@ -39,8 +40,7 @@ const render = (component) => {
 `
 }
 
-export default (port) => {
-  let image = open();
+export default (image, { port }) => {
   let app = express();
   app.use(parser.urlencoded({ extended: false }));
   app.get("/", (request, response) => {

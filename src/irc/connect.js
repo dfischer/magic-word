@@ -17,7 +17,8 @@
 
 import { Socket } from "net";
 import { setTimeout } from "timers";
-import parse from "./parse.js";
+import parseIRC from "./parse.js";
+import makeABCParser from "../shell/makeParser.js";
 
 const eachLine = (thunk) => {
   let buf = "";
@@ -35,13 +36,14 @@ const eachLine = (thunk) => {
   }
 }
 
-export default ({
+export default (image, {
   address,
   port,
   nickname,
   password,
   channel,
-}, handler) => {
+}) => {
+  let parseABC = makeABCParser(image);
   let socket = new Socket();
   console.log(`irc: connecting to ${address}:${port}...`);
   socket.connect(port, address, () => {
@@ -53,7 +55,7 @@ export default ({
   });
   socket.on("data", eachLine(async (line) => {
     console.log(`irc: ${line}`);
-    let message = parse(line);
+    let message = parseIRC(line);
     if (message.verb === "PING") {
       const body = message.parameters[0];
       socket.write(`PONG ${body}\n`);
@@ -65,12 +67,14 @@ export default ({
       if (target === channel) {
         if (body.startsWith(flag)) {
           let src = body.replace(flag, "");
-          let response = await handler(src);
+          let command = parseABC(src);
+          let response = await command();
           socket.write(`PRIVMSG ${channel} :${response}\n`);
         }
       } else if (target === nickname) {
         let name = message.source.split("!")[0];
-        let response = await handler(body);
+        let command = parseABC(body);
+        let response = await command();
         socket.write(`PRIVMSG ${name} :${response}\n`);
       }
     }

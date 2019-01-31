@@ -7,7 +7,7 @@
     "url": "git+https://github.com/xkapastel/denshi.git"
   },
   "scripts": {
-    "start": "node bin/wiki.js"
+    "start": "node bin/denshi.js"
   },
   "author": "Matthew Blount <xkapastel@gmail.com>",
   "license": "AGPL-3.0",

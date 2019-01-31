@@ -21,17 +21,18 @@ export default (props) => {
   if (props.name !== undefined) {
     const action = `/${props.name}`;
     return (
-      <div>
-        <h1>{props.name}</h1>
-        <pre><code>{props.res}</code></pre>
+      <div className="function">
+        <h1 className="name">{props.name}</h1>
+        <pre><code className="residual">{props.res}</code></pre>
         <form method="post"
               action={action}>
           <textarea name="src"
                     rows="5"
                     cols="80"
+                    className="source"
                     defaultValue={props.src}/>
           <br/>
-          <button type="submit">Edit</button>
+          <button type="submit" className="edit">Edit</button>
         </form>
       </div>
     )

@@ -44,35 +44,13 @@ let app = {
   },
 }
 
-let irc = {
+let server = {
   mode: "development",
   target: "node",
-  entry: "./src/irc/main.js",
+  entry: "./src/main.js",
   output: {
     path: path.resolve(__dirname, "bin"),
-    filename: "irc.js",
-  },
-  externals: externals,
-}
-
-let shell = {
-  mode: "development",
-  target: "node",
-  entry: "./src/shell/main.js",
-  output: {
-    path: path.resolve(__dirname, "bin"),
-    filename: "shell.js",
-  },
-  externals: externals,
-}
-
-let wiki = {
-  mode: "development",
-  target: "node",
-  entry: "./src/wiki/main.js",
-  output: {
-    path: path.resolve(__dirname, "bin"),
-    filename: "wiki.js",
+    filename: "denshi.js",
   },
   externals: externals,
   module: {
@@ -88,4 +66,4 @@ let wiki = {
   },
 }
 
-module.exports = [app, irc, shell, wiki];
+module.exports = [server];

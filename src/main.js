@@ -15,7 +15,20 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import listen from "./listen.js";
+import openImage from "./image/open.js";
+import connectIRC from "./irc/connect.js";
+import listenWiki from "./wiki/listen.js";
 
-listen(8000);
+let image = openImage();
 
+let irc = connectIRC(image, {
+  address: process.env.DENSHI_IRC_ADDRESS,
+  channel: process.env.DENSHI_IRC_CHANNEL,
+  nickname: process.env.DENSHI_IRC_NICKNAME,
+  password: process.env.DENSHI_IRC_PASSWORD,
+  port: process.env.DENSHI_IRC_PORT,
+});
+
+let wiki = listenWiki(image, {
+  port: process.env.DENSHI_WIKI_PORT,
+});
