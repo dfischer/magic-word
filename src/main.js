@@ -17,8 +17,20 @@
 
 import open from "./image/open.js";
 import listen from "./wiki/listen.js";
+import connect from "./irc/connect.js";
 
 let image = open();
 let wiki = listen(image, {
   port: process.env.DENSHI_WIKI_PORT,
 });
+
+let irc;
+if (process.env.DENSHI_IRC_ADDRESS !== undefined) {
+  irc = connect(image, {
+    address: process.env.DENSHI_IRC_ADDRESS,
+    port: process.env.DENSHI_IRC_PORT,
+    nickname: process.env.DENSHI_IRC_NICKNAME,
+    password: process.env.DENSHI_IRC_PASSWORD,
+    channel: process.env.DENSHI_IRC_CHANNEL,
+  });
+}

@@ -15,8 +15,6 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import Message from "./Message.js";
-
 // XXX TODO Break this up and document it.
 const pattern = /^(?:@([^\r\n ]*) +)?(?::([^\r\n ]+) +)?([^\r\n ]+)(?: +([^:\r\n ]+[^\r\n ]*(?: +[^:\r\n ]+[^\r\n ]*)*)|)?(?: +:([^\r\n]*)| +)?[\r\n]*$/;
 
@@ -37,6 +35,6 @@ export default (line) => {
     if (trailingParameters !== undefined) {
       parameters.push(trailingParameters);
     }
-    return new Message(source, verb, parameters, line);
+    return { source, verb, parameters };
   }
 }
