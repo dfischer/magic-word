@@ -65,15 +65,23 @@ export default (path) => {
   let db = database(path);
   const set = async (name, src) => {
     console.log(`module: set ${name} to ${src}`);
-    const residual = await norm(src);
     await db.run("delete from words where name=?", [name]);
-    await db.run("insert into words values (?, ?)", [name, residual]);
-    return residual;
+    await db.run("insert into words values (?, ?)", [name, src]);
+    return src;
   }
   const unset = async (name) => {
     console.log(`module: unset ${name}`);
     await db.run("delete from words where name=?", [name]);
     return name;
+  }
+  const get = async (name) => {
+    console.log(`module: get ${name}`);
+    let row = await db.get("select src from words where name=?", [name]);
+    if (row !== undefined) {
+      return row.src;
+    } else {
+      return name;
+    }
   }
   const localNorm = async (src) => {
     console.log(`module: norm ${src}`);
@@ -86,5 +94,10 @@ export default (path) => {
       }
     });
   }
-  return [set, unset, localNorm];
+  return {
+    get: get,
+    set: set,
+    unset: unset,
+    norm: localNorm,
+  }
 }

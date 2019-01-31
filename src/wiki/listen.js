@@ -21,8 +21,7 @@ import parser from "body-parser";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import Index from "./components/Index.js";
-import Word from "./components/Word.js";
-import Block from "./components/Block.js";
+import Function from "./components/Function.js";
 
 const render = (component) => {
   let body = renderToStaticMarkup(component);
@@ -41,7 +40,7 @@ const render = (component) => {
 }
 
 export default (port) => {
-  let [set, unset, norm] = open();
+  let image = open();
   let app = express();
   app.use(parser.urlencoded({ extended: false }));
   app.get("/", (request, response) => {
@@ -70,14 +69,15 @@ export default (port) => {
       response.type("text/plain");
       response.send("Bad request.");
     } else {
-      const src = await norm(request.body.src);
+      const src = request.body.src;
+      const res = await image.norm(request.body.src);
       response.format({
         "text/plain": () => {
           response.type("text/plain");
-          response.send(src);
+          response.send(res);
         },
         "text/html": () => {
-          const html = render(<Block src={src}/>);
+          const html = render(<Function src={src} res={res}/>);
           response.type("text/html");
           response.send(html);
         },
@@ -89,17 +89,18 @@ export default (port) => {
       });
     }
   });
-  app.get("/:word", async (request, response) => {
-    const word = request.params.word;
-    console.log(`wiki: get ${word}`);
-    const src = await norm(word);
+  app.get("/:name", async (request, response) => {
+    const name = request.params.name;
+    console.log(`wiki: get ${name}`);
+    const src = await image.get(name);
+    const res = await image.norm(src);
     response.format({
       "text/plain": () => {
         response.type("text/plain");
-        response.send(src);
+        response.send(res);
       },
       "text/html": () => {
-        const html = render(<Word name={word} src={src}/>);
+        const html = render(<Function name={name} src={src} res={res}/>);
         response.type("text/html");
         response.send(html);
       },
@@ -110,28 +111,29 @@ export default (port) => {
       },
     });
   });
-  app.post("/:word", async (request, response) => {
-    const word = request.params.word;
-    console.log(`wiki: post ${word}`);
+  app.post("/:name", async (request, response) => {
+    const name = request.params.name;
+    console.log(`wiki: post ${name}`);
     if (request.body.src === undefined) {
       response.status(400);
       response.type("text/plain");
       response.send("Bad request.");
     } else {
-      let src = request.body.src.trim();
-      if (src === word) {
-        unset(word);
+      const src = request.body.src;
+      if (src === "" || src === name) {
+        image.unset(name);
+        src = name;
       } else {
-        src = await norm(src);
-        set(word, src);
+        image.set(name, src);
       }
+      const res = await image.norm(src);
       response.format({
         "text/plain": () => {
           response.type("text/plain");
-          response.send(src);
+          response.send(res);
         },
         "text/html": () => {
-          const html = render(<Word name={word} src={src}/>);
+          const html = render(<Function name={name} src={src} res={res}/>);
           response.type("text/html");
           response.send(html);
         },
@@ -142,6 +144,12 @@ export default (port) => {
         },
       });
     }
+  });
+  app.delete("/:name", async (request, response) => {
+    const name = request.params.name;
+    console.log(`wiki: delete ${name}`);
+    image.unset(name);
+    response.redirect("/");
   });
   app.listen(port, () => {
     console.log(`wiki: listening on ${port}`);

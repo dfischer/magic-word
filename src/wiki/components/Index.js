@@ -19,6 +19,6 @@ import React from "react";
 
 export default (props) => {
   return (
-    <h1>Hello, Denshi.</h1>
+    <p>Welcome to the Denshi wiki.</p>
   );
 }

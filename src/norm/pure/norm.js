@@ -43,6 +43,7 @@ export default async (src, expand) => {
         code.push(term.snd);
         term = term.fst;
       } else if (Term.isWord(term)) {
+        console.log(`norm: expand ${term.value}`);
         let src = await expand(term.value);
         if (src === term.value) {
           break;

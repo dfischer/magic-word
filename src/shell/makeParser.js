@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-export default ([set, unset, norm]) => {
+export default (image) => {
   const setPattern = /^:([a-z][a-z0-9-]+) +(.*)$/;
   const unsetPattern = /^~([a-z][a-z0-9-]+) *$/;
   return (line) => {
@@ -23,13 +23,13 @@ export default ([set, unset, norm]) => {
     if (matches !== null) {
       let key = matches[1];
       let value = matches[2];
-      return () => set(key, value);
+      return () => image.set(key, value);
     }
     var matches = line.match(unsetPattern);
     if (matches !== null) {
       let key = matches[1];
-      return () => unset(key);
+      return () => image.unset(key);
     }
-    return () => norm(line);
+    return () => image.norm(line);
   }
 }

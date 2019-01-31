@@ -16,23 +16,30 @@
 // <https://www.gnu.org/licenses/.
 
 import React from "react";
-import Block from "./Block.js";
 
 export default (props) => {
-  const action = `/${props.name}`;
-  return (
-    <div className="block">
-      <h1>{props.name}</h1>
-      <Block src={props.src}/>
-      <form method="post"
-            action={action}>
-        <textarea name="src"
-                  defaultValue={props.src}
-                  rows="5"
-                  cols="80"/>
-        <br/>
-        <button type="submit">Update</button>
-      </form>
-    </div>
-  );
+  if (props.name !== undefined) {
+    const action = `/${props.name}`;
+    return (
+      <div>
+        <h1>{props.name}</h1>
+        <pre><code>{props.res}</code></pre>
+        <form method="post"
+              action={action}>
+          <textarea name="src"
+                    rows="5"
+                    cols="80"
+                    defaultValue={props.src}/>
+          <br/>
+          <button type="submit">Edit</button>
+        </form>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <pre><code>{props.res}</code></pre>
+      </div>
+    );
+  }
 }
