@@ -170,42 +170,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nor
 
 /***/ }),
 
-/***/ "./src/irc/Message.js":
-/*!****************************!*\
-  !*** ./src/irc/Message.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Message; });\n// This file is a part of Denshi.\n// Copyright (C) 2019 Matthew Blount\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU Affero General Public License as\n// published by the Free Software Foundation, either version 3 of the\n// License, or (at your option) any later version.\n// This program is distributed in the hope that it will be useful, but\n// WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n// Affero General Public License for more details.\n// You should have received a copy of the GNU Affero General Public\n// License along with this program.  If not, see\n// <https://www.gnu.org/licenses/.\nclass Message {\n  constructor(source, verb, parameters, rawMessage) {\n    this.source = source;\n    this.verb = verb;\n    this.parameters = parameters;\n    this.rawMessage = rawMessage;\n  }\n\n}\n\n//# sourceURL=webpack:///./src/irc/Message.js?");
-
-/***/ }),
-
-/***/ "./src/irc/connect.js":
-/*!****************************!*\
-  !*** ./src/irc/connect.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var net__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! net */ \"net\");\n/* harmony import */ var net__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(net__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var timers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! timers */ \"timers\");\n/* harmony import */ var timers__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(timers__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _parse_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./parse.js */ \"./src/irc/parse.js\");\n/* harmony import */ var _shell_makeParser_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shell/makeParser.js */ \"./src/shell/makeParser.js\");\n// This file is a part of Denshi.\n// Copyright (C) 2019 Matthew Blount\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU Affero General Public License as\n// published by the Free Software Foundation, either version 3 of the\n// License, or (at your option) any later version.\n// This program is distributed in the hope that it will be useful, but\n// WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n// Affero General Public License for more details.\n// You should have received a copy of the GNU Affero General Public\n// License along with this program.  If not, see\n// <https://www.gnu.org/licenses/.\n\n\n\n\n\nconst eachLine = thunk => {\n  let buf = \"\";\n  return async data => {\n    buf += data;\n    let offset = 0;\n    let index = buf.indexOf(\"\\n\", offset);\n\n    while (index >= 0) {\n      let line = buf.substring(offset, index);\n      await thunk(line);\n      offset = index + 1;\n      index = buf.indexOf(\"\\n\", offset);\n    }\n\n    buf = buf.substring(offset);\n  };\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ((image, {\n  address,\n  port,\n  nickname,\n  password,\n  channel\n}) => {\n  let parseABC = Object(_shell_makeParser_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"])(image);\n  let socket = new net__WEBPACK_IMPORTED_MODULE_0__[\"Socket\"]();\n  console.log(`irc: connecting to ${address}:${port}...`);\n  socket.connect(port, address, () => {\n    console.log(`irc: connected`);\n    socket.write(`NICK ${nickname}\\n`);\n    socket.write(`USER ${nickname} 0 * :${nickname}\\n`);\n    socket.write(`PASS ${password}\\n`);\n    socket.write(`JOIN ${channel}\\n`);\n  });\n  socket.on(\"data\", eachLine(async line => {\n    console.log(`irc: ${line}`);\n    let message = Object(_parse_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(line);\n\n    if (message.verb === \"PING\") {\n      const body = message.parameters[0];\n      socket.write(`PONG ${body}\\n`);\n      console.log(`irc: PONG ${body}`);\n    } else if (message.verb === \"PRIVMSG\") {\n      const target = message.parameters[0];\n      const body = message.parameters[1];\n      const flag = `${nickname}: `;\n\n      if (target === channel) {\n        if (body.startsWith(flag)) {\n          let src = body.replace(flag, \"\");\n          let command = parseABC(src);\n          let response = await command();\n          socket.write(`PRIVMSG ${channel} :${response}\\n`);\n        }\n      } else if (target === nickname) {\n        let name = message.source.split(\"!\")[0];\n        let command = parseABC(body);\n        let response = await command();\n        socket.write(`PRIVMSG ${name} :${response}\\n`);\n      }\n    }\n  }));\n  socket.on(\"error\", error => {\n    console.log(`irc: error: ${error}`);\n  });\n  socket.on(\"close\", () => {\n    console.log(`irc: close`);\n  });\n  return () => {\n    socket.destroy();\n  };\n});\n\n//# sourceURL=webpack:///./src/irc/connect.js?");
-
-/***/ }),
-
-/***/ "./src/irc/parse.js":
-/*!**************************!*\
-  !*** ./src/irc/parse.js ***!
-  \**************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Message_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Message.js */ \"./src/irc/Message.js\");\n// This file is a part of Denshi.\n// Copyright (C) 2019 Matthew Blount\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU Affero General Public License as\n// published by the Free Software Foundation, either version 3 of the\n// License, or (at your option) any later version.\n// This program is distributed in the hope that it will be useful, but\n// WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n// Affero General Public License for more details.\n// You should have received a copy of the GNU Affero General Public\n// License along with this program.  If not, see\n// <https://www.gnu.org/licenses/.\n // XXX TODO Break this up and document it.\n\nconst pattern = /^(?:@([^\\r\\n ]*) +)?(?::([^\\r\\n ]+) +)?([^\\r\\n ]+)(?: +([^:\\r\\n ]+[^\\r\\n ]*(?: +[^:\\r\\n ]+[^\\r\\n ]*)*)|)?(?: +:([^\\r\\n]*)| +)?[\\r\\n]*$/;\n/* harmony default export */ __webpack_exports__[\"default\"] = (line => {\n  let matches = line.match(pattern);\n\n  if (matches === null) {\n    throw `irc: Couldn't parse line: ${line}`;\n  } else {\n    const tags = matches[1];\n    const source = matches[2];\n    const verb = matches[3];\n    const fixedParameters = matches[4];\n    const trailingParameters = matches[5];\n    let parameters = [];\n\n    if (fixedParameters !== undefined) {\n      parameters = fixedParameters.split(\" \");\n    }\n\n    if (trailingParameters !== undefined) {\n      parameters.push(trailingParameters);\n    }\n\n    return new _Message_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"](source, verb, parameters, line);\n  }\n});\n\n//# sourceURL=webpack:///./src/irc/parse.js?");
-
-/***/ }),
-
 /***/ "./src/main.js":
 /*!*********************!*\
   !*** ./src/main.js ***!
@@ -214,7 +178,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Mes
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _image_open_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./image/open.js */ \"./src/image/open.js\");\n/* harmony import */ var _irc_connect_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./irc/connect.js */ \"./src/irc/connect.js\");\n/* harmony import */ var _wiki_listen_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./wiki/listen.js */ \"./src/wiki/listen.js\");\n// This file is a part of Denshi.\n// Copyright (C) 2019 Matthew Blount\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU Affero General Public License as\n// published by the Free Software Foundation, either version 3 of the\n// License, or (at your option) any later version.\n// This program is distributed in the hope that it will be useful, but\n// WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n// Affero General Public License for more details.\n// You should have received a copy of the GNU Affero General Public\n// License along with this program.  If not, see\n// <https://www.gnu.org/licenses/.\n\n\n\nlet image = Object(_image_open_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])();\nlet irc = Object(_irc_connect_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(image, {\n  address: process.env.DENSHI_IRC_ADDRESS,\n  channel: process.env.DENSHI_IRC_CHANNEL,\n  nickname: process.env.DENSHI_IRC_NICKNAME,\n  password: process.env.DENSHI_IRC_PASSWORD,\n  port: process.env.DENSHI_IRC_PORT\n});\nlet wiki = Object(_wiki_listen_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(image, {\n  port: process.env.DENSHI_WIKI_PORT\n});\n\n//# sourceURL=webpack:///./src/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _image_open_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./image/open.js */ \"./src/image/open.js\");\n/* harmony import */ var _wiki_listen_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./wiki/listen.js */ \"./src/wiki/listen.js\");\n// This file is a part of Denshi.\n// Copyright (C) 2019 Matthew Blount\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU Affero General Public License as\n// published by the Free Software Foundation, either version 3 of the\n// License, or (at your option) any later version.\n// This program is distributed in the hope that it will be useful, but\n// WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n// Affero General Public License for more details.\n// You should have received a copy of the GNU Affero General Public\n// License along with this program.  If not, see\n// <https://www.gnu.org/licenses/.\n\n\nlet image = Object(_image_open_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])();\nlet wiki = Object(_wiki_listen_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(image, {\n  port: process.env.DENSHI_WIKI_PORT\n});\n\n//# sourceURL=webpack:///./src/main.js?");
 
 /***/ }),
 
@@ -275,18 +239,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _ass
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return quote; });\n/* harmony import */ var _assert_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../assert.js */ \"./src/assert.js\");\n/* harmony import */ var _Term_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Term.js */ \"./src/norm/pure/Term.js\");\n// This file is a part of Denshi.\n// Copyright (C) 2019 Matthew Blount\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU Affero General Public License as\n// published by the Free Software Foundation, either version 3 of the\n// License, or (at your option) any later version.\n// This program is distributed in the hope that it will be useful, but\n// WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n// Affero General Public License for more details.\n// You should have received a copy of the GNU Affero General Public\n// License along with this program.  If not, see\n// <https://www.gnu.org/licenses/.\n\n // Map a term to a string.\n// XXX TODO: This just repeats information in parse.js.\n\nfunction quote(obj) {\n  Object(_assert_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isTerm(obj));\n\n  if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isId(obj)) {\n    return \"\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isApply(obj)) {\n    return \"a\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isBind(obj)) {\n    return \"b\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isCopy(obj)) {\n    return \"c\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isDrop(obj)) {\n    return \"d\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isReset(obj)) {\n    return \"r\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isShift(obj)) {\n    return \"s\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isSum(obj)) {\n    return \"p\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isNegate(obj)) {\n    return \"n\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isProduct(obj)) {\n    return \"t\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isInvert(obj)) {\n    return \"v\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isExp(obj)) {\n    return \"x\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isLog(obj)) {\n    return \"l\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isCos(obj)) {\n    return \"k\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isSin(obj)) {\n    return \"z\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isFloor(obj)) {\n    return \"f\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isCeil(obj)) {\n    return \"g\";\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isHint(obj)) {\n    return `(${obj.value})`;\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isWord(obj)) {\n    return obj.value;\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isReal(obj)) {\n    return obj.value.toString();\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isBlock(obj)) {\n    const body = quote(obj.body);\n    return `[${body}]`;\n  } else if (_Term_js__WEBPACK_IMPORTED_MODULE_1__[\"Term\"].isSequence(obj)) {\n    const fst = quote(obj.fst);\n    const snd = quote(obj.snd);\n    return `${fst} ${snd}`;\n  } else {\n    throw `Couldn't quote object: ${obj}`;\n  }\n}\n\n//# sourceURL=webpack:///./src/norm/pure/quote.js?");
-
-/***/ }),
-
-/***/ "./src/shell/makeParser.js":
-/*!*********************************!*\
-  !*** ./src/shell/makeParser.js ***!
-  \*********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n// This file is a part of Denshi.\n// Copyright (C) 2019 Matthew Blount\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU Affero General Public License as\n// published by the Free Software Foundation, either version 3 of the\n// License, or (at your option) any later version.\n// This program is distributed in the hope that it will be useful, but\n// WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n// Affero General Public License for more details.\n// You should have received a copy of the GNU Affero General Public\n// License along with this program.  If not, see\n// <https://www.gnu.org/licenses/.\n/* harmony default export */ __webpack_exports__[\"default\"] = (image => {\n  const setPattern = /^:([a-z][a-z0-9-]+) +(.*)$/;\n  const unsetPattern = /^~([a-z][a-z0-9-]+) *$/;\n  return line => {\n    var matches = line.match(setPattern);\n\n    if (matches !== null) {\n      let key = matches[1];\n      let value = matches[2];\n      return () => image.set(key, value);\n    }\n\n    var matches = line.match(unsetPattern);\n\n    if (matches !== null) {\n      let key = matches[1];\n      return () => image.unset(key);\n    }\n\n    return () => image.norm(line);\n  };\n});\n\n//# sourceURL=webpack:///./src/shell/makeParser.js?");
 
 /***/ }),
 
@@ -359,17 +311,6 @@ eval("module.exports = require(\"fs\");\n\n//# sourceURL=webpack:///external_%22
 
 /***/ }),
 
-/***/ "net":
-/*!**********************!*\
-  !*** external "net" ***!
-  \**********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"net\");\n\n//# sourceURL=webpack:///external_%22net%22?");
-
-/***/ }),
-
 /***/ "object-assign":
 /*!********************************!*\
   !*** external "object-assign" ***!
@@ -411,17 +352,6 @@ eval("module.exports = require(\"sqlite3\");\n\n//# sourceURL=webpack:///externa
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"stream\");\n\n//# sourceURL=webpack:///external_%22stream%22?");
-
-/***/ }),
-
-/***/ "timers":
-/*!*************************!*\
-  !*** external "timers" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"timers\");\n\n//# sourceURL=webpack:///external_%22timers%22?");
 
 /***/ })
 
