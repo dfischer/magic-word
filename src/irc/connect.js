@@ -18,7 +18,7 @@
 import { Socket } from "net";
 import { setTimeout } from "timers";
 import parseIRC from "./parse.js";
-import makeABCParser from "../shell/makeParser.js";
+import makeABCParser from "../image/makeParser.js";
 
 const eachLine = (thunk) => {
   let buf = "";

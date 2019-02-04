@@ -16,21 +16,31 @@
 // <https://www.gnu.org/licenses/.
 
 import open from "./image/open.js";
-import listen from "./wiki/listen.js";
+import makeParser from "./image/makeParser.js";
 import connect from "./irc/connect.js";
+import { createInterface as readline } from "readline";
 
 let image = open();
-let wiki = listen(image, {
-  port: process.env.DENSHI_WIKI_PORT,
+let parse = makeParser(image);
+let irc = connect(image, {
+  address: process.env.DENSHI_IRC_ADDRESS,
+  port: process.env.DENSHI_IRC_PORT,
+  nickname: process.env.DENSHI_IRC_NICKNAME,
+  password: process.env.DENSHI_IRC_PASSWORD,
+  channel: process.env.DENSHI_IRC_CHANNEL,
 });
-
-let irc;
-if (process.env.DENSHI_IRC_ADDRESS !== undefined) {
-  irc = connect(image, {
-    address: process.env.DENSHI_IRC_ADDRESS,
-    port: process.env.DENSHI_IRC_PORT,
-    nickname: process.env.DENSHI_IRC_NICKNAME,
-    password: process.env.DENSHI_IRC_PASSWORD,
-    channel: process.env.DENSHI_IRC_CHANNEL,
-  });
-}
+let ui = readline({ input: process.stdin, output: process.stdout });
+ui.setPrompt("user@denshi\n> ");
+ui.on("line", (line) => {
+  let command = parse(line);
+  let response = command();
+  console.log(response);
+  ui.prompt();
+});
+ui.on("error", (error) => {
+  console.log(`shell: error: ${error}`);
+});
+ui.on("close", () => {
+  process.exit(1);
+});
+ui.prompt();

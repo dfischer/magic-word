@@ -7,6 +7,7 @@
     "url": "git+https://github.com/xkapastel/denshi.git"
   },
   "scripts": {
+    "build": "webpack",
     "start": "node bin/denshi.js"
   },
   "author": "Matthew Blount <xkapastel@gmail.com>",
