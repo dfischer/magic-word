@@ -22,6 +22,7 @@ import { createInterface as readline } from "readline";
 
 let image = open();
 let parse = makeParser(image);
+/**
 let irc = connect(image, {
   address: process.env.DENSHI_IRC_ADDRESS,
   port: process.env.DENSHI_IRC_PORT,
@@ -29,11 +30,12 @@ let irc = connect(image, {
   password: process.env.DENSHI_IRC_PASSWORD,
   channel: process.env.DENSHI_IRC_CHANNEL,
 });
+**/
 let ui = readline({ input: process.stdin, output: process.stdout });
 ui.setPrompt("user@denshi\n> ");
-ui.on("line", (line) => {
+ui.on("line", async (line) => {
   let command = parse(line);
-  let response = command();
+  let response = await command();
   console.log(response);
   ui.prompt();
 });
