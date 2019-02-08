@@ -15,18 +15,28 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace Abcc.Norm {
-  public sealed class Identity : Function {
+namespace ABC.Norm {
+  public sealed class Sequence : Function {
+    public Function First { get; }
+    public Function Second { get; }
+
+    public Sequence(Function fst, Function snd) {
+      First = fst;
+      Second = snd;
+    }
+
     public override Function Then(Function rest) {
-      return rest;
+      var inner = Second.Then(rest);
+      return First.Then(inner);
     }
 
     public override string ToString() {
-      return "";
+      return $"{First} {Second}";
     }
 
     internal override void Step(Machine machine) {
-      //
+      machine.Enqueue(First);
+      machine.Enqueue(Second);
     }
   }
 }

@@ -19,7 +19,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Abcc.Norm {
+namespace ABC.Norm {
   class Machine {
     private Stack<Function> sink;
     private Stack<Function> data;

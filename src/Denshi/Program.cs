@@ -15,28 +15,21 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace Abcc.Norm {
-  public sealed class Sequence : Function {
-    public Function First { get; }
-    public Function Second { get; }
+using System;
+using ABC.Norm;
 
-    public Sequence(Function fst, Function snd) {
-      First = fst;
-      Second = snd;
-    }
-
-    public override Function Then(Function rest) {
-      var inner = Second.Then(rest);
-      return First.Then(inner);
-    }
-
-    public override string ToString() {
-      return $"{First} {Second}";
-    }
-
-    internal override void Step(Machine machine) {
-      machine.Enqueue(First);
-      machine.Enqueue(Second);
+namespace Denshi {
+  class Program {
+    static void Main(string[] args) {
+      Console.Write("user@denshi\n> ");
+      var line = Console.ReadLine();
+      while (line != null) {
+        var src = Function.FromString(line);
+        var res = src.Norm(256);
+        Console.WriteLine(res);
+        Console.Write("user@denshi\n> ");
+        line = Console.ReadLine();
+      }
     }
   }
 }

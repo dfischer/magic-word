@@ -23,36 +23,14 @@ fs.readdirSync("node_modules")
   .filter(x => [".bin"].indexOf(x) === -1)
   .forEach(x => externals[x] = `commonjs ${x}`);
 
-let app = {
+let client = {
   mode: "development",
   target: "web",
-  entry: "./src/app/main.js",
+  entry: "./src/Web/main.js",
   output: {
     path: path.resolve(__dirname, "lib"),
-    filename: "app.js",
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-        },
-      },
-    ],
-  },
-}
-
-let server = {
-  mode: "development",
-  target: "node",
-  entry: "./src/main.js",
-  output: {
-    path: path.resolve(__dirname, "bin"),
     filename: "denshi.js",
   },
-  externals: externals,
   module: {
     rules: [
       {
@@ -66,4 +44,4 @@ let server = {
   },
 }
 
-module.exports = [server];
+module.exports = [client];

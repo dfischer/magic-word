@@ -15,21 +15,19 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-export default (image) => {
-  const setPattern = /^:([a-z][a-z0-9-]+) +(.*)$/;
-  const unsetPattern = /^~([a-z][a-z0-9-]+) *$/;
-  return (line) => {
-    var matches = line.match(setPattern);
-    if (matches !== null) {
-      let key = matches[1];
-      let value = matches[2];
-      return () => image.set(key, value);
+namespace ABC.Norm {
+  public sealed class Drop : Function {
+    public override string ToString() {
+      return "d";
     }
-    var matches = line.match(unsetPattern);
-    if (matches !== null) {
-      let key = matches[1];
-      return () => image.unset(key);
+
+    internal override void Step(Machine machine) {
+      if (machine.Arity < 1) {
+        machine.Thunk(this);
+      } else {
+        machine.Tick();
+        machine.Pop();
+      }
     }
-    return () => image.norm(line);
   }
 }

@@ -15,22 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace Abcc.Norm {
-  public sealed class Apply : Function {
+namespace ABC.Norm {
+  public sealed class Reset : Function {
     public override string ToString() {
-      return "a";
+      return "r";
     }
 
     internal override void Step(Machine machine) {
-      if (machine.Arity < 2) {
-        machine.Thunk(this);
-      } else {
-        machine.Tick();
-        var block = machine.Pop() as Quote;
-        var value = machine.Pop();
-        machine.Enqueue(block.Body);
-        machine.Enqueue(value);
-      }
+      machine.Thunk(this);
     }
   }
 }

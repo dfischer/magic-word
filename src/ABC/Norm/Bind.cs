@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace Abcc.Norm {
+namespace ABC.Norm {
   public sealed class Bind : Function {
     public override string ToString() {
       return "b";

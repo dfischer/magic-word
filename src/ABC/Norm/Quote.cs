@@ -15,20 +15,20 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace Abcc.Norm {
-  public sealed class Variable : Function {
-    public string Name { get; }
+namespace ABC.Norm {
+  public sealed class Quote : Function {
+    public Function Body { get; }
 
-    public Variable(string name) {
-      Name = name;
+    public Quote(Function body) {
+      Body = body;
     }
 
     public override string ToString() {
-      return Name;
+      return $"[{Body}]";
     }
 
     internal override void Step(Machine machine) {
-      machine.Thunk(this);
+      machine.Push(this);
     }
   }
 }

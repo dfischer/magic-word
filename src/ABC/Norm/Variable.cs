@@ -15,26 +15,20 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-// XXX TODO Break this up and document it.
-const pattern = /^(?:@([^\r\n ]*) +)?(?::([^\r\n ]+) +)?([^\r\n ]+)(?: +([^:\r\n ]+[^\r\n ]*(?: +[^:\r\n ]+[^\r\n ]*)*)|)?(?: +:([^\r\n]*)| +)?[\r\n]*$/;
+namespace ABC.Norm {
+  public sealed class Variable : Function {
+    public string Name { get; }
 
-export default (line) => {
-  let matches = line.match(pattern);
-  if (matches === null) {
-    throw `irc: Couldn't parse line: ${line}`;
-  } else {
-    const tags = matches[1];
-    const source = matches[2];
-    const verb = matches[3];
-    const fixedParameters = matches[4];
-    const trailingParameters = matches[5];
-    let parameters = [];
-    if (fixedParameters !== undefined) {
-      parameters = fixedParameters.split(" ");
+    public Variable(string name) {
+      Name = name;
     }
-    if (trailingParameters !== undefined) {
-      parameters.push(trailingParameters);
+
+    public override string ToString() {
+      return Name;
     }
-    return { source, verb, parameters };
+
+    internal override void Step(Machine machine) {
+      machine.Thunk(this);
+    }
   }
 }

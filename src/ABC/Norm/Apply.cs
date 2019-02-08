@@ -15,20 +15,22 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace Abcc.Norm {
-  public sealed class Quote : Function {
-    public Function Body { get; }
-
-    public Quote(Function body) {
-      Body = body;
-    }
-
+namespace ABC.Norm {
+  public sealed class Apply : Function {
     public override string ToString() {
-      return $"[{Body}]";
+      return "a";
     }
 
     internal override void Step(Machine machine) {
-      machine.Push(this);
+      if (machine.Arity < 2) {
+        machine.Thunk(this);
+      } else {
+        machine.Tick();
+        var block = machine.Pop() as Quote;
+        var value = machine.Pop();
+        machine.Enqueue(block.Body);
+        machine.Enqueue(value);
+      }
     }
   }
 }

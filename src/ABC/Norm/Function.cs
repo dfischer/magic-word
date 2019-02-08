@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Abcc.Norm {
+namespace ABC.Norm {
   public abstract class Function {
     public static readonly Function Apply    = new Apply();
     public static readonly Function Bind     = new Bind();

@@ -15,21 +15,18 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using System;
-using Abcc.Norm;
+namespace ABC.Norm {
+  public sealed class Identity : Function {
+    public override Function Then(Function rest) {
+      return rest;
+    }
 
-namespace Abcc {
-  class Program {
-    static void Main(string[] args) {
-      Console.Write("user@denshi\n> ");
-      var line = Console.ReadLine();
-      while (line != null) {
-        var src = Function.FromString(line);
-        var res = src.Norm(256);
-        Console.WriteLine(res);
-        Console.Write("user@denshi\n> ");
-        line = Console.ReadLine();
-      }
+    public override string ToString() {
+      return "";
+    }
+
+    internal override void Step(Machine machine) {
+      //
     }
   }
 }
