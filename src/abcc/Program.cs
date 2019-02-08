@@ -25,7 +25,7 @@ namespace Abcc {
       var line = Console.ReadLine();
       while (line != null) {
         var src = Function.FromString(line);
-        var res = src.Norm(100);
+        var res = src.Norm(256);
         Console.WriteLine(res);
         Console.Write("user@denshi\n> ");
         line = Console.ReadLine();

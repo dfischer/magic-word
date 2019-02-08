@@ -33,5 +33,10 @@ namespace Abcc.Norm {
     public override string ToString() {
       return $"{First} {Second}";
     }
+
+    internal override void Step(Machine machine) {
+      machine.Enqueue(First);
+      machine.Enqueue(Second);
+    }
   }
 }

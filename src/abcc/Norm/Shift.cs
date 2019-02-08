@@ -15,10 +15,42 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
+using System.Collections.Generic;
+
 namespace Abcc.Norm {
   public sealed class Shift : Function {
     public override string ToString() {
       return "s";
+    }
+
+    internal override void Step(Machine machine) {
+      var buf = new Stack<Function>();
+      var block = machine.Peek() as Quote;
+      var keepGoing = true;
+      while (machine.Busy && keepGoing) {
+        var fn = machine.Dequeue();
+        if (fn is Reset) {
+          var rest = Function.Identity;
+          foreach (var child in buf) {
+            rest = child.Then(rest);
+          }
+          rest = rest.Quote();
+          machine.Pop();
+          machine.Push(rest);
+          machine.Enqueue(block.Body);
+          keepGoing = false;
+        } else {
+          buf.Push(fn);
+        }
+      }
+      if (keepGoing) {
+        machine.Thunk(this);
+        foreach (var child in buf) {
+          machine.Dump(child);
+        }
+      } else {
+        machine.Tick();
+      }
     }
   }
 }

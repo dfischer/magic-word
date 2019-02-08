@@ -20,5 +20,17 @@ namespace Abcc.Norm {
     public override string ToString() {
       return "a";
     }
+
+    internal override void Step(Machine machine) {
+      if (machine.Arity < 2) {
+        machine.Thunk(this);
+      } else {
+        machine.Tick();
+        var block = machine.Pop() as Quote;
+        var value = machine.Pop();
+        machine.Enqueue(block.Body);
+        machine.Enqueue(value);
+      }
+    }
   }
 }

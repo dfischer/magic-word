@@ -26,5 +26,9 @@ namespace Abcc.Norm {
     public override string ToString() {
       return $"[{Body}]";
     }
+
+    internal override void Step(Machine machine) {
+      machine.Push(this);
+    }
   }
 }

@@ -16,7 +16,6 @@
 // <https://www.gnu.org/licenses/.
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -91,7 +90,12 @@ namespace Abcc.Norm {
     }
 
     public Function Norm(int quota) {
-      return this;
+      var machine = new Machine(this, quota);
+      while (machine.Busy) {
+        var fn = machine.Dequeue();
+        fn.Step(machine);
+      }
+      return machine.ToFunction();
     }
 
     public Function Quote() {
@@ -105,5 +109,7 @@ namespace Abcc.Norm {
         return new Sequence(this, rest);
       }
     }
+
+    internal abstract void Step(Machine machine);
   }
 }

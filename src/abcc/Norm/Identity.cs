@@ -24,5 +24,9 @@ namespace Abcc.Norm {
     public override string ToString() {
       return "";
     }
+
+    internal override void Step(Machine machine) {
+      //
+    }
   }
 }

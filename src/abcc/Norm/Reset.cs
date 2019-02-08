@@ -20,5 +20,9 @@ namespace Abcc.Norm {
     public override string ToString() {
       return "r";
     }
+
+    internal override void Step(Machine machine) {
+      machine.Thunk(this);
+    }
   }
 }

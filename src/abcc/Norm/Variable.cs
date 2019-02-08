@@ -26,5 +26,9 @@ namespace Abcc.Norm {
     public override string ToString() {
       return Name;
     }
+
+    internal override void Step(Machine machine) {
+      machine.Thunk(this);
+    }
   }
 }
