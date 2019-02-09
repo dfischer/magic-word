@@ -15,20 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public sealed class VariableTerm : Term {
-    public string Name { get; }
-
-    public VariableTerm(string name) {
-      Name = name;
-    }
-
+namespace ABC.Blocks {
+  public sealed class DropBlock : Block {
     public override string ToString() {
-      return Name;
+      return "d";
     }
 
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitVariable(this);
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitDrop(this);
     }
   }
 }

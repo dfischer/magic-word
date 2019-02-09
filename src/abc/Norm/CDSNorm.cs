@@ -16,52 +16,52 @@
 // <https://www.gnu.org/licenses/.
 
 using System.Collections.Generic;
-using ABC.Read;
+using ABC.Blocks;
 
 namespace ABC.Norm {
-  public class CDSNorm : INorm, ITermVisitor {
+  public class CDSNorm : INorm, IBlockVisitor {
     private CDSMachine machine;
 
     public CDSNorm() {
 
     }
 
-    public Term Norm(Term init, int quota) {
+    public Block Norm(Block init, int quota) {
       machine = new CDSMachine(init, quota);
       while (machine.Busy) {
-        var term = machine.Dequeue();
-        term.Accept(this);
+        var block = machine.Dequeue();
+        block.Accept(this);
       }
-      return machine.ToTerm();
+      return machine.ToBlock();
     }
 
-    public void VisitApply(ApplyTerm term) {
+    public void VisitApply(ApplyBlock block) {
       if (machine.Arity < 2) {
-        machine.Thunk(term);
+        machine.Thunk(block);
       } else {
         machine.Tick();
-        var block = machine.Pop() as QuoteTerm;
+        var fn = machine.Pop() as QuoteBlock;
         var value = machine.Pop();
-        machine.Enqueue(block.Body);
+        machine.Enqueue(fn.Body);
         machine.Enqueue(value);
       }
     }
 
-    public void VisitBind(BindTerm term) {
+    public void VisitBind(BindBlock block) {
       if (machine.Arity < 2) {
-        machine.Thunk(term);
+        machine.Thunk(block);
       } else {
         machine.Tick();
-        var block = machine.Pop() as QuoteTerm;
+        var fn = machine.Pop() as QuoteBlock;
         var value = machine.Pop();
-        var result = value.Then(block.Body).Quote();
+        var result = value.Then(fn.Body).Quote();
         machine.Push(result);
       }
     }
 
-    public void VisitCopy(CopyTerm term) {
+    public void VisitCopy(CopyBlock block) {
       if (machine.Arity < 1) {
-        machine.Thunk(term);
+        machine.Thunk(block);
       } else {
         machine.Tick();
         var value = machine.Peek();
@@ -69,41 +69,41 @@ namespace ABC.Norm {
       }
     }
 
-    public void VisitDrop(DropTerm term) {
+    public void VisitDrop(DropBlock block) {
       if (machine.Arity < 1) {
-        machine.Thunk(term);
+        machine.Thunk(block);
       } else {
         machine.Tick();
         machine.Pop();
       }
     }
 
-    public void VisitReset(ResetTerm term) {
-      machine.Thunk(term);
+    public void VisitReset(ResetBlock block) {
+      machine.Thunk(block);
     }
 
-    public void VisitShift(ShiftTerm term) {
-      var buf = new Stack<Term>();
-      var block = machine.Peek() as QuoteTerm;
+    public void VisitShift(ShiftBlock block) {
+      var buf = new Stack<Block>();
+      var shift = machine.Peek() as QuoteBlock;
       var keepGoing = true;
       while (machine.Busy && keepGoing) {
-        var fn = machine.Dequeue();
-        if (fn is ResetTerm) {
-          var rest = Term.Identity;
+        var next = machine.Dequeue();
+        if (next is ResetBlock) {
+          var rest = Block.Identity;
           foreach (var child in buf) {
             rest = child.Then(rest);
           }
           rest = rest.Quote();
           machine.Pop();
           machine.Push(rest);
-          machine.Enqueue(block.Body);
+          machine.Enqueue(shift.Body);
           keepGoing = false;
         } else {
-          buf.Push(fn);
+          buf.Push(next);
         }
       }
       if (keepGoing) {
-        machine.Thunk(term);
+        machine.Thunk(block);
         foreach (var child in buf) {
           machine.Dump(child);
         }
@@ -112,20 +112,20 @@ namespace ABC.Norm {
       }
     }
 
-    public void VisitQuote(QuoteTerm term) {
-      machine.Push(term);
+    public void VisitQuote(QuoteBlock block) {
+      machine.Push(block);
     }
 
-    public void VisitSequence(SequenceTerm term) {
-      machine.Enqueue(term.First);
-      machine.Enqueue(term.Second);
+    public void VisitSequence(SequenceBlock block) {
+      machine.Enqueue(block.First);
+      machine.Enqueue(block.Second);
     }
 
-    public void VisitVariable(VariableTerm term) {
-      machine.Thunk(term);
+    public void VisitVariable(VariableBlock block) {
+      machine.Thunk(block);
     }
 
-    public void VisitIdentity(IdentityTerm term) {
+    public void VisitIdentity(IdentityBlock block) {
       //
     }
   }

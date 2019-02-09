@@ -15,14 +15,27 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public sealed class ApplyTerm : Term {
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitApply(this);
+namespace ABC.Blocks {
+  public sealed class SequenceBlock : Block {
+    public Block First { get; }
+    public Block Second { get; }
+
+    public SequenceBlock(Block fst, Block snd) {
+      First = fst;
+      Second = snd;
+    }
+
+    public override Block Then(Block rest) {
+      var inner = Second.Then(rest);
+      return First.Then(inner);
     }
 
     public override string ToString() {
-      return "a";
+      return $"{First} {Second}";
+    }
+
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitSequence(this);
     }
   }
 }

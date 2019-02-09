@@ -15,14 +15,20 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public sealed class BindTerm : Term {
-    public override string ToString() {
-      return "b";
+namespace ABC.Blocks {
+  public sealed class QuoteBlock : Block {
+    public Block Body { get; }
+
+    public QuoteBlock(Block body) {
+      Body = body;
     }
 
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitBind(this);
+    public override string ToString() {
+      return $"[{Body}]";
+    }
+
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitQuote(this);
     }
   }
 }

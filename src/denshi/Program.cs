@@ -16,7 +16,7 @@
 // <https://www.gnu.org/licenses/.
 
 using System;
-using ABC.Read;
+using ABC.Blocks;
 using ABC.Norm;
 
 namespace Denshi {
@@ -26,7 +26,7 @@ namespace Denshi {
       Console.Write("user@denshi\n> ");
       var line = Console.ReadLine();
       while (line != null) {
-        var src = Term.FromString(line);
+        var src = Block.FromString(line);
         var res = norm.Norm(src, 256);
         Console.WriteLine(res);
         Console.Write("user@denshi\n> ");

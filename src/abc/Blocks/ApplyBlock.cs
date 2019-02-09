@@ -15,17 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public interface ITermVisitor {
-    void VisitApply(ApplyTerm term);
-    void VisitBind(BindTerm term);
-    void VisitCopy(CopyTerm term);
-    void VisitDrop(DropTerm term);
-    void VisitReset(ResetTerm term);
-    void VisitShift(ShiftTerm term);
-    void VisitIdentity(IdentityTerm term);
-    void VisitQuote(QuoteTerm term);
-    void VisitSequence(SequenceTerm term);
-    void VisitVariable(VariableTerm term);
+namespace ABC.Blocks {
+  public sealed class ApplyBlock : Block {
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitApply(this);
+    }
+
+    public override string ToString() {
+      return "a";
+    }
   }
 }

@@ -15,16 +15,18 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using System.Collections.Generic;
-
-namespace ABC.Read {
-  public sealed class ShiftTerm : Term {
-    public override string ToString() {
-      return "s";
+namespace ABC.Blocks {
+  public sealed class IdentityBlock : Block {
+    public override Block Then(Block rest) {
+      return rest;
     }
 
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitShift(this);
+    public override string ToString() {
+      return "";
+    }
+
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitIdentity(this);
     }
   }
 }

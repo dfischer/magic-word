@@ -15,14 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public sealed class DropTerm : Term {
+namespace ABC.Blocks {
+  public sealed class CopyBlock : Block {
     public override string ToString() {
-      return "d";
+      return "c";
     }
 
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitDrop(this);
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitCopy(this);
     }
   }
 }

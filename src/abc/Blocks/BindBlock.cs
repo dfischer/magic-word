@@ -15,18 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public sealed class IdentityTerm : Term {
-    public override Term Then(Term rest) {
-      return rest;
-    }
-
+namespace ABC.Blocks {
+  public sealed class BindBlock : Block {
     public override string ToString() {
-      return "";
+      return "b";
     }
 
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitIdentity(this);
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitBind(this);
     }
   }
 }

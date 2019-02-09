@@ -15,20 +15,17 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public sealed class QuoteTerm : Term {
-    public Term Body { get; }
-
-    public QuoteTerm(Term body) {
-      Body = body;
-    }
-
-    public override string ToString() {
-      return $"[{Body}]";
-    }
-
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitQuote(this);
-    }
+namespace ABC.Blocks {
+  public interface IBlockVisitor {
+    void VisitApply(ApplyBlock block);
+    void VisitBind(BindBlock block);
+    void VisitCopy(CopyBlock block);
+    void VisitDrop(DropBlock block);
+    void VisitReset(ResetBlock block);
+    void VisitShift(ShiftBlock block);
+    void VisitIdentity(IdentityBlock block);
+    void VisitQuote(QuoteBlock block);
+    void VisitSequence(SequenceBlock block);
+    void VisitVariable(VariableBlock block);
   }
 }

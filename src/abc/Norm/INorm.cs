@@ -15,10 +15,10 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using ABC.Read;
+using ABC.Blocks;
 
 namespace ABC.Norm {
   public interface INorm {
-    Term Norm(Term init, int quota);
+    Block Norm(Block init, int quota);
   }
 }

@@ -15,14 +15,20 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Read {
-  public sealed class ResetTerm : Term {
-    public override string ToString() {
-      return "r";
+namespace ABC.Blocks {
+  public sealed class VariableBlock : Block {
+    public string Name { get; }
+
+    public VariableBlock(string name) {
+      Name = name;
     }
 
-    public override void Accept(ITermVisitor visitor) {
-      visitor.VisitReset(this);
+    public override string ToString() {
+      return Name;
+    }
+
+    public override void Accept(IBlockVisitor visitor) {
+      visitor.VisitVariable(this);
     }
   }
 }

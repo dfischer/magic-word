@@ -19,84 +19,84 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace ABC.Read {
-  public abstract class Term {
-    public static readonly Term Apply    = new ApplyTerm();
-    public static readonly Term Bind     = new BindTerm();
-    public static readonly Term Copy     = new CopyTerm();
-    public static readonly Term Drop     = new DropTerm();
-    public static readonly Term Reset    = new ResetTerm();
-    public static readonly Term Shift    = new ShiftTerm();
-    public static readonly Term Identity = new IdentityTerm();
+namespace ABC.Blocks {
+  public abstract class Block {
+    public static readonly Block Apply    = new ApplyBlock();
+    public static readonly Block Bind     = new BindBlock();
+    public static readonly Block Copy     = new CopyBlock();
+    public static readonly Block Drop     = new DropBlock();
+    public static readonly Block Reset    = new ResetBlock();
+    public static readonly Block Shift    = new ShiftBlock();
+    public static readonly Block Identity = new IdentityBlock();
 
-    public static Term FromString(string src) {
+    public static Block FromString(string src) {
       var atomPattern = new Regex(@"^[abcdrs]$");
       var variablePattern = new Regex(@"^[a-z0-9-]+$");
-      var build = new Stack<Term>();
-      var stack = new Stack<Stack<Term>>();
+      var build = new Stack<Block>();
+      var stack = new Stack<Stack<Block>>();
       src = src.Replace("[", "[ ");
       src = src.Replace("]", " ]");
       var words = src.Split(" ", StringSplitOptions.RemoveEmptyEntries);
       foreach (var word in words) {
         if (word == "[") {
           stack.Push(build);
-          build = new Stack<Term>();
+          build = new Stack<Block>();
         } else if (word == "]") {
-          Term term = Term.Identity;
+          Block block = Block.Identity;
           foreach (var child in build) {
-            term = child.Then(term);
+            block = child.Then(block);
           }
-          term = term.Quote();
+          block = block.Quote();
           build = stack.Pop();
-          build.Push(term);
+          build.Push(block);
         } else if (atomPattern.IsMatch(word)) {
           switch (word) {
           case "a":
-            build.Push(Term.Apply);
+            build.Push(Block.Apply);
             break;
           case "b":
-            build.Push(Term.Bind);
+            build.Push(Block.Bind);
             break;
           case "c":
-            build.Push(Term.Copy);
+            build.Push(Block.Copy);
             break;
           case "d":
-            build.Push(Term.Drop);
+            build.Push(Block.Drop);
             break;
           case "r":
-            build.Push(Term.Reset);
+            build.Push(Block.Reset);
             break;
           case "s":
-            build.Push(Term.Shift);
+            build.Push(Block.Shift);
             break;
           default:
             throw new Exception($"Unknown token: {word}");
           }
         } else if (variablePattern.IsMatch(word)) {
-          build.Push(new VariableTerm(word));
+          build.Push(new VariableBlock(word));
         } else {
           throw new Exception($"Unknown token: {word}");
         }
       }
-      var state = Term.Identity;
+      var state = Block.Identity;
       foreach (var child in build) {
         state = child.Then(state);
       }
       return state;
     }
 
-    public Term Quote() {
-      return new QuoteTerm(this);
+    public Block Quote() {
+      return new QuoteBlock(this);
     }
 
-    public virtual Term Then(Term rest) {
-      if (rest is IdentityTerm) {
+    public virtual Block Then(Block rest) {
+      if (rest is IdentityBlock) {
         return this;
       } else {
-        return new SequenceTerm(this, rest);
+        return new SequenceBlock(this, rest);
       }
     }
 
-    public abstract void Accept(ITermVisitor visitor);
+    public abstract void Accept(IBlockVisitor visitor);
   }
 }

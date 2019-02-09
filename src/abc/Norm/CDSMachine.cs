@@ -15,22 +15,21 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using System;
 using System.Linq;
 using System.Collections.Generic;
-using ABC.Read;
+using ABC.Blocks;
 
 namespace ABC.Norm {
   class CDSMachine {
-    private Queue<Term> code;
-    private Stack<Term> data;
-    private Stack<Term> sink;
+    private Queue<Block> code;
+    private Stack<Block> data;
+    private Stack<Block> sink;
     private int quota;
 
-    internal CDSMachine(Term init, int quota_) {
-      code = new Queue<Term>();
-      data = new Stack<Term>();
-      sink = new Stack<Term>();
+    internal CDSMachine(Block init, int quota_) {
+      code = new Queue<Block>();
+      data = new Stack<Block>();
+      sink = new Stack<Block>();
       quota = quota_;
       code.Enqueue(init);
     }
@@ -48,64 +47,64 @@ namespace ABC.Norm {
       return this;
     }
 
-    internal CDSMachine Thunk(Term term) {
+    internal CDSMachine Thunk(Block block) {
       foreach (var child in data.Reverse()) {
         sink.Push(child);
       }
-      sink.Push(term);
+      sink.Push(block);
       data.Clear();
       return this;
     }
 
-    internal CDSMachine Push(Term term) {
-      data.Push(term);
+    internal CDSMachine Push(Block block) {
+      data.Push(block);
       return this;
     }
 
-    internal Term Pop() {
+    internal Block Pop() {
       return data.Pop();
     }
 
-    internal Term Peek() {
+    internal Block Peek() {
       return data.Peek();
     }
 
-    internal CDSMachine Enqueue(Term term) {
-      code.Enqueue(term);
+    internal CDSMachine Enqueue(Block block) {
+      code.Enqueue(block);
       return this;
     }
 
-    internal Term Dequeue() {
+    internal Block Dequeue() {
       while (true) {
-        var term = code.Dequeue();
-        switch (term) {
-        case SequenceTerm seq:
+        var block = code.Dequeue();
+        switch (block) {
+        case SequenceBlock seq:
           code.Enqueue(seq.First);
           code.Enqueue(seq.Second);
           break;
         default:
-          return term;
+          return block;
         }
       }
     }
 
-    internal CDSMachine Dump(Term term) {
-      sink.Push(term);
+    internal CDSMachine Dump(Block block) {
+      sink.Push(block);
       return this;
     }
 
-    internal Term ToTerm() {
-      var term = Term.Identity;
+    internal Block ToBlock() {
+      var block = Block.Identity;
       foreach (var child in code.Reverse()) {
-        term = child.Then(term);
+        block = child.Then(block);
       }
       foreach (var child in data) {
-        term = child.Then(term);
+        block = child.Then(block);
       }
       foreach (var child in sink) {
-        term = child.Then(term);
+        block = child.Then(block);
       }
-      return term;
+      return block;
     }
   }
 }
