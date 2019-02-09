@@ -23,10 +23,10 @@ fs.readdirSync("node_modules")
   .filter(x => [".bin"].indexOf(x) === -1)
   .forEach(x => externals[x] = `commonjs ${x}`);
 
-let client = {
+let mobile = {
   mode: "development",
   target: "web",
-  entry: "./src/Web/main.js",
+  entry: "./src/mobile/main.tsx",
   output: {
     path: path.resolve(__dirname, "lib"),
     filename: "denshi.js",
@@ -34,14 +34,14 @@ let client = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: "ts-loader",
         },
       },
     ],
   },
 }
 
-module.exports = [client];
+module.exports = [mobile];

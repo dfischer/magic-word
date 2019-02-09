@@ -15,9 +15,9 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./components/App.js";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import App from "./components/App.tsx";
 
 let container = document.querySelector("#container");
 ReactDOM.render(<App/>, container);

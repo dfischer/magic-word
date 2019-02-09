@@ -15,8 +15,8 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-import React from "react";
+import * as React from "react";
 
-export default (props) => {
+export default (props: any) => {
   return <h1>App</h1>;
 }
