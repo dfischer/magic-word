@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using ABC.Blocks;
 
 namespace ABC.Norm {
+  // CDSNorm, or "code-data-sink", is a simple normalization algorithm
+  // that executes ABC on a stack machine.
   public class CDSNorm : INorm, IBlockVisitor {
     private CDSMachine machine;
 
@@ -36,6 +38,7 @@ namespace ABC.Norm {
     }
 
     public void VisitApply(ApplyBlock block) {
+      // [A] [B] a = B [A]
       if (machine.Arity < 2) {
         machine.Thunk(block);
       } else {
@@ -48,6 +51,7 @@ namespace ABC.Norm {
     }
 
     public void VisitBind(BindBlock block) {
+      // [A] [B] b = [[A] B]
       if (machine.Arity < 2) {
         machine.Thunk(block);
       } else {
@@ -60,6 +64,7 @@ namespace ABC.Norm {
     }
 
     public void VisitCopy(CopyBlock block) {
+      // [A] c = [A] [A]
       if (machine.Arity < 1) {
         machine.Thunk(block);
       } else {
@@ -70,6 +75,7 @@ namespace ABC.Norm {
     }
 
     public void VisitDrop(DropBlock block) {
+      // [A] d =
       if (machine.Arity < 1) {
         machine.Thunk(block);
       } else {
@@ -79,16 +85,24 @@ namespace ABC.Norm {
     }
 
     public void VisitReset(ResetBlock block) {
+      // [A] r = [A] r
       machine.Thunk(block);
     }
 
     public void VisitShift(ShiftBlock block) {
+      // [A] s B C D r = [B C D] A
       var buf = new Stack<Block>();
       var shift = machine.Peek() as QuoteBlock;
       var keepGoing = true;
+      // Look for the next reset block, keeping track of the blocks we
+      // see along the way.
       while (machine.Busy && keepGoing) {
         var next = machine.Dequeue();
         if (next is ResetBlock) {
+          // [A] s B C D r = [B C D] A
+          // A "continuation" made of all of the blocks we've seen
+          // along the way are given as an argument to the block that
+          // was shifted.
           var rest = Block.Identity;
           foreach (var child in buf) {
             rest = child.Then(rest);
@@ -99,34 +113,44 @@ namespace ABC.Norm {
           machine.Enqueue(shift.Body);
           keepGoing = false;
         } else {
+          // We haven't found the reset block yet, so just remember
+          // the block that we did see.
           buf.Push(next);
         }
       }
       if (keepGoing) {
+        // We never found the reset block, but the loop ended because
+        // we ran out of code. So dump the shift block, along with all
+        // of the blocks we saved while looking for the matching
+        // reset.
         machine.Thunk(block);
         foreach (var child in buf) {
           machine.Dump(child);
         }
       } else {
+        // We found the reset block, so consume some quota.
         machine.Tick();
       }
     }
 
     public void VisitQuote(QuoteBlock block) {
+      // A quote is a block like `[foo]`, so just put it on the stack.
       machine.Push(block);
     }
 
     public void VisitSequence(SequenceBlock block) {
+      // Queue up the components of the sequence in order.
       machine.Enqueue(block.First);
       machine.Enqueue(block.Second);
     }
 
     public void VisitVariable(VariableBlock block) {
+      // XXX TODO: Expand variables at some point.
       machine.Thunk(block);
     }
 
     public void VisitIdentity(IdentityBlock block) {
-      //
+      // The identity function is very simple.
     }
   }
 }

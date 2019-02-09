@@ -18,7 +18,10 @@
 using ABC.Blocks;
 
 namespace ABC.Norm {
+  // INorm is an interface for normalization algorithms.
   public interface INorm {
+    // Rewrite a block until it reaches normal form or the quota runs
+    // out.
     Block Norm(Block init, int quota);
   }
 }

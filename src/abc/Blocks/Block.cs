@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ABC.Blocks {
+  // A block is a function made of ABC bytecode. All values in ABC are
+  // blocks.
   public abstract class Block {
     public static readonly Block Apply    = new ApplyBlock();
     public static readonly Block Bind     = new BindBlock();
@@ -29,9 +31,16 @@ namespace ABC.Blocks {
     public static readonly Block Shift    = new ShiftBlock();
     public static readonly Block Identity = new IdentityBlock();
 
+    // Read a block from a string. ABC is a Forth-like concatenative
+    // language:
+    // * Atoms are one of { a, b, c, d, r, s } and represent primitive
+    //   combinators.
+    // * Words are alphanumeric, with hyphens, and must start with an
+    //   alpha.
+    // * Quotations are delimited with [brackets].
     public static Block FromString(string src) {
       var atomPattern = new Regex(@"^[abcdrs]$");
-      var variablePattern = new Regex(@"^[a-z0-9-]+$");
+      var variablePattern = new Regex(@"^[a-z][a-z0-9-]+$");
       var build = new Stack<Block>();
       var stack = new Stack<Stack<Block>>();
       src = src.Replace("[", "[ ");
@@ -85,10 +94,12 @@ namespace ABC.Blocks {
       return state;
     }
 
+    // Mention this block instead of using it.
     public Block Quote() {
       return new QuoteBlock(this);
     }
 
+    // Sequence this block and the argument.
     public virtual Block Then(Block rest) {
       if (rest is IdentityBlock) {
         return this;
