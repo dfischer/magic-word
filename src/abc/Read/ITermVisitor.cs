@@ -15,20 +15,17 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Variable : Function {
-    public string Name { get; }
-
-    public Variable(string name) {
-      Name = name;
-    }
-
-    public override string ToString() {
-      return Name;
-    }
-
-    internal override void Step(Machine machine) {
-      machine.Thunk(this);
-    }
+namespace ABC.Read {
+  public interface ITermVisitor {
+    void VisitApply(ApplyTerm term);
+    void VisitBind(BindTerm term);
+    void VisitCopy(CopyTerm term);
+    void VisitDrop(DropTerm term);
+    void VisitReset(ResetTerm term);
+    void VisitShift(ShiftTerm term);
+    void VisitIdentity(IdentityTerm term);
+    void VisitQuote(QuoteTerm term);
+    void VisitSequence(SequenceTerm term);
+    void VisitVariable(VariableTerm term);
   }
 }

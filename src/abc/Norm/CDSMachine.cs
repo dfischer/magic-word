@@ -18,18 +18,19 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using ABC.Read;
 
 namespace ABC.Norm {
-  class Machine {
-    private Stack<Function> sink;
-    private Stack<Function> data;
-    private Queue<Function> code;
+  class CDSMachine {
+    private Queue<Term> code;
+    private Stack<Term> data;
+    private Stack<Term> sink;
     private int quota;
 
-    internal Machine(Function init, int quota_) {
-      sink = new Stack<Function>();
-      data = new Stack<Function>();
-      code = new Queue<Function>();
+    internal CDSMachine(Term init, int quota_) {
+      code = new Queue<Term>();
+      data = new Stack<Term>();
+      sink = new Stack<Term>();
       quota = quota_;
       code.Enqueue(init);
     }
@@ -42,69 +43,69 @@ namespace ABC.Norm {
       get { return data.Count; }
     }
 
-    internal Machine Tick() {
+    internal CDSMachine Tick() {
       quota = quota - 1;
       return this;
     }
 
-    internal Machine Thunk(Function fn) {
+    internal CDSMachine Thunk(Term term) {
       foreach (var child in data.Reverse()) {
         sink.Push(child);
       }
-      sink.Push(fn);
+      sink.Push(term);
       data.Clear();
       return this;
     }
 
-    internal Machine Push(Function fn) {
-      data.Push(fn);
+    internal CDSMachine Push(Term term) {
+      data.Push(term);
       return this;
     }
 
-    internal Function Pop() {
+    internal Term Pop() {
       return data.Pop();
     }
 
-    internal Function Peek() {
+    internal Term Peek() {
       return data.Peek();
     }
 
-    internal Machine Enqueue(Function fn) {
-      code.Enqueue(fn);
+    internal CDSMachine Enqueue(Term term) {
+      code.Enqueue(term);
       return this;
     }
 
-    internal Function Dequeue() {
+    internal Term Dequeue() {
       while (true) {
-        var fn = code.Dequeue();
-        switch (fn) {
-        case Sequence seq:
+        var term = code.Dequeue();
+        switch (term) {
+        case SequenceTerm seq:
           code.Enqueue(seq.First);
           code.Enqueue(seq.Second);
           break;
         default:
-          return fn;
+          return term;
         }
       }
     }
 
-    internal Machine Dump(Function fn) {
-      sink.Push(fn);
+    internal CDSMachine Dump(Term term) {
+      sink.Push(term);
       return this;
     }
 
-    internal Function ToFunction() {
-      var fn = Function.Identity;
+    internal Term ToTerm() {
+      var term = Term.Identity;
       foreach (var child in code.Reverse()) {
-        fn = child.Then(fn);
+        term = child.Then(term);
       }
       foreach (var child in data) {
-        fn = child.Then(fn);
+        term = child.Then(term);
       }
       foreach (var child in sink) {
-        fn = child.Then(fn);
+        term = child.Then(term);
       }
-      return fn;
+      return term;
     }
   }
 }

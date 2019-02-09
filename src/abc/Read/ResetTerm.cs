@@ -15,23 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using System;
-using ABC.Read;
-using ABC.Norm;
+namespace ABC.Read {
+  public sealed class ResetTerm : Term {
+    public override string ToString() {
+      return "r";
+    }
 
-namespace Denshi {
-  class Program {
-    static void Main(string[] args) {
-      var norm = new CDSNorm();
-      Console.Write("user@denshi\n> ");
-      var line = Console.ReadLine();
-      while (line != null) {
-        var src = Term.FromString(line);
-        var res = norm.Norm(src, 256);
-        Console.WriteLine(res);
-        Console.Write("user@denshi\n> ");
-        line = Console.ReadLine();
-      }
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitReset(this);
     }
   }
 }

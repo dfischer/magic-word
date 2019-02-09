@@ -15,20 +15,10 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Copy : Function {
-    public override string ToString() {
-      return "c";
-    }
+using ABC.Read;
 
-    internal override void Step(Machine machine) {
-      if (machine.Arity < 1) {
-        machine.Thunk(this);
-      } else {
-        machine.Tick();
-        var value = machine.Peek();
-        machine.Push(value);
-      }
-    }
+namespace ABC.Norm {
+  public interface INorm {
+    Term Norm(Term init, int quota);
   }
 }

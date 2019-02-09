@@ -15,19 +15,27 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Drop : Function {
-    public override string ToString() {
-      return "d";
+namespace ABC.Read {
+  public sealed class SequenceTerm : Term {
+    public Term First { get; }
+    public Term Second { get; }
+
+    public SequenceTerm(Term fst, Term snd) {
+      First = fst;
+      Second = snd;
     }
 
-    internal override void Step(Machine machine) {
-      if (machine.Arity < 1) {
-        machine.Thunk(this);
-      } else {
-        machine.Tick();
-        machine.Pop();
-      }
+    public override Term Then(Term rest) {
+      var inner = Second.Then(rest);
+      return First.Then(inner);
+    }
+
+    public override string ToString() {
+      return $"{First} {Second}";
+    }
+
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitSequence(this);
     }
   }
 }

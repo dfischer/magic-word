@@ -15,18 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Identity : Function {
-    public override Function Then(Function rest) {
-      return rest;
-    }
-
+namespace ABC.Read {
+  public sealed class DropTerm : Term {
     public override string ToString() {
-      return "";
+      return "d";
     }
 
-    internal override void Step(Machine machine) {
-      //
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitDrop(this);
     }
   }
 }

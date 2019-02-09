@@ -15,22 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Bind : Function {
+namespace ABC.Read {
+  public sealed class BindTerm : Term {
     public override string ToString() {
       return "b";
     }
 
-    internal override void Step(Machine machine) {
-      if (machine.Arity < 2) {
-        machine.Thunk(this);
-      } else {
-        machine.Tick();
-        var block = machine.Pop() as Quote;
-        var value = machine.Pop();
-        var result = value.Then(block.Body).Quote();
-        machine.Push(result);
-      }
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitBind(this);
     }
   }
 }

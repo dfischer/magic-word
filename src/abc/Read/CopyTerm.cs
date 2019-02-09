@@ -15,22 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Apply : Function {
+namespace ABC.Read {
+  public sealed class CopyTerm : Term {
     public override string ToString() {
-      return "a";
+      return "c";
     }
 
-    internal override void Step(Machine machine) {
-      if (machine.Arity < 2) {
-        machine.Thunk(this);
-      } else {
-        machine.Tick();
-        var block = machine.Pop() as Quote;
-        var value = machine.Pop();
-        machine.Enqueue(block.Body);
-        machine.Enqueue(value);
-      }
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitCopy(this);
     }
   }
 }

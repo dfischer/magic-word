@@ -15,14 +15,20 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Reset : Function {
-    public override string ToString() {
-      return "r";
+namespace ABC.Read {
+  public sealed class VariableTerm : Term {
+    public string Name { get; }
+
+    public VariableTerm(string name) {
+      Name = name;
     }
 
-    internal override void Step(Machine machine) {
-      machine.Thunk(this);
+    public override string ToString() {
+      return Name;
+    }
+
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitVariable(this);
     }
   }
 }

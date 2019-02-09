@@ -15,28 +15,18 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Sequence : Function {
-    public Function First { get; }
-    public Function Second { get; }
-
-    public Sequence(Function fst, Function snd) {
-      First = fst;
-      Second = snd;
-    }
-
-    public override Function Then(Function rest) {
-      var inner = Second.Then(rest);
-      return First.Then(inner);
+namespace ABC.Read {
+  public sealed class IdentityTerm : Term {
+    public override Term Then(Term rest) {
+      return rest;
     }
 
     public override string ToString() {
-      return $"{First} {Second}";
+      return "";
     }
 
-    internal override void Step(Machine machine) {
-      machine.Enqueue(First);
-      machine.Enqueue(Second);
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitIdentity(this);
     }
   }
 }

@@ -15,20 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Norm {
-  public sealed class Quote : Function {
-    public Function Body { get; }
-
-    public Quote(Function body) {
-      Body = body;
+namespace ABC.Read {
+  public sealed class ApplyTerm : Term {
+    public override void Accept(ITermVisitor visitor) {
+      visitor.VisitApply(this);
     }
 
     public override string ToString() {
-      return $"[{Body}]";
-    }
-
-    internal override void Step(Machine machine) {
-      machine.Push(this);
+      return "a";
     }
   }
 }
