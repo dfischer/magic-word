@@ -23,9 +23,10 @@ namespace ABC.Norm {
   // that executes ABC on a stack machine.
   public class CDSNorm : INorm, IBlockVisitor {
     private CDSMachine machine;
+    private int defaultQuota;
 
     public CDSNorm() {
-
+      defaultQuota = 4096;
     }
 
     public Block Norm(Block init, int quota) {
@@ -35,6 +36,12 @@ namespace ABC.Norm {
         block.Accept(this);
       }
       return machine.ToBlock();
+    }
+
+    public string Norm(string src) {
+      var block = Block.FromString(src);
+      block = Norm(block, defaultQuota);
+      return block.ToString();
     }
 
     public void VisitApply(ApplyBlock block) {
