@@ -17,21 +17,12 @@
 
 using System;
 using ABC.Blocks;
-using ABC.Norm;
+using ABC.Normalize;
 
 namespace Denshi {
   class Program {
     static void Main(string[] args) {
-      var norm = new CDSNorm();
-      Console.Write("user@denshi\n> ");
-      var line = Console.ReadLine();
-      while (line != null) {
-        var src = Block.FromString(line);
-        var res = norm.Norm(src, 256);
-        Console.WriteLine(res);
-        Console.Write("user@denshi\n> ");
-        line = Console.ReadLine();
-      }
+
     }
   }
 }
