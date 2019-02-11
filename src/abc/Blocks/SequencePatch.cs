@@ -15,13 +15,32 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using ABC.Blocks;
+namespace ABC.Blocks {
+  public class SequencePatch : Patch {
+    public Patch First { get; }
+    public Patch Second { get; }
 
-namespace ABC.Norm {
-  // INorm is an interface for normalization algorithms.
-  public interface INorm {
-    // Rewrite a block until it reaches normal form or quota runs out.
-    string Norm(string src);
-    Block Norm(Block init);
+    public SequencePatch(Patch fst, Patch snd) {
+      First = fst;
+      Second = snd;
+    }
+
+    public override void Apply(Module module) {
+      First.Apply(module);
+      Second.Apply(module);
+    }
+
+    public override void Accept(IPatchVisitor visitor) {
+      visitor.VisitSequence(this);
+    }
+
+    public override Patch Then(Patch rest) {
+      var inner = Second.Then(rest);
+      return First.Then(inner);
+    }
+
+    public override string ToString() {
+      return $"{First}\n{Second}";
+    }
   }
 }

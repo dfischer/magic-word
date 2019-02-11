@@ -38,7 +38,7 @@ namespace ABC.Blocks {
     // * Words are alphanumeric, with hyphens, and must start with an
     //   alpha.
     // * Quotations are delimited with [brackets].
-    public static Block FromString(string src) {
+    public static bool TryFromString(string src, out Block response) {
       var atomPattern = new Regex(@"^[abcdrs]$");
       var variablePattern = new Regex(@"^[a-z][a-z0-9-]+$");
       var build = new Stack<Block>();
@@ -79,19 +79,22 @@ namespace ABC.Blocks {
             build.Push(Block.Shift);
             break;
           default:
-            throw new Exception($"Unknown token: {word}");
+            response = null;
+            return false;
           }
         } else if (variablePattern.IsMatch(word)) {
           build.Push(new VariableBlock(word));
         } else {
-          throw new Exception($"Unknown token: {word}");
+          response = null;
+          return false;
         }
       }
       var state = Block.Identity;
       foreach (var child in build) {
         state = child.Then(state);
       }
-      return state;
+      response = state;
+      return true;
     }
 
     // Mention this block instead of using it.

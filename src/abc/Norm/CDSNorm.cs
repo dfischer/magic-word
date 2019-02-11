@@ -29,19 +29,21 @@ namespace ABC.Norm {
       defaultQuota = 4096;
     }
 
-    public Block Norm(Block init, int quota) {
-      machine = new CDSMachine(init, quota);
+    public string Norm(string src) {
+      Block block;
+      if (!Block.TryFromString(src, out block)) {
+        return "(error)";
+      }
+      return Norm(block).ToString();
+    }
+
+    public Block Norm(Block init) {
+      machine = new CDSMachine(init, defaultQuota);
       while (machine.Busy) {
         var block = machine.Dequeue();
         block.Accept(this);
       }
       return machine.ToBlock();
-    }
-
-    public string Norm(string src) {
-      var block = Block.FromString(src);
-      block = Norm(block, defaultQuota);
-      return block.ToString();
     }
 
     public void VisitApply(ApplyBlock block) {

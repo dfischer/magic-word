@@ -15,13 +15,26 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using ABC.Blocks;
+namespace ABC.Blocks {
+  public class SetPatch : Patch {
+    public string Name { get; }
+    public Block Body { get; }
 
-namespace ABC.Norm {
-  // INorm is an interface for normalization algorithms.
-  public interface INorm {
-    // Rewrite a block until it reaches normal form or quota runs out.
-    string Norm(string src);
-    Block Norm(Block init);
+    public SetPatch(string name, Block body) {
+      Name = name;
+      Body = body;
+    }
+
+    public override void Apply(Module module) {
+      module.Set(Name, Body);
+    }
+
+    public override void Accept(IPatchVisitor visitor) {
+      visitor.VisitSet(this);
+    }
+
+    public override string ToString() {
+      return $":{Name} {Body}";
+    }
   }
 }

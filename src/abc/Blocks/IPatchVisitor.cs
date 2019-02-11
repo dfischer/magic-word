@@ -15,13 +15,11 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using ABC.Blocks;
-
-namespace ABC.Norm {
-  // INorm is an interface for normalization algorithms.
-  public interface INorm {
-    // Rewrite a block until it reaches normal form or quota runs out.
-    string Norm(string src);
-    Block Norm(Block init);
+namespace ABC.Blocks {
+  public interface IPatchVisitor {
+    void VisitIdentity(IdentityPatch patch);
+    void VisitSet(SetPatch patch);
+    void VisitUnset(UnsetPatch patch);
+    void VisitSequence(SequencePatch patch);
   }
 }
