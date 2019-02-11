@@ -16,23 +16,7 @@
 // <https://www.gnu.org/licenses/.
 
 namespace ABC.Blocks {
-  public class UnsetPatch : Patch {
-    public string Name { get; }
-
-    public UnsetPatch(string key) {
-      Name = key;
-    }
-
-    public override void Apply(Module module) {
-      module.Unset(Name);
-    }
-
-    public override void Accept(IPatchVisitor visitor) {
-      visitor.VisitUnset(this);
-    }
-
-    public override string ToString() {
-      return $"~{Name}";
-    }
+  public interface IEnvironment {
+    bool TryResolve(VariableBlock variable, out Block binding);
   }
 }

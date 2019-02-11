@@ -22,17 +22,16 @@ namespace ABC.Normalize {
   public class StackNormalizer : INormalizer, IBlockVisitor {
     private StackMachine machine;
     private int defaultQuota;
+    private IEnvironment env;
 
     public StackNormalizer() {
+      env = null;
       defaultQuota = 4096;
     }
 
-    public string Normalize(string src) {
-      Block block;
-      if (!Block.TryFromString(src, out block)) {
-        return "(error)";
-      }
-      return Normalize(block).ToString();
+    public StackNormalizer(IEnvironment env_) {
+      env = env_;
+      defaultQuota = 4096;
     }
 
     public Block Normalize(Block init) {
@@ -152,8 +151,16 @@ namespace ABC.Normalize {
     }
 
     public void VisitVariable(VariableBlock block) {
-      // XXX TODO: Expand variables at some point.
-      machine.Thunk(block);
+      if (env != null) {
+        Block binding;
+        if (env.TryResolve(block, out binding)) {
+          binding.Accept(this);
+        } else {
+          machine.Thunk(block);
+        }
+      } else {
+        machine.Thunk(block);
+      }
     }
 
     public void VisitIdentity(IdentityBlock block) {

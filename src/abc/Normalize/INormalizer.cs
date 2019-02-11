@@ -21,7 +21,6 @@ namespace ABC.Normalize {
   // INormalizer is an interface for normalization algorithms.
   public interface INormalizer {
     // Rewrite a block until it reaches normal form or quota runs out.
-    string Normalize(string src);
     Block Normalize(Block block);
   }
 }
