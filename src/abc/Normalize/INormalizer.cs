@@ -17,11 +17,11 @@
 
 using ABC.Blocks;
 
-namespace ABC.Norm {
-  // INorm is an interface for normalization algorithms.
-  public interface INorm {
+namespace ABC.Normalize {
+  // INormalizer is an interface for normalization algorithms.
+  public interface INormalizer {
     // Rewrite a block until it reaches normal form or quota runs out.
-    string Norm(string src);
-    Block Norm(Block init);
+    string Normalize(string src);
+    Block Normalize(Block block);
   }
 }

@@ -16,49 +16,49 @@
 // <https://www.gnu.org/licenses/.
 
 using Xunit;
-using ABC.Norm;
+using ABC.Normalize;
 
 namespace ABC.Tests {
-  public class CDSNormTests {
-    private INorm ctx;
+  public class StackNormalizerTests {
+    private INormalizer ctx;
 
-    public CDSNormTests() {
-      ctx = new CDSNorm();
+    public StackNormalizerTests() {
+      ctx = new StackNormalizer();
     }
 
     [Fact]
     public void Apply() {
       var src = "[foo] [bar] a";
       var res = "bar [foo]";
-      Assert.Equal(res, ctx.Norm(src));
+      Assert.Equal(res, ctx.Normalize(src));
     }
 
     [Fact]
     public void Bind() {
       var src = "[foo] [bar] b";
       var res = "[[foo] bar]";
-      Assert.Equal(res, ctx.Norm(src));
+      Assert.Equal(res, ctx.Normalize(src));
     }
 
     [Fact]
     public void Copy() {
       var src = "[foo] c";
       var res = "[foo] [foo]";
-      Assert.Equal(res, ctx.Norm(src));
+      Assert.Equal(res, ctx.Normalize(src));
     }
 
     [Fact]
     public void Drop() {
       var src = "[foo] d";
       var res = "";
-      Assert.Equal(res, ctx.Norm(src));
+      Assert.Equal(res, ctx.Normalize(src));
     }
 
     [Fact]
     public void ResetShift() {
       var src = "[foo] s bar r";
       var res = "[bar] foo";
-      Assert.Equal(res, ctx.Norm(src));
+      Assert.Equal(res, ctx.Normalize(src));
     }
   }
 }

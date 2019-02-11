@@ -19,14 +19,14 @@ using System.Linq;
 using System.Collections.Generic;
 using ABC.Blocks;
 
-namespace ABC.Norm {
-  class CDSMachine {
+namespace ABC.Normalize {
+  class StackMachine {
     private Queue<Block> code;
     private Stack<Block> data;
     private Stack<Block> sink;
     private int quota;
 
-    internal CDSMachine(Block init, int quota_) {
+    internal StackMachine(Block init, int quota_) {
       code = new Queue<Block>();
       data = new Stack<Block>();
       sink = new Stack<Block>();
@@ -46,9 +46,8 @@ namespace ABC.Norm {
     }
 
     // Consume some quota due to a successful rewrite.
-    internal CDSMachine Tick() {
+    internal void Tick() {
       quota = quota - 1;
-      return this;
     }
 
     // Put all of the data on the stack in to the sink, followed by
@@ -57,19 +56,17 @@ namespace ABC.Norm {
     // arguments available, or because a variable is unbound. Instead
     // of crashing, the machine simply "thunks" that part of the
     // computation and keeps going.
-    internal CDSMachine Thunk(Block block) {
+    internal void Thunk(Block block) {
       foreach (var child in data.Reverse()) {
         sink.Push(child);
       }
       sink.Push(block);
       data.Clear();
-      return this;
     }
 
     // Put a block on top of the stack.
-    internal CDSMachine Push(Block block) {
+    internal void Push(Block block) {
       data.Push(block);
-      return this;
     }
 
     // Get the block at the top of the stack.
@@ -83,9 +80,8 @@ namespace ABC.Norm {
     }
 
     // Schedule a block to be executed.
-    internal CDSMachine Enqueue(Block block) {
+    internal void Enqueue(Block block) {
       code.Enqueue(block);
-      return this;
     }
 
     // Get the next block to be executed.
@@ -106,9 +102,8 @@ namespace ABC.Norm {
     }
 
     // Put a block directly in to the sink.
-    internal CDSMachine Dump(Block block) {
+    internal void Dump(Block block) {
       sink.Push(block);
-      return this;
     }
 
     // Form a block from the sink, data stack, and code queue, from

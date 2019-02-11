@@ -18,27 +18,25 @@
 using System.Collections.Generic;
 using ABC.Blocks;
 
-namespace ABC.Norm {
-  // CDSNorm, or "code-data-sink", is a simple normalization algorithm
-  // that executes ABC on a stack machine.
-  public class CDSNorm : INorm, IBlockVisitor {
-    private CDSMachine machine;
+namespace ABC.Normalize {
+  public class StackNormalizer : INormalizer, IBlockVisitor {
+    private StackMachine machine;
     private int defaultQuota;
 
-    public CDSNorm() {
+    public StackNormalizer() {
       defaultQuota = 4096;
     }
 
-    public string Norm(string src) {
+    public string Normalize(string src) {
       Block block;
       if (!Block.TryFromString(src, out block)) {
         return "(error)";
       }
-      return Norm(block).ToString();
+      return Normalize(block).ToString();
     }
 
-    public Block Norm(Block init) {
-      machine = new CDSMachine(init, defaultQuota);
+    public Block Normalize(Block init) {
+      machine = new StackMachine(init, defaultQuota);
       while (machine.Busy) {
         var block = machine.Dequeue();
         block.Accept(this);
