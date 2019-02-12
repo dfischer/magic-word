@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-dotnet build ./src/denshi/denshi.csproj
-cp ./src/denshi/bin/Debug/netcoreapp3.0/* ./bin
