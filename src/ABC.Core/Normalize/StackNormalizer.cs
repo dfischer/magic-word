@@ -34,6 +34,21 @@ namespace ABC.Core.Normalize {
       defaultQuota = 4096;
     }
 
+    public float Match(string src) {
+      return 1.0f;
+    }
+
+    public bool TryNormalize(string src, out string res) {
+      Block block;
+      if (!Block.TryFromString(src, out block)) {
+        res = null;
+        return false;
+      }
+      block = Normalize(block);
+      res = block.ToString();
+      return true;
+    }
+
     public Block Normalize(Block init) {
       machine = new StackMachine(init, defaultQuota);
       while (machine.Busy) {

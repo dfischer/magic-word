@@ -20,7 +20,10 @@ using ABC.Core.Blocks;
 namespace ABC.Core.Normalize {
   // INormalizer is an interface for normalization algorithms.
   public interface INormalizer {
+    // Confidence for whether this normalizer can handle the given
+    // source code.
+    float Match(string src);
     // Rewrite a block until it reaches normal form or quota runs out.
-    Block Normalize(Block block);
+    bool TryNormalize(string src, out string res);
   }
 }

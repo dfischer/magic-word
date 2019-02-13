@@ -19,7 +19,7 @@ using Xunit;
 using ABC.Core.Blocks;
 using ABC.Core.Normalize;
 
-namespace ABC.Core.Tests {
+namespace ABC.Test.Core {
   public class StackNormalizerTests {
     private INormalizer ctx;
 
@@ -28,10 +28,9 @@ namespace ABC.Core.Tests {
     }
 
     private string Normalize(string src) {
-      Block source;
-      Assert.True(Block.TryFromString(src, out source));
-      Block residual = ctx.Normalize(source);
-      return residual.ToString();
+      string res;
+      Assert.True(ctx.TryNormalize(src, out res));
+      return res;
     }
 
     [Fact]
