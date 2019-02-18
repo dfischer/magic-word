@@ -1,9 +1,0 @@
-[book]
-title = "ABC"
-authors = ["Matthew Blount"]
-description = "The ABC book."
-src = "src/docs"
-
-[build]
-build-dir = "docs"
-create-missing = false

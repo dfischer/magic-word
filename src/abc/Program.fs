@@ -15,11 +15,13 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-using System;
-using ABC.Core.Blocks;
+open System
+open ABC.Core
 
-class Program {
-  static void Main(string[] args) {
-    Console.WriteLine("abc");
-  }
-}
+[<EntryPoint>]
+let main argv =
+  let ctx = Container.defaultContainer()
+  let src = "[foo] [bar] baz"
+  let res = ctx.Norm src
+  printfn "%s" res
+  0

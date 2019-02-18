@@ -1,3 +1,13 @@
-ABC is a text-based programming protocol. It's kind of like IRC, with
-first class support for code. The result is a tight coupling between a
-chatroom and a FaaS platform.
+Smalltalk's main feature is removing the distinction between the
+operating system and the language used to program it. I'd really like
+to see this idea applied to a modern OS, especially one running on a
+mobile device.
+
+```
+ ---------------------   ----------------------   --------------
+| Progressive Web App | | GNU/Emacs Major Mode | | WebExtension |
+ ---------------------   ----------------------   --------------
+ ---------------------------------------------------------------
+|                    F# / .NET Core Language Server             |
+ ---------------------------------------------------------------
+```

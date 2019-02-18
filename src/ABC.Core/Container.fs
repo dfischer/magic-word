@@ -15,20 +15,25 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Core.Blocks {
-  public sealed class VariableBlock : Block {
-    public string Name { get; }
+namespace ABC.Core
 
-    public VariableBlock(string name) {
-      Name = name;
-    }
+module Container =
+  type DefaultContainer() =    
+    interface IContainer with
+      member x.Set key value =
+        ()
 
-    public override string ToString() {
-      return Name;
-    }
+      member x.Delete key =
+        ()
 
-    public override void Accept(IBlockVisitor visitor) {
-      visitor.VisitVariable(this);
-    }
-  }
-}
+      member x.Norm src =
+        let word = Word.parse src
+        match Term.parse word with
+          | None -> src
+          | Some fst ->
+            let snd = Term.norm fst
+            let lis = Term.quote snd
+            Word.quote lis
+
+  let defaultContainer (): IContainer =
+    DefaultContainer() :> IContainer
