@@ -1,4 +1,4 @@
-﻿// This file is a part of ABC.
+﻿// This file is a part of Planet Forth.
 // Copyright (C) 2019 Matthew Blount
 
 // This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
 // <https://www.gnu.org/licenses/.
 
 open System
-open ABC.Core
+open PlanetForth.Lang
 
 [<EntryPoint>]
 let main argv =
   let ctx = Container.defaultContainer()
-  let src = "[foo] [bar] baz"
-  let res = ctx.Norm src
-  printfn "%s" res
+  let src = Word.parse "[foo] [bar] baz"
+  let res = ctx.Exec src
+  printfn "%s" <| Word.quote res
   0

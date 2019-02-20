@@ -1,4 +1,4 @@
-// This file is a part of ABC.
+// This file is a part of Planet Forth.
 // Copyright (C) 2019 Matthew Blount
 
 // This program is free software: you can redistribute it and/or modify
@@ -15,25 +15,19 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Core
+namespace PlanetForth.Lang
+
+open System.Collections.Generic;
 
 module Container =
-  type DefaultContainer() =    
+  type DefaultContainer() =
+    let words = new Dictionary<string, string>();
+
     interface IContainer with
-      member x.Set key value =
-        ()
-
-      member x.Delete key =
-        ()
-
-      member x.Norm src =
-        let word = Word.parse src
-        match Term.parse word with
-          | None -> src
-          | Some fst ->
-            let snd = Term.norm fst
-            let lis = Term.quote snd
-            Word.quote lis
+      member x.Exec words =
+        match Term.parse words with
+          | None     -> words
+          | Some src -> src |> Term.norm |> Term.quote
 
   let defaultContainer (): IContainer =
     DefaultContainer() :> IContainer

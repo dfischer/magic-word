@@ -1,13 +1,10 @@
-Smalltalk's main feature is removing the distinction between the
-operating system and the language used to program it. I'd really like
-to see this idea applied to a modern OS, especially one running on a
-mobile device.
+# Planet Forth
 
-```
- ---------------------   ----------------------   --------------
-| Progressive Web App | | GNU/Emacs Major Mode | | WebExtension |
- ---------------------   ----------------------   --------------
- ---------------------------------------------------------------
-|                    F# / .NET Core Language Server             |
- ---------------------------------------------------------------
-```
+Go beyond the cloud: a Forth based FaaS platform.
+
+## Table of contents
+- [About](#about)
+
+## About
+Planet Forth is a function-as-a-service (FaaS) platform where users
+write code that executes in a server-side container.

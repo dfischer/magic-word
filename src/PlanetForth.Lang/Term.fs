@@ -1,4 +1,4 @@
-// This file is a part of ABC.
+// This file is a part of Planet Forth.
 // Copyright (C) 2019 Matthew Blount
 
 // This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Core
+namespace PlanetForth.Lang
 
 // Terms are a more committal level of parsing than words: code is now
 // tree shaped and will evaluate by rewriting. But e.g. we could have

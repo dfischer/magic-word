@@ -1,4 +1,4 @@
-// This file is a part of ABC.
+// This file is a part of Planet Forth.
 // Copyright (C) 2019 Matthew Blount
 
 // This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace ABC.Core
+namespace PlanetForth.Lang
 
 [<AutoOpen>]
 module SharedTypes =  
@@ -41,6 +41,4 @@ module SharedTypes =
     | Var of string
 
   type IContainer =
-    abstract member Set: string -> string -> unit
-    abstract member Delete: string -> unit
-    abstract member Norm: string -> string
+    abstract member Exec: Word list -> Word list
