@@ -24,14 +24,15 @@ audiovisual content.
 I'd like to use Planet Forth to explore a number of experimental ideas
 in programming languages and machine learning:
 
-* Recreate results from [Neural Program Synthesis with Priority Queue Training](https://arxiv.org/abs/1801.03526)
+### Recreate results from [Neural Program Synthesis with Priority Queue Training](https://arxiv.org/abs/1801.03526)
 
 Character and word based neural language models achieve good results
 and are now commonplace. The word-at-a-time model seems to be a
 natural fit for Forth, and I'd like to generate Forth code with these
 techniques.
 
-* Programming on a mobile device
+### Programming on a mobile device
+
 Smartphones have been around for many years now but they're still not
 good environments for writing code. I have some ideas about this that
 I'd like to try out, in particular: programming on a mobile device
@@ -40,7 +41,7 @@ for a function. Consider [SmartSynth: Synthesizing Smartphone
 Automation Scripts from Natural
 Language](https://www.microsoft.com/en-us/research/publication/smartsynth-synthesizing-smartphone-automation-scripts-natural-language/).
 
-* Recreate graphics/audio programming model from [IBNIZ](http://pelulamu.net/ibniz/)
+### Recreate graphics/audio programming model from [IBNIZ](http://pelulamu.net/ibniz/)
 
 I like the idea of interpreting a function as a map from time to
 sample intensity, or a map from 2D space to color space; these seem
