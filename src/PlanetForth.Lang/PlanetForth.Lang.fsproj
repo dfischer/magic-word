@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="String.fs"/>
     <Compile Include="SharedTypes.fs"/>
     <Compile Include="Word.fs"/>
     <Compile Include="Term.fs"/>

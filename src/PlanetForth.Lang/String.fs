@@ -17,28 +17,12 @@
 
 namespace PlanetForth.Lang
 
-[<AutoOpen>]
-module SharedTypes =
-  // Words are an "initial" level of normalization: we haven't yet done
-  // the computation that balances braces, but we've broken things on
-  // spaces and know what the shape of each token is.
-  //
-  // One reason I make this form explicit instead of e.g. going
-  // straight to terms is that this is the canonical form for program
-  // synthesis with neural nets as well. Another is that I may want to
-  // do graph rewriting at some point, so there's nothing special
-  // about terms.
-  type Word =
-    | Id
-    | Apply
-    | Bind
-    | Copy
-    | Drop
-    | Reset
-    | Shift
-    | Begin
-    | End
-    | Var of string
+open System
 
-  type IContainer =
-    abstract member Exec: Word list -> Word list
+module String =
+  let inline replace (fst: string) (snd: string) (str: string): string =
+    str.Replace(fst, snd)
+
+  let inline split (sep: string) (str: string): string list =
+    str.Split(sep, StringSplitOptions.RemoveEmptyEntries)
+    |> Array.toList

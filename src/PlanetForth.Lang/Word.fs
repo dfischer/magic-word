@@ -21,36 +21,35 @@ open System
 
 module Word =
   let parse (src: string): Word list =
-    let src = src.Replace("[", "[ ")
-    let src = src.Replace("]", " ]")
-    let tokens = src.Split(" ", StringSplitOptions.RemoveEmptyEntries)
-    let tokens = Array.toList tokens
-    List.map (fun token ->
-              match token with
-              | "a" -> Apply
-              | "b" -> Bind
-              | "c" -> Copy
-              | "d" -> Drop
-              | "r" -> Reset
-              | "s" -> Shift
-              | "[" -> Begin
-              | "]" -> End
-              | _   -> Var token) tokens
+    src
+    |> String.replace "[" "[ "
+    |> String.replace "]" " ]"
+    |> String.split " "
+    |> List.map (fun token ->
+                 match token with
+                 | "a" -> Apply
+                 | "b" -> Bind
+                 | "c" -> Copy
+                 | "d" -> Drop
+                 | "r" -> Reset
+                 | "s" -> Shift
+                 | "[" -> Begin
+                 | "]" -> End
+                 | _   -> Var token)
 
   let quote (words: Word list): string =
-    let xs = List.map (fun word ->
-                       match word with
-                       | Id       -> ""
-                       | Apply    -> "a"
-                       | Bind     -> "b"
-                       | Copy     -> "c"
-                       | Drop     -> "d"
-                       | Reset    -> "r"
-                       | Shift    -> "s"
-                       | Begin    -> "["
-                       | End      -> "]"
-                       | Var name -> name) words
-    let src = String.concat " " xs
-    let src = src.Replace("[ ", "[")
-    let src = src.Replace(" ]", "]")
-    src
+    words
+    |> List.map (function
+                 | Id       -> ""
+                 | Apply    -> "a"
+                 | Bind     -> "b"
+                 | Copy     -> "c"
+                 | Drop     -> "d"
+                 | Reset    -> "r"
+                 | Shift    -> "s"
+                 | Begin    -> "["
+                 | End      -> "]"
+                 | Var name -> name)
+    |> String.concat " "
+    |> String.replace "[ " "["
+    |> String.replace " ]" "]"
