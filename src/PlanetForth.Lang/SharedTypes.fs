@@ -38,7 +38,7 @@ module SharedTypes =
     | Shift
     | Begin
     | End
-    | Var of string
+    | Variable of string
 
   type IContainer =
     abstract member Exec: Word list -> Word list

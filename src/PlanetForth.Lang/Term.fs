@@ -29,7 +29,7 @@ module Term =
     | Drop
     | Reset
     | Shift
-    | Var of string
+    | Variable of string
     | Quote of Term
     | Sequence of (Term * Term)
 
@@ -72,16 +72,16 @@ module Term =
       | None     -> None
       | Some ctx ->
         match word with
-          | Word.Begin    -> Some <| save ctx
-          | Word.End      -> tryRestore ctx
-          | Word.Id       -> Some ctx
-          | Word.Apply    -> Some <| push ctx Apply
-          | Word.Bind     -> Some <| push ctx Bind
-          | Word.Copy     -> Some <| push ctx Copy
-          | Word.Drop     -> Some <| push ctx Drop
-          | Word.Reset    -> Some <| push ctx Reset
-          | Word.Shift    -> Some <| push ctx Shift
-          | Word.Var name -> Some <| push ctx (Var name)
+          | Word.Begin         -> Some <| save ctx
+          | Word.End           -> tryRestore ctx
+          | Word.Id            -> Some ctx
+          | Word.Apply         -> Some <| push ctx Apply
+          | Word.Bind          -> Some <| push ctx Bind
+          | Word.Copy          -> Some <| push ctx Copy
+          | Word.Drop          -> Some <| push ctx Drop
+          | Word.Reset         -> Some <| push ctx Reset
+          | Word.Shift         -> Some <| push ctx Shift
+          | Word.Variable name -> Some <| push ctx (Variable name)
 
   let parse (words: Word list) : Term option =
     let init = Some <| { build = []; stack = []; }
@@ -93,15 +93,15 @@ module Term =
 
   let rec quote (term: Term): Word list =
     match term with
-      | Id         -> [Word.Id]
-      | Apply      -> [Word.Apply]
-      | Bind       -> [Word.Bind]
-      | Copy       -> [Word.Copy]
-      | Drop       -> [Word.Drop]
-      | Reset      -> [Word.Reset]
-      | Shift      -> [Word.Shift]
-      | Var name   -> [Word.Var name]
-      | Quote body ->
+      | Id            -> [Word.Id]
+      | Apply         -> [Word.Apply]
+      | Bind          -> [Word.Bind]
+      | Copy          -> [Word.Copy]
+      | Drop          -> [Word.Drop]
+      | Reset         -> [Word.Reset]
+      | Shift         -> [Word.Shift]
+      | Variable name -> [Word.Variable name]
+      | Quote body    ->
         let body = quote body
         List.concat [[Word.Begin]; body; [Word.End]]
       | Sequence (fst, snd) ->

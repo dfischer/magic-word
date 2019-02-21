@@ -35,21 +35,21 @@ module Word =
                  | "s" -> Shift
                  | "[" -> Begin
                  | "]" -> End
-                 | _   -> Var token)
+                 | _   -> Variable token)
 
   let quote (words: Word list): string =
     words
     |> List.map (function
-                 | Id       -> ""
-                 | Apply    -> "a"
-                 | Bind     -> "b"
-                 | Copy     -> "c"
-                 | Drop     -> "d"
-                 | Reset    -> "r"
-                 | Shift    -> "s"
-                 | Begin    -> "["
-                 | End      -> "]"
-                 | Var name -> name)
+                 | Id            -> ""
+                 | Apply         -> "a"
+                 | Bind          -> "b"
+                 | Copy          -> "c"
+                 | Drop          -> "d"
+                 | Reset         -> "r"
+                 | Shift         -> "s"
+                 | Begin         -> "["
+                 | End           -> "]"
+                 | Variable name -> name)
     |> String.concat " "
     |> String.replace "[ " "["
     |> String.replace " ]" "]"
