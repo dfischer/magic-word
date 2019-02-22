@@ -1,4 +1,4 @@
-﻿// This file is a part of Planet Forth.
+// This file is a part of Planet Forth.
 // Copyright (C) 2019 Matthew Blount
 
 // This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,9 @@ open PlanetForth.Lang
 [<EntryPoint>]
 let main argv =
   let ctx = Container.defaultContainer()
-  let src = Word.parse "[foo] [bar] baz"
-  let res = ctx.Exec src
-  printfn "%s" <| Word.quote res
+  match Word.parse "[foo] [bar] baz" with
+    | None -> printfn "Couldn't parse the stuff"
+    | Some src ->
+      let res = ctx.Exec src
+      printfn "%s" <| Word.quote res
   0

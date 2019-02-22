@@ -29,6 +29,8 @@ module Term =
     | Drop
     | Reset
     | Shift
+    | Bang of string
+    | Symbol of string
     | Variable of string
     | Quote of Term
     | Sequence of (Term * Term)
@@ -81,6 +83,8 @@ module Term =
           | Word.Drop          -> Some <| push ctx Drop
           | Word.Reset         -> Some <| push ctx Reset
           | Word.Shift         -> Some <| push ctx Shift
+          | Word.Bang name     -> Some <| push ctx (Bang name)
+          | Word.Symbol name   -> Some <| push ctx (Symbol name)
           | Word.Variable name -> Some <| push ctx (Variable name)
 
   let parse (words: Word list) : Term option =
@@ -100,6 +104,8 @@ module Term =
       | Drop          -> [Word.Drop]
       | Reset         -> [Word.Reset]
       | Shift         -> [Word.Shift]
+      | Bang name     -> [Word.Bang name]
+      | Symbol name   -> [Word.Symbol name]
       | Variable name -> [Word.Variable name]
       | Quote body    ->
         let body = quote body

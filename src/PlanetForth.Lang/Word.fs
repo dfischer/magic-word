@@ -18,24 +18,43 @@
 namespace PlanetForth.Lang
 
 open System
+open System.Text.RegularExpressions
 
 module Word =
-  let parse (src: string): Word list =
+  let parse (src: string): Word list option =
+    let bangR     = Regex(@"^[a-z][a-z0-9-]*!$")
+    let symbolR   = Regex(@"^/[a-z][a-z0-9-]+$")
+    let variableR = Regex(@"^[a-z][a-z0-9-]*$")
+
+    let isBang (token: string): bool =
+      bangR.IsMatch(token)
+
+    let isSymbol (token: string): bool =
+      symbolR.IsMatch(token)
+
+    let isVariable (token: string): bool =
+      variableR.IsMatch(token)
+
     src
     |> String.replace "[" "[ "
     |> String.replace "]" " ]"
     |> String.split " "
     |> List.map (fun token ->
                  match token with
-                 | "a" -> Apply
-                 | "b" -> Bind
-                 | "c" -> Copy
-                 | "d" -> Drop
-                 | "r" -> Reset
-                 | "s" -> Shift
-                 | "[" -> Begin
-                 | "]" -> End
-                 | _   -> Variable token)
+                 | "a" -> Some Apply
+                 | "b" -> Some Bind
+                 | "c" -> Some Copy
+                 | "d" -> Some Drop
+                 | "r" -> Some Reset
+                 | "s" -> Some Shift
+                 | "[" -> Some Begin
+                 | "]" -> Some End
+                 | _   ->
+                 if isBang token then Some <| Bang token
+                 elif isSymbol token then Some <| Symbol token
+                 elif isVariable token then Some <| Variable token
+                 else None)
+    |> Option.all
 
   let quote (words: Word list): string =
     words
@@ -49,6 +68,8 @@ module Word =
                  | Shift         -> "s"
                  | Begin         -> "["
                  | End           -> "]"
+                 | Bang name     -> name
+                 | Symbol name   -> name
                  | Variable name -> name)
     |> String.concat " "
     |> String.replace "[ " "["

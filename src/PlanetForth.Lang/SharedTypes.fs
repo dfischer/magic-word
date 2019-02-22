@@ -19,6 +19,22 @@ namespace PlanetForth.Lang
 
 [<AutoOpen>]
 module SharedTypes =
+  module Option =
+    let all (xs: 'a option list): 'a list option =
+      let cons (value: 'a option) (xs: 'a list): 'a list option =
+        match value with
+          | None   -> None
+          | Some x -> Some <| x :: xs
+
+      let step (state: 'a list option) (value: 'a option): 'a list option =
+        match state with
+          | None    -> None
+          | Some xs -> cons value xs
+
+      let init = Some []
+
+      List.fold step init <| List.rev xs
+
   // Words are an "initial" level of normalization: we haven't yet done
   // the computation that balances braces, but we've broken things on
   // spaces and know what the shape of each token is.
@@ -38,6 +54,8 @@ module SharedTypes =
     | Shift
     | Begin
     | End
+    | Bang of string
+    | Symbol of string
     | Variable of string
 
   type IContainer =
