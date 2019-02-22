@@ -17,11 +17,11 @@
 
 namespace PlanetForth.Lang
 
-open System.Collections.Generic;
+open System.Collections.Generic
 
 module Container =
   type DefaultContainer() =
-    let words = new Dictionary<string, string>();
+    let words = new Dictionary<string, string>()
 
     interface IContainer with
       member x.Exec words =
