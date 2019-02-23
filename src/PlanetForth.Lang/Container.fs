@@ -27,7 +27,7 @@ module Container =
       member x.Exec words =
         match Term.parse words with
           | None     -> words
-          | Some src -> src |> Term.norm |> Term.quote
+          | Some src -> src |> Term.rewrite |> Term.quote
 
   let defaultContainer (): IContainer =
     DefaultContainer() :> IContainer

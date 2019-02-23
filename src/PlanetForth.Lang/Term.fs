@@ -137,5 +137,5 @@ module Term =
         Some <| (head, { st with code = tail })
       | [] -> None
 
-  let norm (term: Term): Term =
+  let rewrite (term: Term): Term =
     term
