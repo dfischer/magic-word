@@ -1,4 +1,4 @@
-// This file is a part of Planet Forth.
+// This file is a part of Magic Word.
 // Copyright (C) 2019 Matthew Blount
 
 // This program is free software: you can redistribute it and/or modify
@@ -15,20 +15,15 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace PlanetForth.Lang
+open System
+open MagicWord.Lang
 
-module Option =
-  let all (xs: 'a option list): 'a list option =
-    let cons (value: 'a option) (xs: 'a list): 'a list option =
-      match value with
-        | None   -> None
-        | Some x -> Some <| x :: xs
-
-    let step (state: 'a list option) (value: 'a option): 'a list option =
-      match state with
-        | None    -> None
-        | Some xs -> cons value xs
-
-    let init = Some []
-
-    List.fold step init <| List.rev xs
+[<EntryPoint>]
+let main argv =
+  let ctx = Container.defaultContainer()
+  match Word.parse "[foo] [bar] baz" with
+    | None -> printfn "Couldn't parse the stuff"
+    | Some src ->
+      let res = ctx.Exec src
+      printfn "%s" <| Word.quote res
+  0

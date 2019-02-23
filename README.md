@@ -1,4 +1,4 @@
-# Planet Forth
+# Magic Word
 A Forth-based FaaS platform. Typed, purely functional concatenative
 code for scripting the web — and others! With deep learning! 🚀
 
@@ -8,20 +8,20 @@ code for scripting the web — and others! With deep learning! 🚀
 - [License](#license)
 
 ## About
-Planet Forth is a function-as-a-service (FaaS) platform where users
+Magic Word is a function-as-a-service (FaaS) platform where users
 collaboratively write code that executes in a server-side container.
 
-Planet Forth uses a minimalist, purely functional dialect of Forth
+Magic Word uses a minimalist, purely functional dialect of Forth
 known as *ABC*.
 
 ## Roadmap
-My vision for Planet Forth is something similar to
+My vision for Magic Word is something similar to
 [Glitch](https://glitch.com/) and [IFTTT](https://ifttt.com/): a way
 for small groups of developers to collaborate on a running program,
 with an emphasis on integration with web services and generation of
 audiovisual content.
 
-I'd like to use Planet Forth to explore a number of experimental ideas
+I'd like to use Magic Word to explore a number of experimental ideas
 in programming languages and machine learning:
 
 ### Recreate results from [Neural Program Synthesis with Priority Queue Training](https://arxiv.org/abs/1801.03526)
@@ -49,5 +49,5 @@ like really simple audio/graphics APIs that can rival e.g. Processing
 for functional code.
 
 ## License
-Planet Forth is available under the terms of the GNU Affero General
+Magic Word is available under the terms of the GNU Affero General
 Public License, version 3; see the `LICENSE` file for details.

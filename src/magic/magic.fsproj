@@ -7,6 +7,6 @@
     <Compile Include="Program.fs"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PlanetForth.Lang\PlanetForth.Lang.fsproj"/>
+    <ProjectReference Include="..\MagicWord.Lang\MagicWord.Lang.fsproj"/>
   </ItemGroup>
 </Project>

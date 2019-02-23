@@ -1,4 +1,4 @@
-// This file is a part of Planet Forth.
+// This file is a part of Magic Word.
 // Copyright (C) 2019 Matthew Blount
 
 // This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace PlanetForth.Lang
+namespace MagicWord.Lang
 
 // Terms are a more committal level of parsing than words: code is now
 // tree shaped and will evaluate by rewriting. But e.g. we could have
