@@ -45,6 +45,7 @@ module Word =
                  | "b" -> Some Bind
                  | "c" -> Some Copy
                  | "d" -> Some Drop
+                 | "q" -> Some Inequal
                  | "r" -> Some Reset
                  | "s" -> Some Shift
                  | "[" -> Some Begin
@@ -64,6 +65,7 @@ module Word =
                  | Bind          -> "b"
                  | Copy          -> "c"
                  | Drop          -> "d"
+                 | Inequal       -> "q"
                  | Reset         -> "r"
                  | Shift         -> "s"
                  | Begin         -> "["

@@ -27,6 +27,7 @@ module Term =
     | Bind
     | Copy
     | Drop
+    | Inequal
     | Reset
     | Shift
     | Bang of string
@@ -81,6 +82,7 @@ module Term =
           | Word.Bind          -> Some <| push ctx Bind
           | Word.Copy          -> Some <| push ctx Copy
           | Word.Drop          -> Some <| push ctx Drop
+          | Word.Inequal       -> Some <| push ctx Inequal
           | Word.Reset         -> Some <| push ctx Reset
           | Word.Shift         -> Some <| push ctx Shift
           | Word.Bang name     -> Some <| push ctx (Bang name)
@@ -102,6 +104,7 @@ module Term =
       | Bind          -> [Word.Bind]
       | Copy          -> [Word.Copy]
       | Drop          -> [Word.Drop]
+      | Inequal       -> [Word.Inequal]
       | Reset         -> [Word.Reset]
       | Shift         -> [Word.Shift]
       | Bang name     -> [Word.Bang name]

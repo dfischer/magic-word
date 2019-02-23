@@ -34,6 +34,7 @@ module SharedTypes =
     | Bind
     | Copy
     | Drop
+    | Inequal
     | Reset
     | Shift
     | Begin
