@@ -8,6 +8,5 @@
     <Compile Include="SharedTypes.fs"/>
     <Compile Include="Word.fs"/>
     <Compile Include="Term.fs"/>
-    <Compile Include="Container.fs"/>
   </ItemGroup>
 </Project>

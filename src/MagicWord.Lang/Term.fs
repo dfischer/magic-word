@@ -17,6 +17,8 @@
 
 namespace MagicWord.Lang
 
+open System.Collections.Generic
+
 // Terms are a more committal level of parsing than words: code is now
 // tree shaped and will evaluate by rewriting. But e.g. we could have
 // gone to graphs instead, with something like an interaction net.
@@ -118,24 +120,36 @@ module Term =
         let snd = quote snd
         List.concat [fst; snd]
 
-  type private RewriteState = {
-    sink : Term list
-    data : Term list
-    code : Term list
-  }
+  type Rewriter() =
+    let words = new Dictionary<string, string>()
+    let mutable sink: Term list = []
+    let mutable data: Term list = []
+    let mutable code: Term list = []
 
-  let private thunk st term =
-    let sink' = List.append st.sink st.data
-    let sink' = term :: sink'
-    { st with sink = sink'; data = [] }
+    let thunk(term: Term) =
+      sink <- List.append sink data
+      sink <- term :: sink
+      data <- []
 
-  let rec private fetch st =
-    match st.code with
-      | Sequence (fst, snd) :: tail ->
-        fetch <| { st with code = fst :: snd :: tail }
-      | head :: tail ->
-        Some <| (head, { st with code = tail })
-      | [] -> None
+    let rec fetch() =
+      match code with
+        | Sequence (fst, snd) :: tail ->
+          code <- fst :: snd :: tail
+          fetch()
+        | head :: tail ->
+          code <- tail
+          Some head
+        | [] ->
+          None
 
-  let rewrite (term: Term): Term =
-    term
+    let rewrite (term: Term): Term =
+      term
+
+    interface IContainer with
+      member x.Exec words =
+        match parse words with
+          | None     -> words
+          | Some src -> src |> rewrite |> quote
+
+  let newContainer(): IContainer =
+    Rewriter() :> IContainer

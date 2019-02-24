@@ -20,7 +20,7 @@ open MagicWord.Lang
 
 [<EntryPoint>]
 let main argv =
-  let ctx = Container.defaultContainer()
+  let ctx = Term.newContainer()
   match Word.parse "[foo] [bar] baz" with
     | None -> printfn "Couldn't parse the stuff"
     | Some src ->
