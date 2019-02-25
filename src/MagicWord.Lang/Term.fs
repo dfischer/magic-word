@@ -123,8 +123,8 @@ module Term =
   type Rewriter() =
     let words = new Dictionary<string, string>()
     let mutable sink: Term list = []
-    let mutable data: Term list = []
     let mutable code: Term list = []
+    let mutable data: Term list = []
 
     let thunk(term: Term) =
       sink <- List.append sink data
@@ -148,8 +148,8 @@ module Term =
     interface IContainer with
       member x.Exec words =
         match parse words with
-          | None     -> words
-          | Some src -> src |> rewrite |> quote
+          | None      -> words
+          | Some term -> term |> rewrite |> quote
 
   let newContainer(): IContainer =
     Rewriter() :> IContainer
