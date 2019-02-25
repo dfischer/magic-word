@@ -1,0 +1,8 @@
+[book]
+title = "Magic Word"
+authors = ["Matthew Blount"]
+description = "The Magic Word manual"
+src = "./src/docs/"
+
+[build]
+build-dir = "./docs/"
