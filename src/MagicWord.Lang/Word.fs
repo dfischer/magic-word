@@ -22,18 +22,15 @@ open System.Text.RegularExpressions
 
 module Word =
   let parse (src: string): Word list option =
+    let tagR      = Regex(@"^#[a-z][a-z0-9-]*$")
     let bangR     = Regex(@"^[a-z][a-z0-9-]*!$")
     let symbolR   = Regex(@"^/[a-z][a-z0-9-]+$")
     let variableR = Regex(@"^[a-z][a-z0-9-]*$")
 
-    let isBang (token: string): bool =
-      bangR.IsMatch(token)
-
-    let isSymbol (token: string): bool =
-      symbolR.IsMatch(token)
-
-    let isVariable (token: string): bool =
-      variableR.IsMatch(token)
+    let isTag (token: string): bool      = tagR.IsMatch(token)
+    let isBang (token: string): bool     = bangR.IsMatch(token)
+    let isSymbol (token: string): bool   = symbolR.IsMatch(token)
+    let isVariable (token: string): bool = variableR.IsMatch(token)
 
     src
     |> String.replace "[" "[ "
@@ -51,7 +48,8 @@ module Word =
                  | "[" -> Some Begin
                  | "]" -> Some End
                  | _   ->
-                 if isBang token then Some <| Bang token
+                 if isTag token then Some <| Tag token
+                 elif isBang token then Some <| Bang token
                  elif isSymbol token then Some <| Symbol token
                  elif isVariable token then Some <| Variable token
                  else None)
@@ -70,6 +68,7 @@ module Word =
                  | Shift         -> "s"
                  | Begin         -> "["
                  | End           -> "]"
+                 | Tag name      -> name
                  | Bang name     -> name
                  | Symbol name   -> name
                  | Variable name -> name)

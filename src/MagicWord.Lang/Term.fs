@@ -32,6 +32,7 @@ module Term =
     | Inequal
     | Reset
     | Shift
+    | Tag of string
     | Bang of string
     | Symbol of string
     | Variable of string
@@ -87,6 +88,7 @@ module Term =
           | Word.Inequal       -> Some <| push ctx Inequal
           | Word.Reset         -> Some <| push ctx Reset
           | Word.Shift         -> Some <| push ctx Shift
+          | Word.Tag name      -> Some <| push ctx (Tag name)
           | Word.Bang name     -> Some <| push ctx (Bang name)
           | Word.Symbol name   -> Some <| push ctx (Symbol name)
           | Word.Variable name -> Some <| push ctx (Variable name)
@@ -109,6 +111,7 @@ module Term =
       | Inequal       -> [Word.Inequal]
       | Reset         -> [Word.Reset]
       | Shift         -> [Word.Shift]
+      | Tag name      -> [Word.Tag name]
       | Bang name     -> [Word.Bang name]
       | Symbol name   -> [Word.Symbol name]
       | Variable name -> [Word.Variable name]
