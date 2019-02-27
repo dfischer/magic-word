@@ -25,15 +25,19 @@ module SharedTypes =
     | Bind
     | Copy
     | Drop
-    | Inequal
     | Reset
     | Shift
     | Begin
     | End
     | Tag of string
-    | Bang of string
-    | Symbol of string
-    | Variable of string
+    | Var of string
+    | Def of string
+    | Del of string
+
+  type IGrammar =
+    abstract member Add: Word list -> unit
+    abstract member Continue: Word list -> Word list
+    abstract member Normalize: int -> int
 
   type IContainer =
     abstract member Exec: Word list -> Word list

@@ -29,13 +29,12 @@ module Term =
     | Bind
     | Copy
     | Drop
-    | Inequal
     | Reset
     | Shift
     | Tag of string
-    | Bang of string
-    | Symbol of string
-    | Variable of string
+    | Var of string
+    | Def of string
+    | Del of string
     | Quote of Term
     | Sequence of (Term * Term)
 
@@ -78,20 +77,19 @@ module Term =
       | None     -> None
       | Some ctx ->
         match word with
-          | Word.Begin         -> Some <| save ctx
-          | Word.End           -> tryRestore ctx
-          | Word.Id            -> Some ctx
-          | Word.Apply         -> Some <| push ctx Apply
-          | Word.Bind          -> Some <| push ctx Bind
-          | Word.Copy          -> Some <| push ctx Copy
-          | Word.Drop          -> Some <| push ctx Drop
-          | Word.Inequal       -> Some <| push ctx Inequal
-          | Word.Reset         -> Some <| push ctx Reset
-          | Word.Shift         -> Some <| push ctx Shift
-          | Word.Tag name      -> Some <| push ctx (Tag name)
-          | Word.Bang name     -> Some <| push ctx (Bang name)
-          | Word.Symbol name   -> Some <| push ctx (Symbol name)
-          | Word.Variable name -> Some <| push ctx (Variable name)
+          | Word.Begin    -> Some <| save ctx
+          | Word.End      -> tryRestore ctx
+          | Word.Id       -> Some ctx
+          | Word.Apply    -> Some <| push ctx Apply
+          | Word.Bind     -> Some <| push ctx Bind
+          | Word.Copy     -> Some <| push ctx Copy
+          | Word.Drop     -> Some <| push ctx Drop
+          | Word.Reset    -> Some <| push ctx Reset
+          | Word.Shift    -> Some <| push ctx Shift
+          | Word.Tag name -> Some <| push ctx (Tag name)
+          | Word.Var name -> Some <| push ctx (Var name)
+          | Word.Def name -> Some <| push ctx (Def name)
+          | Word.Del name -> Some <| push ctx (Del name)
 
   let parse (words: Word list) : Term option =
     let init = Some <| { build = []; stack = []; }
@@ -103,19 +101,18 @@ module Term =
 
   let rec quote (term: Term): Word list =
     match term with
-      | Id            -> [Word.Id]
-      | Apply         -> [Word.Apply]
-      | Bind          -> [Word.Bind]
-      | Copy          -> [Word.Copy]
-      | Drop          -> [Word.Drop]
-      | Inequal       -> [Word.Inequal]
-      | Reset         -> [Word.Reset]
-      | Shift         -> [Word.Shift]
-      | Tag name      -> [Word.Tag name]
-      | Bang name     -> [Word.Bang name]
-      | Symbol name   -> [Word.Symbol name]
-      | Variable name -> [Word.Variable name]
-      | Quote body    ->
+      | Id         -> [Word.Id]
+      | Apply      -> [Word.Apply]
+      | Bind       -> [Word.Bind]
+      | Copy       -> [Word.Copy]
+      | Drop       -> [Word.Drop]
+      | Reset      -> [Word.Reset]
+      | Shift      -> [Word.Shift]
+      | Tag name   -> [Word.Tag name]
+      | Var name   -> [Word.Var name]
+      | Def name   -> [Word.Def name]
+      | Del name   -> [Word.Del name]
+      | Quote body ->
         let body = quote body
         List.concat [[Word.Begin]; body; [Word.End]]
       | Sequence (fst, snd) ->

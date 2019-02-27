@@ -22,15 +22,15 @@ open System.Text.RegularExpressions
 
 module Word =
   let parse (src: string): Word list option =
-    let tagR      = Regex(@"^#[a-z][a-z0-9-]*$")
-    let bangR     = Regex(@"^[a-z][a-z0-9-]*!$")
-    let symbolR   = Regex(@"^/[a-z][a-z0-9-]+$")
-    let variableR = Regex(@"^[a-z][a-z0-9-]*$")
+    let tagR = Regex(@"^#[a-z][a-z0-9-]*$")
+    let varR = Regex(@"^[a-z][a-z0-9-]*$")
+    let defR = Regex(@"^:[a-z][a-z0-9-]*$")
+    let delR = Regex(@"^\.[a-z][a-z0-9-]*$")
 
-    let isTag (token: string): bool      = tagR.IsMatch(token)
-    let isBang (token: string): bool     = bangR.IsMatch(token)
-    let isSymbol (token: string): bool   = symbolR.IsMatch(token)
-    let isVariable (token: string): bool = variableR.IsMatch(token)
+    let isTag (token: string): bool = tagR.IsMatch(token)
+    let isVar (token: string): bool = varR.IsMatch(token)
+    let isDef (token: string): bool = defR.IsMatch(token)
+    let isDel (token: string): bool = delR.IsMatch(token)
 
     src
     |> String.replace "[" "[ "
@@ -42,36 +42,34 @@ module Word =
                  | "b" -> Some Bind
                  | "c" -> Some Copy
                  | "d" -> Some Drop
-                 | "q" -> Some Inequal
                  | "r" -> Some Reset
                  | "s" -> Some Shift
                  | "[" -> Some Begin
                  | "]" -> Some End
                  | _   ->
                  if isTag token then Some <| Tag token
-                 elif isBang token then Some <| Bang token
-                 elif isSymbol token then Some <| Symbol token
-                 elif isVariable token then Some <| Variable token
+                 elif isVar token then Some <| Var token
+                 elif isDef token then Some <| Def token
+                 elif isDel token then Some <| Del token
                  else None)
     |> Option.all
 
   let quote (words: Word list): string =
     words
     |> List.map (function
-                 | Id            -> ""
-                 | Apply         -> "a"
-                 | Bind          -> "b"
-                 | Copy          -> "c"
-                 | Drop          -> "d"
-                 | Inequal       -> "q"
-                 | Reset         -> "r"
-                 | Shift         -> "s"
-                 | Begin         -> "["
-                 | End           -> "]"
-                 | Tag name      -> name
-                 | Bang name     -> name
-                 | Symbol name   -> name
-                 | Variable name -> name)
+                 | Id       -> ""
+                 | Apply    -> "a"
+                 | Bind     -> "b"
+                 | Copy     -> "c"
+                 | Drop     -> "d"
+                 | Reset    -> "r"
+                 | Shift    -> "s"
+                 | Begin    -> "["
+                 | End      -> "]"
+                 | Tag name -> name
+                 | Var name -> name
+                 | Def name -> ":" + name
+                 | Del name -> "." + name)
     |> String.concat " "
     |> String.replace "[ " "["
     |> String.replace " ]" "]"
