@@ -1,10 +1,16 @@
-[Language & Spaces](language-and-spaces.md) argues for search as an
-alternative to the "writing" metaphor for creating software. It also
-discusses modern approaches to program synthesis, and in particular
-neural language models.
+Magic Word is a hobbyist research & development project in programming
+languages and machine learning. I would like to experiment with a
+number of recent developments, including:
 
-[ABC](abc.md) describes the purely functional bytecode used throughout
-Magic Word and adapted from the [Awelon
-project](https://github.com/dmbarbour/wikilon), introduces sum,
-product and exponential types in analogy to arithmetic, and describes
-an approach to effects based on continuous transactions.
+* combinatory term rewriting for mobile code
+* [delimited continuations](http://okmij.org/ftp/continuations/) for program structure
+* neural language models for program synthesis
+
+The organization of the documentation is as follows:
+
+[Program Rewriting](program-rewriting.md)
+[Arithmetic Types](arithmetic-types.md)
+[Delimited Continuations](delimited-continuations.md)
+[Open Deduction](open-deduction.md)
+[Transactors](transactors.md)
+[Neural Language Models](neural-language-models.md)

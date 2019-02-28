@@ -4,9 +4,13 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Program.fs"/>
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MagicWord.Lang\MagicWord.Lang.fsproj"/>
+    <ProjectReference Include="..\MagicWord.Lang\MagicWord.Lang.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Giraffe" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.2" />
   </ItemGroup>
 </Project>

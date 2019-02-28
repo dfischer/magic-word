@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Magic Word</title>
+        <title>Program Rewriting - Magic Word</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="The Magic Word manual">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="introduction.html">Introduction</a></li><li class="affix"><a href="program-rewriting.html">Program Rewriting</a></li><li class="affix"><a href="arithmetic-types.html">Arithmetic Types</a></li><li class="affix"><a href="open-deduction.html">Open Deduction</a></li><li class="affix"><a href="transactors.html">Transactors</a></li><li class="affix"><a href="neural-language-models.html">Neural Language Models</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="introduction.html">Introduction</a></li><li class="affix"><a href="program-rewriting.html" class="active">Program Rewriting</a></li><li class="affix"><a href="arithmetic-types.html">Arithmetic Types</a></li><li class="affix"><a href="open-deduction.html">Open Deduction</a></li><li class="affix"><a href="transactors.html">Transactors</a></li><li class="affix"><a href="neural-language-models.html">Neural Language Models</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -136,22 +136,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Magic Word is a hobbyist research &amp; development project in programming
-languages and machine learning. I would like to experiment with a
-number of recent developments, including:</p>
-<ul>
-<li>combinatory term rewriting for mobile code</li>
-<li><a href="http://okmij.org/ftp/continuations/">delimited continuations</a> for program structure</li>
-<li>neural language models for program synthesis</li>
-</ul>
-<p>The organization of the documentation is as follows:</p>
-<p><a href="program-rewriting.html">Program Rewriting</a>
-<a href="arithmetic-types.html">Arithmetic Types</a>
-<a href="delimited-continuations.html">Delimited Continuations</a>
-<a href="open-deduction.html">Open Deduction</a>
-<a href="transactors.html">Transactors</a>
-<a href="neural-language-models.html">Neural Language Models</a></p>
-<p>Magic Word's bytecode is a <em>term rewriting system</em>.</p>
+                        <p>Magic Word's bytecode is a <em>term rewriting system</em>.</p>
 <pre><code>[A] [B] a = B [A]    apply
 </code></pre>
 <p>Capture and escape.</p>
@@ -176,43 +161,21 @@ can then move this program across machines, as it will not capture any
 ephemeral resources; because our programs are combinatory, this
 doesn't require any tricky bundling of the current lexical
 environment.</p>
-<p>When creating a programming language, the question arises of what
-things should be <em>primitive</em> and what things should be defined in
-terms of those primitives. I think a good way to tackle this problem
-is by appeal to the things that are primitive in the surrounding
-intellectual context.</p>
-<p>Consider the basic algebraic rules for addition:</p>
-<pre><code>(a + (b + c)) = ((a + b) + c)    associativity
-        a + b = b + a            commutativity
-        a + 0 = a                identity
-</code></pre>
-<p>These rules say that whenever you have an expression on one side of an
-equals sign, you're allowed to transform it in to the expression on
-the other side. &quot;Transform&quot; sounds a lot like what functions do, so
-let's rewrite those rules using <code>&lt;-&gt;</code> to mean a pair of functions that
-go from left to right and right to left:</p>
-<pre><code> assocl: (a + (b + c)) &lt;-&gt; ((a + b) + c) :assocr
-commute:       (a + b) &lt;-&gt; (b + a)       :commute
-  zeroi:             a &lt;-&gt; (a + 0)       :zeroe
-</code></pre>
-<p>These are functions that operate on <em>sum types</em>, types of the form
-<code>a + b</code>. What is a sum type? In keeping with the arithmetic analogy,
-think of the expression as representing the <em>number of values in that
-type</em>. If the type <code>a</code> has <code>a</code> values, and the type <code>b</code> has <code>b</code>
-values, then the type <code>a + b</code> has <code>a + b</code> values.</p>
-<p>In light of this argument, it's interesting to look at the languages
-that do <em>not</em> have sum types: C, C++, D, Go, JavaScript, Python, Ruby,
-Perl, PHP, Tcl. If no popular languages have sum types, does that mean
-they are not primitive? Or does it mean most popular languages have
-failed at identifying a good set of primitives?</p>
-<p>A <em>transactor</em> runs in a continuous loop.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
+                        
+                            <a rel="next" href="arithmetic-types.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -222,7 +185,15 @@ failed at identifying a good set of primitives?</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
+                
+                    <a href="arithmetic-types.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
                 
             </nav>
 
@@ -247,14 +218,6 @@ failed at identifying a good set of primitives?</p>
         <!-- Custom JS scripts -->
         
 
-        
-        
-        <script type="text/javascript">
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
-        
         
 
     </body>
