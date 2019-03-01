@@ -1,4 +1,6 @@
 # Magic Word
+<a href="https://liberapay.com/xkapastel/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> [![ko-fi](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/T6T5QRUW)
+
 A programming system focused on functions and machine learning.
 
 ## Table of contents
