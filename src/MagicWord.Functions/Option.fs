@@ -15,14 +15,20 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace MagicWord.Lang
+namespace MagicWord.Functions
 
-open System
+module Option =
+  let all (xs: 'a option list): 'a list option =
+    let cons (value: 'a option) (xs: 'a list): 'a list option =
+      match value with
+        | None   -> None
+        | Some x -> Some <| x :: xs
 
-module String =
-  let inline replace (fst: string) (snd: string) (str: string): string =
-    str.Replace(fst, snd)
+    let step (state: 'a list option) (value: 'a option): 'a list option =
+      match state with
+        | None    -> None
+        | Some xs -> cons value xs
 
-  let inline split (sep: string) (str: string): string list =
-    str.Split(sep, StringSplitOptions.RemoveEmptyEntries)
-    |> Array.toList
+    let init = Some []
+
+    List.fold step init <| List.rev xs

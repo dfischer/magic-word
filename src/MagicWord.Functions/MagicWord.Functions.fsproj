@@ -7,7 +7,6 @@
     <Compile Include="String.fs"/>
     <Compile Include="SharedTypes.fs"/>
     <Compile Include="Word.fs"/>
-    <Compile Include="Grammar.fs"/>
     <Compile Include="Term.fs"/>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace MagicWord.Lang
+namespace MagicWord.Functions
 
 open System
 open System.Text.RegularExpressions
@@ -24,13 +24,9 @@ module Word =
   let parse (src: string): Word list option =
     let tagR = Regex(@"^#[a-z][a-z0-9-]*$")
     let varR = Regex(@"^[a-z][a-z0-9-]*$")
-    let defR = Regex(@"^:[a-z][a-z0-9-]*$")
-    let delR = Regex(@"^\.[a-z][a-z0-9-]*$")
 
     let isTag (token: string): bool = tagR.IsMatch(token)
     let isVar (token: string): bool = varR.IsMatch(token)
-    let isDef (token: string): bool = defR.IsMatch(token)
-    let isDel (token: string): bool = delR.IsMatch(token)
 
     src
     |> String.replace "[" "[ "
@@ -49,8 +45,6 @@ module Word =
                  | _   ->
                  if isTag token then Some <| Tag token
                  elif isVar token then Some <| Var token
-                 elif isDef token then Some <| Def token
-                 elif isDel token then Some <| Del token
                  else None)
     |> Option.all
 
@@ -67,9 +61,7 @@ module Word =
                  | Begin    -> "["
                  | End      -> "]"
                  | Tag name -> name
-                 | Var name -> name
-                 | Def name -> ":" + name
-                 | Del name -> "." + name)
+                 | Var name -> name)
     |> String.concat " "
     |> String.replace "[ " "["
     |> String.replace " ]" "]"

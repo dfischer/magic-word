@@ -7,7 +7,8 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MagicWord.Lang\MagicWord.Lang.fsproj" />
+    <ProjectReference Include="..\MagicWord.Functions\MagicWord.Functions.fsproj" />
+    <ProjectReference Include="..\MagicWord.Bots\MagicWord.Bots.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Giraffe" Version="3.6.0" />

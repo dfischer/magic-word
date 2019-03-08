@@ -15,21 +15,22 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace MagicWord.Lang
+namespace MagicWord.Functions
 
-open MathNet.Numerics
-open MathNet.Numerics.LinearAlgebra
+[<AutoOpen>]
+module SharedTypes =
+  type Word =
+    | Id
+    | Apply
+    | Bind
+    | Copy
+    | Drop
+    | Reset
+    | Shift
+    | Begin
+    | End
+    | Tag of string
+    | Var of string
 
-module Grammar =
-  type private Vec = Vector<float>
-
-  type private IFunction =
-    abstract member Apply: Vec -> Vec
-    abstract member Alter: unit -> unit
-    abstract member Clear: unit -> unit
-
-  type private Id() =
-    interface IFunction with
-      member __.Apply src = src
-      member __.Alter ()  = ()
-      member __.Clear ()  = ()
+  type IContainer =
+    abstract member Exec: Word list -> Word list

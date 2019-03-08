@@ -15,15 +15,14 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-open System
-open MagicWord.Lang
+namespace MagicWord.Functions
 
-[<EntryPoint>]
-let main argv =
-  let ctx = Term.newContainer()
-  match Word.parse "[foo] [bar] baz" with
-    | None -> printfn "Couldn't parse the stuff"
-    | Some src ->
-      let res = ctx.Exec src
-      printfn "%s" <| Word.quote res
-  0
+open System
+
+module String =
+  let inline replace (fst: string) (snd: string) (str: string): string =
+    str.Replace(fst, snd)
+
+  let inline split (sep: string) (str: string): string list =
+    str.Split(sep, StringSplitOptions.RemoveEmptyEntries)
+    |> Array.toList

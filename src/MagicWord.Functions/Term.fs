@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace MagicWord.Lang
+namespace MagicWord.Functions
 
 open System.Collections.Generic
 
@@ -33,8 +33,6 @@ module Term =
     | Shift
     | Tag of string
     | Var of string
-    | Def of string
-    | Del of string
     | Quote of Term
     | Sequence of (Term * Term)
 
@@ -88,8 +86,6 @@ module Term =
           | Word.Shift    -> Some <| push ctx Shift
           | Word.Tag name -> Some <| push ctx (Tag name)
           | Word.Var name -> Some <| push ctx (Var name)
-          | Word.Def name -> Some <| push ctx (Def name)
-          | Word.Del name -> Some <| push ctx (Del name)
 
   let parse (words: Word list) : Term option =
     let init = Some <| { build = []; stack = []; }
@@ -110,8 +106,6 @@ module Term =
       | Shift      -> [Word.Shift]
       | Tag name   -> [Word.Tag name]
       | Var name   -> [Word.Var name]
-      | Def name   -> [Word.Def name]
-      | Del name   -> [Word.Del name]
       | Quote body ->
         let body = quote body
         List.concat [[Word.Begin]; body; [Word.End]]
