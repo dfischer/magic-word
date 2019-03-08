@@ -18,6 +18,12 @@ Magic Word is a collection of compilers and services written in F# and
 targeting the web platform. The common theme is **ABC**, a purely
 functional bytecode designed for livecoding and program synthesis.
 
+## Getting Started
+`dotnet build` at the top-level will build all projects. At the moment
+Magic Word is vaporware, but some time real soon, `dotnet run
+--project ./src/MagicWord.Wiki` will start the wiki, which will walk
+you through further configuration and usage.
+
 `magic-word.sln` is a .NET solution containing a number of projects:
 
 ### `MagicWord.Code`
@@ -47,12 +53,6 @@ community development of ABC programs.
 multimedia formats: audio, images, video and so on. A typical example
 is a function from infinite, continuous two dimensional space to some
 color space being interpreted as an image (e.g. `R^2 -> R^4`).
-
-## Getting Started
-`dotnet build` at the top-level will build all projects. At the moment
-Magic Word is vaporware, but some time real soon, `dotnet run
---project ./src/MagicWord.Web` will start the web server, which will
-walk you through further configuration and usage.
 
 ## Documentation
 Documentation created with mdBook is available on [GitHub
