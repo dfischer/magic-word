@@ -27,11 +27,10 @@ you through further configuration and usage.
 `magic-word.sln` is a .NET solution containing a number of projects:
 
 ### `MagicWord.Functions`
-`MagicWord.Functions` implements evaluation and synthesis of the purely
-functional bytecode, known as ABC, that powers the Magic Word
-project. Its unique feature is its *rewriting* semantics, that allows
-programs to be paused, migrated, and resumed at arbitrary points
-during execution.
+`MagicWord.Functions` provides evaluators for the purely functional
+bytecode, known as ABC, that powers the Magic Word project. Its unique
+feature is its *rewriting* semantics, that allows programs to be
+paused, migrated, and resumed at arbitrary points during execution.
   
 ### `MagicWord.Bots`
 The Magic Word project takes the view that programming language theory
