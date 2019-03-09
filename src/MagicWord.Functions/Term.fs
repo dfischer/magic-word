@@ -33,6 +33,7 @@ module Term =
     | Shift
     | Tag of string
     | Var of string
+    | Bin of string
     | Quote of Term
     | Sequence of (Term * Term)
 
@@ -86,6 +87,7 @@ module Term =
           | Word.Shift    -> Some <| push ctx Shift
           | Word.Tag name -> Some <| push ctx (Tag name)
           | Word.Var name -> Some <| push ctx (Var name)
+          | Word.Bin name -> Some <| push ctx (Bin name)
 
   let parse (words: Word list) : Term option =
     let init = Some <| { build = []; stack = []; }
@@ -106,6 +108,7 @@ module Term =
       | Shift      -> [Word.Shift]
       | Tag name   -> [Word.Tag name]
       | Var name   -> [Word.Var name]
+      | Bin name   -> [Word.Bin name]
       | Quote body ->
         let body = quote body
         List.concat [[Word.Begin]; body; [Word.End]]
@@ -140,10 +143,17 @@ module Term =
       term
 
     interface IContainer with
-      member x.Exec words =
-        match parse words with
-          | None      -> words
-          | Some term -> term |> rewrite |> quote
+      member x.Add key value =
+        value
 
-  let newContainer(): IContainer =
-    Rewriter() :> IContainer
+      member x.Delete key =
+        key
+
+      member x.Rewrite src =
+        src
+
+      member x.Continue src =
+        src
+
+      member x.Optimize quota =
+        0

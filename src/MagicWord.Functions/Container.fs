@@ -15,14 +15,8 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-open System
-open MagicWord.Functions
-open MagicWord.Bots
+namespace MagicWord.Functions
 
-[<EntryPoint>]
-let main argv =
-  let ctx = Container.init "default"
-  let src = "[foo] [bar] a"
-  let res = ctx.Rewrite src
-  printfn "%s = %s" src res
-  0
+module Container =
+  let init (filename: string): IContainer =
+    Term.Rewriter() :> IContainer

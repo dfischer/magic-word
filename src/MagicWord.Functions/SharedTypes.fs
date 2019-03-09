@@ -31,6 +31,12 @@ module SharedTypes =
     | End
     | Tag of string
     | Var of string
+    // XXX TODO Better type than string for hashes.
+    | Bin of string
 
   type IContainer =
-    abstract member Exec: Word list -> Word list
+    abstract member Add: string -> string -> string
+    abstract member Delete: string -> string
+    abstract member Rewrite: string -> string
+    abstract member Continue: string -> string
+    abstract member Optimize: int -> int

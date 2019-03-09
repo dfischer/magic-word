@@ -22,11 +22,13 @@ open System.Text.RegularExpressions
 
 module Word =
   let parse (src: string): Word list option =
-    let tagR = Regex(@"^#[a-z][a-z0-9-]*$")
-    let varR = Regex(@"^[a-z][a-z0-9-]*$")
+    let varR = Regex(@"^[a-z]+$")
+    let tagR = Regex(@"^#[a-z]+$")
+    let binR = Regex(@"^%[a-z]+$")
 
     let isTag (token: string): bool = tagR.IsMatch(token)
     let isVar (token: string): bool = varR.IsMatch(token)
+    let isBin (token: string): bool = binR.IsMatch(token)
 
     src
     |> String.replace "[" "[ "
@@ -45,6 +47,7 @@ module Word =
                  | _   ->
                  if isTag token then Some <| Tag token
                  elif isVar token then Some <| Var token
+                 elif isBin token then Some <| Bin token
                  else None)
     |> Option.all
 
@@ -61,7 +64,8 @@ module Word =
                  | Begin    -> "["
                  | End      -> "]"
                  | Tag name -> name
-                 | Var name -> name)
+                 | Var name -> name
+                 | Bin name -> name)
     |> String.concat " "
     |> String.replace "[ " "["
     |> String.replace " ]" "]"
