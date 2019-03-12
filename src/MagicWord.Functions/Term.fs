@@ -117,43 +117,5 @@ module Term =
         let snd = quote snd
         List.concat [fst; snd]
 
-  type Rewriter() =
-    let words = new Dictionary<string, string>()
-    let mutable sink: Term list = []
-    let mutable code: Term list = []
-    let mutable data: Term list = []
-
-    let thunk(term: Term) =
-      sink <- List.append sink data
-      sink <- term :: sink
-      data <- []
-
-    let rec fetch() =
-      match code with
-        | Sequence (fst, snd) :: tail ->
-          code <- fst :: snd :: tail
-          fetch()
-        | head :: tail ->
-          code <- tail
-          Some head
-        | [] ->
-          None
-
-    let rewrite (term: Term): Term =
-      term
-
-    interface IContainer with
-      member x.Add key value =
-        value
-
-      member x.Delete key =
-        key
-
-      member x.Rewrite src =
-        src
-
-      member x.Continue src =
-        src
-
-      member x.Optimize quota =
-        0
+  let rewrite (src: Term) (env: string -> Term option): Term =
+    src

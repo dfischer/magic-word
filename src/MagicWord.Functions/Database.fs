@@ -17,6 +17,23 @@
 
 namespace MagicWord.Functions
 
-module Container =
-  let init (filename: string): IContainer =
-    Term.Rewriter() :> IContainer
+module Database =
+  type TermDatabase() =
+    interface IDatabase with
+      member __.Apply txs =
+        ()
+
+      member __.Quote () =
+        []
+
+      member __.Rewrite src =
+        src
+
+      member __.Continue src =
+        src
+
+      member __.Update gas =
+        0
+  
+  let init (filename: string): IDatabase =
+    TermDatabase() :> IDatabase

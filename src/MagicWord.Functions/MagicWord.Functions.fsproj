@@ -8,7 +8,8 @@
     <Compile Include="SharedTypes.fs"/>
     <Compile Include="Word.fs"/>
     <Compile Include="Term.fs"/>
-    <Compile Include="Container.fs"/>
+    <Compile Include="Transaction.fs"/>
+    <Compile Include="Database.fs"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MathNet.Numerics" Version="4.7.0"/>

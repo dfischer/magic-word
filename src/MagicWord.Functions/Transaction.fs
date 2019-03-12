@@ -17,31 +17,9 @@
 
 namespace MagicWord.Functions
 
-[<AutoOpen>]
-module SharedTypes =
-  type Word =
-    | Id
-    | Apply
-    | Bind
-    | Copy
-    | Drop
-    | Reset
-    | Shift
-    | Begin
-    | End
-    | Tag of string
-    | Var of string
-    // XXX TODO Better type than string for hashes.
-    | Bin of string
+module Transaction =
+  let parse (src: string): Transaction list option =
+    None
 
-  type Transaction =
-    | Insert of (string * string)
-    | Delete of string
-    | Import of (string * string)
-
-  type IDatabase =
-    abstract member Apply: Transaction list -> unit
-    abstract member Quote: unit -> Transaction list
-    abstract member Rewrite: string -> string
-    abstract member Continue: string -> string
-    abstract member Update: int -> int
+  let quote (txs: Transaction list): string =
+    ""
