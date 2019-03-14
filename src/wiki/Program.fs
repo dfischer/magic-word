@@ -16,7 +16,7 @@
 // <https://www.gnu.org/licenses/.
 
 open System
-open MagicWord.Functions
+open MagicWord.Core
 
 [<EntryPoint>]
 let main argv =

@@ -15,7 +15,7 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace MagicWord.Functions
+namespace MagicWord.Core
 
 module Transaction =
   let parse (src: string): Transaction list option =
