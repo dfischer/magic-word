@@ -17,31 +17,17 @@
 
 namespace MagicWord.Functions
 
-[<AutoOpen>]
-module SharedTypes =
-  type Word =
-    | Id
-    | Apply
-    | Bind
-    | Copy
-    | Drop
-    | Reset
-    | Shift
-    | Begin
-    | End
-    | Tag of string
-    | Var of string
-    // XXX TODO Better type than string for hashes.
-    | Bin of string
+module Database =
+  type TermDatabase() =
+    interface IDatabase with
+      member __.Apply txs =
+        ()
 
-  type Transaction =
-    | Insert of (string * string)
-    | Delete of string
-    | Import of (string * string)
+      member __.Quote () =
+        []
 
-  type IDatabase =
-    abstract member Apply: Transaction list -> unit
-    abstract member Quote: unit -> Transaction list
-    abstract member Rewrite: string -> string
-    abstract member Continue: string -> string
-    abstract member Update: int -> int
+      member __.Rewrite src =
+        src
+  
+  let init (filename: string): IDatabase =
+    TermDatabase() :> IDatabase

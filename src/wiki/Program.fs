@@ -15,25 +15,13 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-namespace MagicWord.Functions
+open System
+open MagicWord.Functions
 
-module Database =
-  type TermDatabase() =
-    interface IDatabase with
-      member __.Apply txs =
-        ()
-
-      member __.Quote () =
-        []
-
-      member __.Rewrite src =
-        src
-
-      member __.Continue src =
-        src
-
-      member __.Update gas =
-        0
-  
-  let init (filename: string): IDatabase =
-    TermDatabase() :> IDatabase
+[<EntryPoint>]
+let main argv =
+  let ctx = Database.init "default"
+  let src = "[foo] [bar] a"
+  let res = ctx.Rewrite src
+  printfn "%s = %s" src res
+  0

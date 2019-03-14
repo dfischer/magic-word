@@ -15,14 +15,31 @@
 // License along with this program.  If not, see
 // <https://www.gnu.org/licenses/.
 
-open System
-open MagicWord.Functions
-open MagicWord.Bots
+namespace MagicWord.Functions
 
-[<EntryPoint>]
-let main argv =
-  let ctx = Container.init "default"
-  let src = "[foo] [bar] a"
-  let res = ctx.Rewrite src
-  printfn "%s = %s" src res
-  0
+[<AutoOpen>]
+module SharedTypes =
+  type Word =
+    | Id
+    | Apply
+    | Bind
+    | Copy
+    | Drop
+    | Reset
+    | Shift
+    | Begin
+    | End
+    | Tag of string
+    | Var of string
+    // XXX TODO Better type than string for hashes.
+    | Bin of string
+
+  type Transaction =
+    | Insert of (string * string)
+    | Delete of string
+    | Import of (string * string)
+
+  type IDatabase =
+    abstract member Apply: Transaction list -> unit
+    abstract member Quote: unit -> Transaction list
+    abstract member Rewrite: string -> string

@@ -1,8 +1,0 @@
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/bin/Debug/netstandard2.0/MagicWord.Bots.deps.json
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/bin/Debug/netstandard2.0/MagicWord.Bots.dll
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/bin/Debug/netstandard2.0/MagicWord.Bots.pdb
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/obj/Debug/netstandard2.0/MagicWord.Bots.fsprojAssemblyReference.cache
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/obj/Debug/netstandard2.0/MagicWord.Bots.AssemblyInfoInputs.cache
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/obj/Debug/netstandard2.0/MagicWord.Bots.AssemblyInfo.fs
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/obj/Debug/netstandard2.0/MagicWord.Bots.dll
-/home/xkapastel/src/magic-word/src/MagicWord.Bots/obj/Debug/netstandard2.0/MagicWord.Bots.pdb
