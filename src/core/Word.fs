@@ -21,6 +21,21 @@ open System
 open System.Text.RegularExpressions
 
 module Word =
+  type Word =
+    | Id
+    | Apply
+    | Bind
+    | Copy
+    | Drop
+    | Reset
+    | Shift
+    | Begin
+    | End
+    | Tag of string
+    | Var of string
+    // XXX TODO Better type than string for hashes.
+    | Bin of string
+
   let parse (src: string): Word list option =
     let varR = Regex(@"^[a-z]+$")
     let tagR = Regex(@"^#[a-z]+$")

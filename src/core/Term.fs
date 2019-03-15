@@ -89,7 +89,7 @@ module Term =
           | Word.Var name -> Some <| push ctx (Var name)
           | Word.Bin name -> Some <| push ctx (Bin name)
 
-  let parse (words: Word list) : Term option =
+  let parse (words: Word.Word list) : Term option =
     let init = Some <| { build = []; stack = []; }
     match List.fold stepReader init words with
       | None -> None
@@ -97,7 +97,7 @@ module Term =
         let build = List.rev ctx.build
         Some <| List.fold sequence Id build
 
-  let rec quote (term: Term): Word list =
+  let rec quote (term: Term): Word.Word list =
     match term with
       | Id         -> [Word.Id]
       | Apply      -> [Word.Apply]

@@ -19,21 +19,6 @@ namespace MagicWord.Core
 
 [<AutoOpen>]
 module SharedTypes =
-  type Word =
-    | Id
-    | Apply
-    | Bind
-    | Copy
-    | Drop
-    | Reset
-    | Shift
-    | Begin
-    | End
-    | Tag of string
-    | Var of string
-    // XXX TODO Better type than string for hashes.
-    | Bin of string
-
   type Transaction =
     | Insert of (string * string)
     | Delete of string
