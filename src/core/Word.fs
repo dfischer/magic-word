@@ -27,10 +27,11 @@ module Word =
     | Bind
     | Copy
     | Drop
-    | Reset
-    | Shift
-    | Begin
-    | End
+    | Escape
+    | BeginBlock
+    | EndBlock
+    | BeginPrompt
+    | EndPrompt
     | Tag of string
     | Var of string
     // XXX TODO Better type than string for hashes.
@@ -55,10 +56,11 @@ module Word =
                  | "b" -> Some Bind
                  | "c" -> Some Copy
                  | "d" -> Some Drop
-                 | "r" -> Some Reset
-                 | "s" -> Some Shift
-                 | "[" -> Some Begin
-                 | "]" -> Some End
+                 | "e" -> Some Escape
+                 | "[" -> Some BeginBlock
+                 | "]" -> Some EndBlock
+                 | "{" -> Some BeginPrompt
+                 | "}" -> Some EndPrompt
                  | _   ->
                  if isTag token then Some <| Tag token
                  elif isVar token then Some <| Var token
@@ -69,18 +71,19 @@ module Word =
   let quote (words: Word list): string =
     words
     |> List.map (function
-                 | Id       -> ""
-                 | Apply    -> "a"
-                 | Bind     -> "b"
-                 | Copy     -> "c"
-                 | Drop     -> "d"
-                 | Reset    -> "r"
-                 | Shift    -> "s"
-                 | Begin    -> "["
-                 | End      -> "]"
-                 | Tag name -> name
-                 | Var name -> name
-                 | Bin name -> name)
+                 | Id          -> ""
+                 | Apply       -> "a"
+                 | Bind        -> "b"
+                 | Copy        -> "c"
+                 | Drop        -> "d"
+                 | Escape      -> "e"
+                 | BeginBlock  -> "["
+                 | EndBlock    -> "]"
+                 | BeginPrompt -> "{"
+                 | EndPrompt   -> "}"
+                 | Tag name    -> name
+                 | Var name    -> name
+                 | Bin name    -> name)
     |> String.concat " "
     |> String.replace "[ " "["
     |> String.replace " ]" "]"

@@ -18,6 +18,10 @@
 namespace MagicWord.Core
 
 module Transaction =
+  type Transaction =
+    | Insert of (string * string)
+    | Delete of string
+
   let parse (src: string): Transaction list option =
     None
 

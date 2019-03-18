@@ -19,12 +19,7 @@ namespace MagicWord.Core
 
 [<AutoOpen>]
 module SharedTypes =
-  type Transaction =
-    | Insert of (string * string)
-    | Delete of string
-    | Import of (string * string)
-
   type IDatabase =
-    abstract member Apply: Transaction list -> unit
-    abstract member Quote: unit -> Transaction list
+    abstract member Apply: string -> unit
+    abstract member Quote: unit -> string
     abstract member Rewrite: string -> string

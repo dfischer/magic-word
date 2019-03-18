@@ -20,11 +20,11 @@ namespace MagicWord.Core
 module Database =
   type TermDatabase() =
     interface IDatabase with
-      member __.Apply txs =
+      member __.Apply src =
         ()
 
       member __.Quote () =
-        []
+        ""
 
       member __.Rewrite src =
         src

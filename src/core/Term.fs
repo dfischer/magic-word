@@ -29,12 +29,12 @@ module Term =
     | Bind
     | Copy
     | Drop
-    | Reset
-    | Shift
+    | Escape
     | Tag of string
     | Var of string
     | Bin of string
-    | Quote of Term
+    | Block of Term
+    | Prompt of Term
     | Sequence of (Term * Term)
 
   let rec sequence fst snd =
@@ -44,26 +44,42 @@ module Term =
       | (Sequence (head, tail), _) -> sequence head <| sequence tail snd
       | _                          -> Sequence (fst, snd)
 
+  type private Bracket =
+    | MatchBlock of Term list
+    | MatchPrompt of Term list
+
   type private ReaderState = {
-    stack : Term list list
+    stack : Bracket list
     build : Term list
   }
 
   // Save the current term on the stack and start a new one.  Called
   // when the reader reaches a '['.
-  let private save ctx =
-    { build = []; stack = ctx.build :: ctx.stack }
+  let private pushBlock ctx =
+    { build = []; stack = MatchBlock ctx.build :: ctx.stack }
+
+  let private pushPrompt ctx =
+    { build = []; stack = MatchPrompt ctx.build :: ctx.stack }
 
   // Try to pop the stack and make a quote from the saved term. If the
   // stack is empty, then the brackets are unbalanced, and we return
   // in the error branch.
-  let private tryRestore ctx =
+  let private popBlock ctx =
     match ctx.stack with
-      | prev :: rest ->
+      | MatchBlock prev :: rest ->
         let build = List.rev ctx.build
-        let block = Quote <| List.fold sequence Id build
+        let block = Block <| List.fold sequence Id build
         Some <| { build = block :: prev; stack = rest }
-      | [] ->
+      | _ ->
+        None
+
+  let private popPrompt ctx =
+    match ctx.stack with
+      | MatchPrompt prev :: rest ->
+        let build = List.rev ctx.build
+        let block = Prompt <| List.fold sequence Id build
+        Some <| { build = block :: prev; stack = rest }
+      | _ ->
         None
 
   // Put a term on the building stack.
@@ -76,18 +92,19 @@ module Term =
       | None     -> None
       | Some ctx ->
         match word with
-          | Word.Begin    -> Some <| save ctx
-          | Word.End      -> tryRestore ctx
-          | Word.Id       -> Some ctx
-          | Word.Apply    -> Some <| push ctx Apply
-          | Word.Bind     -> Some <| push ctx Bind
-          | Word.Copy     -> Some <| push ctx Copy
-          | Word.Drop     -> Some <| push ctx Drop
-          | Word.Reset    -> Some <| push ctx Reset
-          | Word.Shift    -> Some <| push ctx Shift
-          | Word.Tag name -> Some <| push ctx (Tag name)
-          | Word.Var name -> Some <| push ctx (Var name)
-          | Word.Bin name -> Some <| push ctx (Bin name)
+          | Word.BeginBlock  -> Some <| pushBlock ctx
+          | Word.EndBlock    -> popBlock ctx
+          | Word.BeginPrompt -> Some <| pushPrompt ctx
+          | Word.EndPrompt   -> popPrompt ctx
+          | Word.Id          -> Some ctx
+          | Word.Apply       -> Some <| push ctx Apply
+          | Word.Bind        -> Some <| push ctx Bind
+          | Word.Copy        -> Some <| push ctx Copy
+          | Word.Drop        -> Some <| push ctx Drop
+          | Word.Escape      -> Some <| push ctx Escape
+          | Word.Tag name    -> Some <| push ctx (Tag name)
+          | Word.Var name    -> Some <| push ctx (Var name)
+          | Word.Bin name    -> Some <| push ctx (Bin name)
 
   let parse (words: Word.Word list) : Term option =
     let init = Some <| { build = []; stack = []; }
@@ -104,18 +121,22 @@ module Term =
       | Bind       -> [Word.Bind]
       | Copy       -> [Word.Copy]
       | Drop       -> [Word.Drop]
-      | Reset      -> [Word.Reset]
-      | Shift      -> [Word.Shift]
+      | Escape     -> [Word.Escape]
       | Tag name   -> [Word.Tag name]
       | Var name   -> [Word.Var name]
       | Bin name   -> [Word.Bin name]
-      | Quote body ->
+      | Block body ->
         let body = quote body
-        List.concat [[Word.Begin]; body; [Word.End]]
+        List.concat [[Word.BeginBlock]; body; [Word.EndBlock]]
+      | Prompt body ->
+        let body = quote body
+        List.concat [[Word.BeginPrompt]; body; [Word.EndPrompt]]
       | Sequence (fst, snd) ->
         let fst = quote fst
         let snd = quote snd
         List.concat [fst; snd]
 
   let rewrite (src: Term) (env: string -> Term option): Term =
+    let mutable data: Term list = []
+    let mutable code: Term list = [src]
     src
